@@ -4,6 +4,7 @@
 
 .hero,
 .panel-section,
+.home-portfolio,
 .growing-section {
   width: 100%;
   max-width: var(--content-width);
@@ -59,14 +60,21 @@
 
 .img-container {
   display: flex;
-  height: 100%;
+  width: min(100%, 380px);
+  aspect-ratio: 1;
+  margin-inline: auto;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+  border-radius: 50%;
 }
 
 .hero-image {
-  max-width: 380px;
-  height: auto;
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  object-fit: cover;
 }
 
 .section-label,

@@ -1,14 +1,12 @@
 ---
 import { Image } from "astro:assets"
 import { getEntry } from "astro:content"
-import type { CollectionEntry } from "astro:content"
-import ArchiveCard from "../components/ArchiveCard.astro"
 import LatestMedia from "../components/LatestMedia.astro"
 import LatestNotes from "../components/LatestNotes.astro"
 import PageShell from "../components/PageShell.astro"
+import PortfolioSection from "../components/PortfolioSection.astro"
 import PortfolioWildcard from "../components/PortfolioWildcard.astro"
 import BaseLayout from "../layouts/BaseLayout.astro"
-import { formatDottedDate } from "../lib/dates"
 import { getVisibleSpanishMedia } from "../lib/media"
 import { getVisibleSpanishNotes } from "../lib/notes"
 import { getVisibleSpanishProjects } from "../lib/portfolio"
@@ -26,41 +24,6 @@ if (!home || !ahora) {
 const publishedNotes = await getVisibleSpanishNotes(false)
 const publishedMedia = await getVisibleSpanishMedia(false)
 const publishedProjects = await getVisibleSpanishProjects(false)
-const latestPublishedNote = [...publishedNotes].sort(
-  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
-)[0]
-
-type HomepagePanel = CollectionEntry<"homepage">["data"]["panels"][number]
-type RenderedHomepagePanel = HomepagePanel & {
-  metadata: string
-  reveal: string
-}
-
-const panels: RenderedHomepagePanel[] = home.data.panels.map((panel) => {
-  if (panel.kind === "notas") {
-    return {
-      ...panel,
-      metadata: `Última nota · ${latestPublishedNote ? formatDottedDate(latestPublishedNote.data.publishedAt) : "—"}`,
-      reveal: `${publishedNotes.length} ${publishedNotes.length === 1 ? "nota publicada" : "notas publicadas"}`,
-    }
-  }
-
-  if (panel.kind === "mediateca") {
-    return {
-      ...panel,
-      reveal: `${publishedMedia.length} ${publishedMedia.length === 1 ? "medio guardado" : "medios guardados"}`,
-    }
-  }
-
-  if (panel.kind === "portafolio") {
-    return {
-      ...panel,
-      reveal: `${publishedProjects.length} ${publishedProjects.length === 1 ? "proyecto publicado" : "proyectos publicados"}`,
-    }
-  }
-
-  return panel
-})
 
 const notes = publishedNotes.slice(0, 3)
 
@@ -103,13 +66,12 @@ const connectionLabelAfter = home.data.connectionLabel.slice(
       </div>
     </section>
 
-    <section class="panel-section" id="indice" aria-label="Archivo principal">
-      <div class="section-label">
-        <span>{home.data.indexLabel}</span>
-      </div>
-      <div class="panels">
-        {panels.map((panel) => <ArchiveCard panel={panel} />)}
-      </div>
+    <section class="home-portfolio" id="indice" aria-label="Portafolio">
+      <PortfolioSection
+        projects={publishedProjects}
+        headingLevel="h2"
+        titleId="home-portfolio-title"
+      />
     </section>
 
     <section class="growing-section" id="ahora" aria-labelledby="growing-title">

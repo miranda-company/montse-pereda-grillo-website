@@ -1,9 +1,9 @@
 [
   {
     "id": "homepage",
-    "heroEyebrow": "Rodolfo Miranda Company",
-    "heroTitle": "Estrategia Digital y Operaciones",
-    "connectionLabel": "Defino estrategias y dirijo proyectos digitales de principio a fin, diseño sistemas escalables para optimizar las operaciones y este es mi jardín digital.",
+    "heroEyebrow": "Montse Pereda Grillo",
+    "heroTitle": "Directora de comunicación y estrategia digital",
+    "connectionLabel": "Profesional de la comunicación institucional y corporativa con sólida experiencia en organizaciones públicas y privadas de los ámbitos cultural, educativo, social y ciencias de la vida. Este es mi jardín digital.",
     "connectionLink": {
       "label": "jardín digital",
       "href": "/notas/el-magnifico-mundo-de-los-jardines-digitales"
@@ -19,7 +19,7 @@
         "href": "/yo",
         "kind": "yo",
         "image": "../../assets/images/homepage/workspace-001.jpg",
-        "imageAlt": "Expediente retrofuturista con una fotografía de Rodolfo Miranda, engranajes y un disco óptico."
+        "imageAlt": "Expediente retrofuturista con una fotografía de Montse Pereda, engranajes y un disco óptico."
       },
       {
         "index": "02",

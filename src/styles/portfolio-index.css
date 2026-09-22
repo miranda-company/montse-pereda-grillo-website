@@ -18,8 +18,13 @@
   border-bottom: 1px solid var(--line);
 }
 
-.portfolio-intro h1 {
+.portfolio-intro :is(h1, h2) {
   margin: 0;
+}
+
+.portfolio-intro h2 {
+  font-size: var(--heading-h1-size);
+  line-height: 1;
 }
 
 .portfolio-intro__meta {

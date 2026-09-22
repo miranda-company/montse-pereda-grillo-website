@@ -1,31 +1,17 @@
 ---
 import PageShell from "../../components/PageShell.astro"
-import PortfolioCard from "../../components/PortfolioCard.astro"
+import PortfolioSection from "../../components/PortfolioSection.astro"
 import BaseLayout from "../../layouts/BaseLayout.astro"
-import { formatNumericDate } from "../../lib/dates"
 import { getVisibleSpanishProjects } from "../../lib/portfolio"
-import "../../styles/portfolio-index.css"
 import "../../styles/portfolio-shared.css"
 
 const includeDrafts = import.meta.env.DEV
 const projects = await getVisibleSpanishProjects(includeDrafts)
-const lastUpdated = projects.reduce<Date | undefined>(
-  (latest, project) =>
-    !latest || project.data.updatedAt.getTime() > latest.getTime()
-      ? project.data.updatedAt
-      : latest,
-  undefined,
-)
-const lastUpdatedLabel = lastUpdated ? formatNumericDate(lastUpdated) : undefined
-const projectCount = String(projects.length).padStart(2, "0")
-const tags = Array.from(new Set(projects.flatMap((project) => project.data.tags))).sort(
-  (first, second) => first.localeCompare(second, "es"),
-)
 ---
 
 <BaseLayout
   title="Portafolio"
-  description="Selección curada de proyectos de Rodolfo Miranda Company."
+  description="Selección curada de proyectos de Montse Pereda Grillo."
   canonicalPath="/portafolio"
   socialImage={projects[0]?.data.coverImage}
   socialImageAlt={projects[0]?.data.coverAlt}
@@ -33,143 +19,11 @@ const tags = Array.from(new Set(projects.flatMap((project) => project.data.tags)
 >
   <PageShell pageClass="portfolio-page" mainClass="portfolio-main page-main--with-back">
     <a class="page-back" href="/#indice">← Volver al índice</a>
-
-    <section class="page-intro portfolio-intro" aria-labelledby="portfolio-title">
-      <p class="kicker portfolio-kicker">Trabajo seleccionado de Rodolfo Miranda</p>
-      <h1 id="portfolio-title">Portafolio</h1>
-      <p class="portfolio-intro__meta">
-        {projectCount}
-        {includeDrafts ? "PROYECTOS DE DESARROLLO" : "PROYECTOS PUBLICADOS"}
-        {lastUpdatedLabel && <> · ACTUALIZADO {lastUpdatedLabel}</>}
-      </p>
-    </section>
-
-    <section class="portfolio-selection" aria-labelledby="portfolio-selection-title">
-      <h2 class="portfolio-controls__title" id="portfolio-selection-title">
-        Buscar y filtrar proyectos
-      </h2>
-
-      {
-        projects.length > 0 ? (
-          <>
-            <div class="portfolio-controls" data-portfolio-controls>
-              <label class="portfolio-search">
-                <span>Buscar</span>
-                <input
-                  class="archive-control"
-                  type="search"
-                  placeholder="Buscar proyectos"
-                  autocomplete="off"
-                  aria-controls="portfolio-list"
-                  data-portfolio-search
-                />
-              </label>
-
-              <fieldset class="portfolio-tag-filter">
-                <legend>Etiquetas</legend>
-                <div>
-                  <button
-                    class="archive-control"
-                    type="button"
-                    aria-pressed="true"
-                    data-portfolio-tag="all"
-                  >
-                    Todas
-                  </button>
-                  {tags.map((tag) => (
-                    <button
-                      class="archive-control"
-                      type="button"
-                      aria-pressed="false"
-                      data-portfolio-tag={tag}
-                    >
-                      {tag}
-                    </button>
-                  ))}
-                </div>
-              </fieldset>
-
-              <p data-portfolio-count aria-live="polite">
-                {projects.length} proyectos
-              </p>
-            </div>
-
-            <ol class="portfolio-list" id="portfolio-list">
-              {projects.map((project) => (
-                <PortfolioCard entry={project} />
-              ))}
-            </ol>
-            <div class="portfolio-filter-empty" data-portfolio-empty hidden>
-              <p>No hay proyectos que coincidan con esta búsqueda.</p>
-              <button class="filter-reset" type="button" data-portfolio-reset>
-                Restablecer filtros
-              </button>
-            </div>
-          </>
-        ) : (
-          <p class="portfolio-empty">La selección de proyectos está en preparación.</p>
-        )
-      }
-    </section>
+    <PortfolioSection
+      projects={projects}
+      includeDrafts={includeDrafts}
+      headingLevel="h1"
+      titleId="portfolio-title"
+    />
   </PageShell>
-
-  <script>
-    const controls = document.querySelector<HTMLElement>("[data-portfolio-controls]")
-
-    if (controls && controls.dataset.ready !== "true") {
-      controls.dataset.ready = "true"
-      const search = controls.querySelector<HTMLInputElement>("[data-portfolio-search]")
-      const tagButtons = Array.from(
-        controls.querySelectorAll<HTMLButtonElement>("[data-portfolio-tag]"),
-      )
-      const cards = Array.from(document.querySelectorAll<HTMLElement>("[data-portfolio-card]"))
-      const count = controls.querySelector<HTMLElement>("[data-portfolio-count]")
-      const empty = document.querySelector<HTMLElement>("[data-portfolio-empty]")
-      const reset = document.querySelector<HTMLButtonElement>("[data-portfolio-reset]")
-      let activeTag = "all"
-
-      const normalize = (value: string) =>
-        value
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .toLocaleLowerCase("es")
-
-      const applyFilters = () => {
-        const query = normalize(search?.value.trim() ?? "")
-        let visible = 0
-
-        cards.forEach((card) => {
-          const matchesSearch = !query || normalize(card.dataset.search ?? "").includes(query)
-          const matchesTag =
-            activeTag === "all" || (card.dataset.tags ?? "").split("|").includes(activeTag)
-          card.hidden = !(matchesSearch && matchesTag)
-          if (!card.hidden) visible += 1
-        })
-
-        if (count) count.textContent = `${visible} ${visible === 1 ? "proyecto" : "proyectos"}`
-        if (empty) empty.hidden = visible !== 0
-      }
-
-      search?.addEventListener("input", applyFilters)
-      tagButtons.forEach((button) => {
-        button.addEventListener("click", () => {
-          activeTag = button.dataset.portfolioTag ?? "all"
-          tagButtons.forEach((candidate) => {
-            candidate.setAttribute("aria-pressed", String(candidate === button))
-          })
-          applyFilters()
-        })
-      })
-
-      reset?.addEventListener("click", () => {
-        if (search) search.value = ""
-        activeTag = "all"
-        tagButtons.forEach((button) => {
-          button.setAttribute("aria-pressed", String(button.dataset.portfolioTag === "all"))
-        })
-        applyFilters()
-        search?.focus()
-      })
-    }
-  </script>
 </BaseLayout>
