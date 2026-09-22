@@ -1,0 +1,37 @@
+---
+const currentPath = Astro.url.pathname.replace(/\/+$/, "") || "/"
+---
+
+<footer class="site-footer">
+  <nav aria-label="Enlaces del pie de página">
+    <ul class="site-footer__links">
+      <li>
+        <a
+          href="https://www.linkedin.com/in/rodolfo-miranda-company/"
+          target="_blank"
+          rel="external noopener noreferrer"
+          aria-label="LinkedIn, se abre en una pestaña nueva">LinkedIn ↗</a
+        >
+      </li>
+      <li>
+        <a
+          href="https://github.com/miranda-company"
+          target="_blank"
+          rel="external noopener noreferrer"
+          aria-label="GitHub, se abre en una pestaña nueva">GitHub ↗</a
+        >
+      </li>
+      <li><a href="mailto:hi@rodolfomiranda.company">Email</a></li>
+      <li>
+        <a href="/colofon" aria-current={currentPath === "/colofon" ? "page" : undefined}>
+          Colofón
+        </a>
+      </li>
+      <li>
+        <a href="/registro" aria-current={currentPath === "/registro" ? "page" : undefined}>
+          Registro
+        </a>
+      </li>
+    </ul>
+  </nav>
+</footer>

@@ -1,0 +1,107 @@
+---
+import { getEntry } from "astro:content"
+import portrait from "../assets/images/retrato-rodolfo-miranda.jpg"
+import CareerTimeline from "../components/CareerTimeline.astro"
+import LinkedParagraph from "../components/LinkedParagraph.astro"
+import PageShell from "../components/PageShell.astro"
+import YoPortrait from "../components/YoPortrait.astro"
+import BaseLayout from "../layouts/BaseLayout.astro"
+import "../styles/yo.css"
+
+const profile = await getEntry("profile", "yo")
+if (!profile) throw new Error("Falta src/content/site/yo.json")
+---
+
+<BaseLayout
+  title={profile.data.hero.name}
+  description="Perfil, contexto y trayectoria profesional de Rodolfo Miranda."
+  canonicalPath="/yo"
+  socialImage={portrait}
+  socialImageAlt={profile.data.portrait.alt}
+  schemaType="ProfilePage"
+>
+  <PageShell pageClass="yo-page" mainClass="yo-main page-main--with-back">
+    <a class="page-back" href="/#indice">← Volver al índice</a>
+    <section class="page-intro yo-intro" aria-labelledby="yo-title">
+      <div class="yo-intro__lead">
+        <p class="kicker yo-kicker">{profile.data.hero.label}</p>
+        <h1 id="yo-title">{profile.data.hero.name}</h1>
+      </div>
+    </section>
+
+    <section class="yo-section yo-context" aria-labelledby="context-title">
+      <div class="yo-section__heading">
+        <p>{profile.data.context.index}</p>
+        <h2 id="context-title">{profile.data.context.title}</h2>
+      </div>
+      <div class="yo-context__grid">
+        <div class="yo-prose yo-prose--lead">
+          {
+            profile.data.context.paragraphs.map((paragraph) => (
+              <LinkedParagraph segments={paragraph} />
+            ))
+          }
+        </div>
+        <YoPortrait alt={profile.data.portrait.alt} annotation={profile.data.portrait.annotation} />
+      </div>
+    </section>
+
+    <section class="yo-section yo-now" aria-labelledby="now-title">
+      <div class="yo-section__heading">
+        <p>{profile.data.currentContext.index}</p>
+        <h2 id="now-title">{profile.data.currentContext.title}</h2>
+      </div>
+      <div class="yo-prose">
+        {
+          profile.data.currentContext.paragraphs.map((paragraph) => (
+            <LinkedParagraph segments={paragraph} />
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="yo-section yo-career" aria-labelledby="career-title">
+      <div class="yo-section__heading">
+        <p>{profile.data.timeline.index}</p>
+        <h2 id="career-title">{profile.data.timeline.title}</h2>
+      </div>
+      <CareerTimeline entries={profile.data.timeline.entries} />
+    </section>
+
+    <section class="yo-section yo-history" aria-labelledby="history-title">
+      <div class="yo-section__heading">
+        <p>{profile.data.history.index}</p>
+        <h2 id="history-title">{profile.data.history.title}</h2>
+      </div>
+      <div class="yo-history__body">
+        <div class="yo-prose">
+          {
+            profile.data.history.paragraphs.map((paragraph) => (
+              <LinkedParagraph segments={paragraph} />
+            ))
+          }
+        </div>
+        <aside class="yo-history__note" aria-labelledby="personal-note-title">
+          <span id="personal-note-title">{profile.data.history.personalNote.label}</span>
+          <p>{profile.data.history.personalNote.paragraph}</p>
+        </aside>
+      </div>
+    </section>
+
+    <nav class="yo-connections" aria-label="Siguientes rutas del archivo">
+      <div>
+        <span>{profile.data.closing.index}</span>
+        <p>{profile.data.closing.label}</p>
+      </div>
+      <ul>
+        {
+          profile.data.closing.links.map((link) => (
+            <li>
+              <a href={link.href}>{link.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </PageShell>
+</BaseLayout>

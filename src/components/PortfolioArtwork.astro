@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+interface Props {
+  entry: CollectionEntry<"portafolio">
+}
+
+const { entry } = Astro.props
+const coverImage = entry.data.coverImage
+const coverAlt = entry.data.coverAlt ?? ""
+const coverCaption = entry.data.coverCaption?.trim()
+const variant = ((entry.data.displayOrder - 1) % 3) + 1
+---
+
+{
+  coverImage ? (
+    <figure class="portfolio-cover">
+      <img
+        class="portfolio-artwork portfolio-artwork--cover"
+        src={coverImage.src}
+        width={coverImage.width}
+        height={coverImage.height}
+        alt={coverAlt}
+        loading="lazy"
+        decoding="async"
+      />
+      {coverCaption && <figcaption>{coverCaption}</figcaption>}
+    </figure>
+  ) : (
+    <div class:list={["portfolio-artwork", `portfolio-artwork--${variant}`]}>
+      <div
+        class="portfolio-artwork__field"
+        role="img"
+        aria-label={`Composición geométrica provisional del archivo ${entry.data.archiveNumber}.`}
+      >
+        <span class="portfolio-artwork__node portfolio-artwork__node--a" />
+        <span class="portfolio-artwork__node portfolio-artwork__node--b" />
+        <span class="portfolio-artwork__node portfolio-artwork__node--c" />
+        <i class="portfolio-artwork__line portfolio-artwork__line--a" />
+        <i class="portfolio-artwork__line portfolio-artwork__line--b" />
+        <b class="portfolio-artwork__plane portfolio-artwork__plane--a" />
+        <b class="portfolio-artwork__plane portfolio-artwork__plane--b" />
+        <em>PROTOTIPO / {entry.data.archiveNumber}</em>
+      </div>
+    </div>
+  )
+}

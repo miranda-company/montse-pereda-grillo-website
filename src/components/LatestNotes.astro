@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { formatDottedDate, toDateValue } from "../lib/dates"
+import { getNoteDestination } from "../lib/notes"
+
+interface Props {
+  entries: CollectionEntry<"notas">[]
+  fragmentTargets?: boolean
+  detailLinks?: boolean
+}
+
+const { entries, fragmentTargets = false, detailLinks = false } = Astro.props
+---
+
+<ol class="latest-notes" aria-label="Últimas tres notas">
+  {
+    entries.map((entry) => {
+      const localHref = detailLinks ? `/notas/${entry.id}` : `/notas#${entry.id}`
+      const destination = getNoteDestination(entry, localHref)
+
+      return (
+        <li
+          id={fragmentTargets ? entry.id : undefined}
+          class={fragmentTargets ? "fragment-target" : undefined}
+          tabindex={fragmentTargets ? "-1" : undefined}
+        >
+          <time datetime={toDateValue(entry.data.updatedAt)}>
+            {formatDottedDate(entry.data.updatedAt)}
+          </time>
+          <a
+            href={destination.href}
+            target={destination.target}
+            rel={destination.rel}
+            aria-label={destination.ariaLabel}
+          >
+            {entry.data.title}
+            {destination.external && <span aria-hidden="true"> ↗</span>}
+          </a>
+        </li>
+      )
+    })
+  }
+</ol>

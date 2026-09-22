@@ -1,0 +1,42 @@
+---
+interface Props {
+  mode: "read" | "watch" | "listen"
+}
+
+const { mode } = Astro.props
+const labels = {
+  read: "LEER",
+  watch: "VER",
+  listen: "ESCUCHAR",
+}
+---
+
+<span
+  class:list={["engagement-mode", `engagement-mode--${mode}`]}
+  role="img"
+  aria-label={`Modo de consulta: ${labels[mode]}`}
+>
+  <span class="engagement-mode__icon" aria-hidden="true">
+    {
+      mode === "read" && (
+        <>
+          <i />
+          <i />
+        </>
+      )
+    }
+    {mode === "watch" && <i />}
+    {
+      mode === "listen" && (
+        <>
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+        </>
+      )
+    }
+  </span>
+  <span class="engagement-mode__label" aria-hidden="true">{labels[mode]}</span>
+</span>

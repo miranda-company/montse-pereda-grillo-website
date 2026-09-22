@@ -1,0 +1,65 @@
+---
+interface Props {
+  provider: "youtube" | "vimeo"
+  videoId: string
+  title: string
+  caption?: string
+}
+
+const { provider, videoId, title, caption } = Astro.props
+
+if (provider !== "youtube" && provider !== "vimeo") {
+  throw new Error('VideoEmbed solo admite los proveedores "youtube" y "vimeo".')
+}
+
+if (typeof title !== "string" || !title.trim()) {
+  throw new Error("VideoEmbed requiere un título accesible no vacío.")
+}
+
+if (typeof videoId !== "string" || !videoId.trim()) {
+  throw new Error("VideoEmbed requiere un identificador de vídeo no vacío.")
+}
+
+const normalizedVideoId = videoId.trim()
+const youtubeIdPattern = /^[A-Za-z0-9_-]{11}$/
+const vimeoIdPattern = /^\d+$/
+const validVideoId =
+  provider === "youtube"
+    ? youtubeIdPattern.test(normalizedVideoId)
+    : vimeoIdPattern.test(normalizedVideoId)
+
+if (!validVideoId) {
+  const expectedFormat =
+    provider === "youtube"
+      ? "11 caracteres seguros: letras, números, guion o guion bajo"
+      : "solo dígitos"
+  throw new Error(`Identificador de ${provider} no válido; se esperaba ${expectedFormat}.`)
+}
+
+const providerLabel = provider === "youtube" ? "YouTube" : "Vimeo"
+const embedUrl =
+  provider === "youtube"
+    ? `https://www.youtube-nocookie.com/embed/${normalizedVideoId}`
+    : `https://player.vimeo.com/video/${normalizedVideoId}?dnt=1`
+const fallbackUrl =
+  provider === "youtube"
+    ? `https://www.youtube.com/watch?v=${normalizedVideoId}`
+    : `https://vimeo.com/${normalizedVideoId}`
+const accessibleTitle = title.trim()
+const editorialCaption = caption?.trim()
+---
+
+<figure class="content-video">
+  <div class="content-video__frame">
+    <iframe
+      src={embedUrl}
+      title={accessibleTitle}
+      loading="lazy"
+      allow="encrypted-media; picture-in-picture; fullscreen"
+      referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  </div>
+  {editorialCaption && <figcaption>{editorialCaption}</figcaption>}
+  <p class="content-video__fallback">
+    <a href={fallbackUrl} rel="external noreferrer">Ver vídeo en {providerLabel} ↗</a>
+  </p>
+</figure>

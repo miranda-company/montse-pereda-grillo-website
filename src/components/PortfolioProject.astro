@@ -1,0 +1,133 @@
+---
+import { render, type CollectionEntry } from "astro:content"
+import { countConnections, type ConnectionGroups } from "../lib/connection-graph"
+import { getExternalNoteConnectionLinks } from "../lib/content-connections"
+import { formatNumericDate } from "../lib/dates"
+import "../styles/portfolio-detail.css"
+import "../styles/portfolio-shared.css"
+import EditorialDetailLayout from "./EditorialDetailLayout.astro"
+import EditorialConnections from "./EditorialConnections.astro"
+import PortfolioArtwork from "./PortfolioArtwork.astro"
+import ProjectMeta from "./ProjectMeta.astro"
+
+interface Props {
+  entry: CollectionEntry<"portafolio">
+  connections: ConnectionGroups
+  previousProject?: CollectionEntry<"portafolio">
+  nextProject?: CollectionEntry<"portafolio">
+}
+
+const { entry, connections, previousProject, nextProject } = Astro.props
+const { Content } = await render(entry)
+const updatedLabel = formatNumericDate(entry.data.updatedAt)
+const supplementalLinks = await getExternalNoteConnectionLinks(
+  entry.data.relatedNotes,
+  import.meta.env.DEV,
+)
+const connectionCount = countConnections(connections, supplementalLinks.length)
+---
+
+<EditorialDetailLayout
+  title={entry.data.title}
+  description={entry.data.summary}
+  pageClass="portfolio-page"
+  introClass="portfolio-intro"
+  backlinkHref="/portafolio"
+  backlinkLabel="Volver a Portafolio"
+  hasConnections={false}
+  canonicalPath={`/portafolio/${entry.id}`}
+  socialImage={entry.data.coverImage}
+  socialImageAlt={entry.data.coverAlt}
+  schemaType="CreativeWork"
+  updatedAt={entry.data.updatedAt}
+  keywords={[...entry.data.disciplines, ...entry.data.tags]}
+  schemaData={{
+    dateCreated: String(entry.data.year),
+    ...(entry.data.endYear ? { temporalCoverage: `${entry.data.year}/${entry.data.endYear}` } : {}),
+    ...(entry.data.client
+      ? { contributor: { "@type": "Organization", name: entry.data.client } }
+      : {}),
+  }}
+>
+  <p slot="header-meta">{entry.data.archiveNumber} / {entry.data.projectStatus}</p>
+  <p slot="header-summary">{entry.data.summary}</p>
+
+  <Fragment slot="metadata">
+    <ProjectMeta entry={entry} />
+  </Fragment>
+
+  <Fragment>
+    {
+      entry.data.placeholder && (
+        <p class="project-provisional-notice">
+          <span aria-hidden="true">●—●</span>
+          PROTOTIPO DE CONTENIDO · INFORMACIÓN DE PROYECTO PENDIENTE
+        </p>
+      )
+    }
+
+    <PortfolioArtwork entry={entry} />
+
+    <div class="rich-content">
+      <Content />
+    </div>
+
+    {
+      entry.data.gallery.length > 0 && (
+        <div class="project-gallery" aria-label="Imágenes adicionales del proyecto">
+          {entry.data.gallery.map((item) => (
+            <figure>
+              <img
+                src={item.image.src}
+                width={item.image.width}
+                height={item.image.height}
+                alt={item.alt}
+                loading="lazy"
+                decoding="async"
+              />
+              {item.caption && <figcaption>{item.caption}</figcaption>}
+            </figure>
+          ))}
+        </div>
+      )
+    }
+
+    {
+      connectionCount > 0 && (
+        <EditorialConnections
+          connections={connections}
+          supplementalLinks={supplementalLinks}
+          presentation="inline"
+          headingId="project-connections-title"
+        />
+      )
+    }
+
+    <footer class="project-article-footer">
+      <p>ÚLTIMA ACTUALIZACIÓN · {updatedLabel}</p>
+      <span>{entry.data.projectStatus}</span>
+    </footer>
+  </Fragment>
+
+  {
+    !entry.data.fixture && (
+      <nav slot="sequence" class="project-sequence" aria-label="Navegación entre proyectos">
+        {previousProject && (
+          <a class="project-sequence__previous" href={`/portafolio/${previousProject.id}`}>
+            <span>← Proyecto anterior</span>
+            {previousProject.data.title}
+          </a>
+        )}
+        {nextProject && (
+          <a class="project-sequence__next" href={`/portafolio/${nextProject.id}`}>
+            <span>Proyecto siguiente →</span>
+            {nextProject.data.title}
+          </a>
+        )}
+        <a class="project-sequence__all" href="/portafolio">
+          Volver a todos los proyectos
+        </a>
+      </nav>
+    )
+  }
+</EditorialDetailLayout>

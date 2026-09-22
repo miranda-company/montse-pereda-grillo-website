@@ -1,0 +1,43 @@
+{
+  "name": "montse-pereda-grillo-website",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "packageManager": "pnpm@10.34.3",
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro check",
+    "build": "pnpm run check && astro build",
+    "preview": "astro preview",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "test:e2e": "pnpm run build && playwright test",
+    "test:e2e:dist": "playwright test",
+    "test:content": "node scripts/check-content-integrity.mjs",
+    "test:production": "node --env-file=.env.production scripts/verify-production.mjs",
+    "test:budgets": "node scripts/check-performance-budgets.mjs",
+    "test:links": "node scripts/check-internal-links.mjs",
+    "test": "pnpm run test:content && pnpm run test:production && pnpm run test:budgets && pnpm run test:links && pnpm run test:e2e:dist",
+    "verify": "pnpm run format:check && pnpm run build && pnpm run test",
+    "audit:lighthouse": "pnpm run build && node scripts/run-lighthouse.mjs",
+    "audit:lighthouse:dist": "node scripts/run-lighthouse.mjs",
+    "verify:launch": "pnpm run verify && pnpm run audit:lighthouse:dist"
+  },
+  "dependencies": {
+    "@astrojs/mdx": "^7.0.5",
+    "@fontsource-variable/instrument-sans": "^5.3.0",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "astro": "^7.1.6",
+    "sharp": "0.35.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.62.1",
+    "@types/node": "^22.0.0",
+    "lighthouse": "13.4.1",
+    "prettier": "3.9.6",
+    "prettier-plugin-astro": "0.14.1",
+    "typescript": "^5.9.3"
+  }
+}

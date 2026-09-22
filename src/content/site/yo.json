@@ -1,0 +1,153 @@
+[
+  {
+    "id": "yo",
+    "hero": {
+      "label": "Sobre mi",
+      "name": "Rodolfo Miranda Company",
+      "positioning": "Claridad, estrategia y creatividad para el trabajo digital.",
+      "profileMeta": "PERFIL / EN EVOLUCIÓN",
+      "disciplines": "COMUNICACIÓN · DISEÑO · TECNOLOGÍA"
+    },
+    "portrait": {
+      "alt": "Retrato de Rodolfo Miranda Company en el puerto de Barcelona. Julio de 2026.",
+      "annotation": "Rodolfo Miranda en Barcelona, 2026"
+    },
+    "context": {
+      "index": "Introducción",
+      "title": "Sobre mí",
+      "paragraphs": [
+        [
+          {
+            "text": "Llevo más de 13 años moviéndome en la intersección entre la comunicación, la creatividad y la tecnología."
+          }
+        ],
+        [
+          {
+            "text": "Ayudo a equipos y empresas a ordenar sus procesos para lograr proyectos digitales más creativos y con mayor valor. Mi función es actuar como un puente entre los equipos técnicos y los equipos creativos, asegurando que las campañas y productos digitales estén alineados con la estrategia."
+          }
+        ],
+        [
+          {
+            "text": "Me gusta entender qué problema estamos intentando resolver, qué valor queremos crear, quién tiene que participar y qué necesita ocurrir para que el trabajo fluya y sea enriquecedor."
+          }
+        ],
+        [
+          {
+            "text": "Con los años han cambiado los proyectos, los clientes y las herramientas. Mi forma de trabajar, no tanto. Entender bien el problema, reunir a las personas adecuadas y encontrar una manera clara y práctica de convertir una necesidad en algo útil."
+          }
+        ],
+        [
+          {
+            "text": "Y sí, mi apellido es Company :)"
+          }
+        ]
+      ]
+    },
+    "currentContext": {
+      "index": "Ahora",
+      "title": "En este momento",
+      "paragraphs": [
+        [
+          {
+            "text": "Estoy explorando cómo la inteligencia artificial está cambiando la comunicación, la creatividad y nuestra forma de trabajar.  Aprendo haciendo. Diseño productos, construyo prototipos y pruebo nuevas formas de trabajar con IA. Este sitio también forma parte del experimento. Documento lo que aprendo y comparto parte del proceso en mis notas y en LinkedIn."
+          }
+        ]
+      ]
+    },
+    "timeline": {
+      "index": "CV",
+      "title": "Trayectoria",
+      "entries": [
+        {
+          "role": "Fundador | Responsable de Operaciones Digitales",
+          "organization": "Eloquent",
+          "period": "2018-2026",
+          "description": "Ayudo a organizaciones de España y Latinoamérica a fortalecer su comunicación mediante consultoría y el desarrollo de metodologías y sistemas propios.",
+          "caseStudyLabel": "Ver portafolio ↗",
+          "caseStudyUrl": "/portafolio/eloquent",
+          "current": true,
+          "placeholder": false
+        },
+        {
+          "role": "Fundador | Responsable de Operaciones",
+          "organization": "Modulab Barcelona",
+          "period": "2021–2025",
+          "description": "Fundé y dirigí un estudio de fotografía y vídeo, ocupándome del modelo de negocio, la marca, el marketing, la infraestructura digital y las operaciones; aprendí a convertir una idea creativa en un negocio viable y conseguí procesar más de 400 reservas anuales, obtener 100 reseñas de cinco estrellas y traspasar el proyecto a Pixel Estudis en 2025.",
+          "caseStudyLabel": "Ver portafolio ↗",
+          "caseStudyUrl": "/portafolio/modulab-barcelona",
+          "current": false,
+          "placeholder": false
+        },
+        {
+          "role": "Creative Advertising Lead",
+          "organization": "Elespacio",
+          "period": "2017–2020",
+          "description": "Lideré el área de publicidad y marketing digital, coordinando equipos, clientes y campañas internacionales, aprendí a conectar creatividad, tecnología y negocio mediante procesos escalables y desarrollé un sistema de DCO desplegado en más de 15 mercados y 11 idiomas que contribuyó a captar clientes como Nespresso y Victorinox.",
+          "current": false,
+          "placeholder": false
+        },
+        {
+          "role": "Sr. Digital Advertising Specialist",
+          "organization": "ThisPage Amsterdam",
+          "period": "2013–2017",
+          "description": "Trabajé como Sr. Digital Advertising Specialist, liderando equipos, coordinando proyectos y diseñando procesos internos; aprendí a convertir una producción digital compleja en sistemas modulares y escalables, y desarrollé el AO System, un framework de DCO que generaba más de 900 variantes mensuales en siete formatos y tres idiomas, ahorró cientos de horas facturables y contribuyó a captar nuevos clientes y mejorar el retorno de las campañas.",
+          "current": false,
+          "placeholder": false
+        },
+        {
+          "role": "Content Specialist",
+          "organization": "CNN Expansión",
+          "period": "2011",
+          "description": "En CNN Grupo Expansión trabajé como Especialista en Contenidos, creando infografías interactivas y gestionando su archivo digital. Aprendí a transformar información editorial en experiencias visuales claras y contribuí a enriquecer sus publicaciones digitales y a organizar sus activos multimedia.",
+          "current": false,
+          "placeholder": false
+        }
+      ]
+    },
+    "history": {
+      "index": "Bio",
+      "title": "¿Cómo llegué hasta aquí?",
+      "paragraphs": [
+        [
+          {
+            "text": "Estudié diseño interactivo en Ciudad de México y más adelante me formé en fotografía, medios documentales y nuevas narrativas en Nueva York y Madrid. Desde entonces, la vida me ha llevado por Ciudad de México, Nueva York, Madrid, Ámsterdam y Barcelona."
+          }
+        ],
+        [
+          {
+            "text": "He colaborado con agencias internacionales, instituciones científicas y culturales, grandes empresas, pequeños negocios y proyectos propios. Por el camino he diseñado estrategias, marcas, campañas, plataformas digitales, contenidos y sistemas de trabajo. Algunas cosas funcionaron muy bien. Otras no pasaron del prototipo. Y unas cuantas me enseñaron, sobre todo, qué no volver a hacer."
+          }
+        ],
+        [
+          {
+            "text": "Soy fundador Eloquent y Modulab Barcelona, dos proyectos que me enseñaron que sacar adelante un negocio tiene tanto que ver con la marca y la experiencia del cliente como con las cuentas, la operativa del día a día y los pequeños problemas que aparecen cuando una idea se encuentra con la realidad. Emprender es una gran responsabilidad."
+          }
+        ],
+        [
+          {
+            "text": "Hoy vivo en Barcelona. Sigo asesorando a organizaciones, desarrollando productos digitales y buscando formas de aportar claridad y valor."
+          }
+        ]
+      ],
+      "personalNote": {
+        "label": "Más personal...",
+        "paragraph": "Crecí en Cuernavaca, la ciudad de la eterna primavera, con madre española y padre mexicano. Esta herencia bicultural me enseñó desde muy temprano a mezclar perspectivas y a entender el mundo desde la diversidad; algo que hoy aplico en cada proyecto. Cuando no estoy frente a una pantalla, mi curiosidad toma otras formas. Me dedico a viajar, a devorar libros y a escribir. Además, la fotografía y el vídeo (que durante años fueron parte de mis negocios) siguen siendo mi forma favorita de documentar y expresar mi realidad."
+      }
+    },
+    "closing": {
+      "index": "01.05 / SIGUIENTES RUTAS",
+      "label": "Continuar por el archivo",
+      "links": [
+        {
+          "label": "Ver portafolio ↗",
+          "href": "/portafolio"
+        },
+        {
+          "label": "Leer notas ↗",
+          "href": "/notas"
+        }
+      ]
+    },
+    "language": "es"
+  }
+]

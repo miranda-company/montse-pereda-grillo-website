@@ -1,0 +1,48 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+type Panel = CollectionEntry<"homepage">["data"]["panels"][number] & {
+  metadata: string
+  reveal: string
+}
+
+interface Props {
+  panel: Panel
+}
+
+const { panel } = Astro.props
+---
+
+<article class:list={["archive-panel", panel.kind]}>
+  <a class="panel-link" href={panel.href} aria-label={"Ir a " + panel.title}>
+    <div class="panel-top">
+      <span>{panel.index}</span>
+      <span>{panel.title}</span>
+      <span class="panel-arrow" aria-hidden="true">↗</span>
+    </div>
+    <div
+      class:list={["panel-image-placeholder", panel.image && "has-image"]}
+      aria-hidden={panel.image ? undefined : "true"}
+    >
+      {
+        panel.image ? (
+          <img
+            src={panel.image.src}
+            width={panel.image.width}
+            height={panel.image.height}
+            alt={panel.imageAlt ?? ""}
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <span>IMAGEN / {panel.index}</span>
+        )
+      }
+    </div>
+    <div class="panel-copy">
+      <p>{panel.description}</p>
+      <small>{panel.metadata}</small>
+      <small class="reveal">{panel.reveal}</small>
+    </div>
+  </a>
+</article>

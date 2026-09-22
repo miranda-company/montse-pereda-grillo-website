@@ -1,0 +1,23 @@
+---
+import PageShell from "../components/PageShell.astro"
+import BaseLayout from "../layouts/BaseLayout.astro"
+import "../styles/not-found.css"
+---
+
+<BaseLayout
+  title="Página no encontrada"
+  description="La página solicitada no existe o ya no está disponible."
+  canonicalPath="/404"
+  forceNoIndex
+>
+  <PageShell pageClass="not-found-page" mainClass="not-found-main">
+    <section class="page-intro not-found-intro" aria-labelledby="not-found-title">
+      <p class="kicker">404 / Ruta no encontrada</p>
+      <h1 id="not-found-title">Esta página no existe.</h1>
+      <p class="intro-lead not-found-intro__description">
+        Puede que el enlace haya cambiado o que esta parte del archivo todavía no esté disponible.
+      </p>
+      <a class="page-back not-found-intro__link" href="/#indice">← Volver al índice</a>
+    </section>
+  </PageShell>
+</BaseLayout>

@@ -1,0 +1,55 @@
+[
+  {
+    "id": "homepage",
+    "heroEyebrow": "Rodolfo Miranda Company",
+    "heroTitle": "Estrategia Digital y Operaciones",
+    "connectionLabel": "Defino estrategias y dirijo proyectos digitales de principio a fin, diseño sistemas escalables para optimizar las operaciones y este es mi jardín digital.",
+    "connectionLink": {
+      "label": "jardín digital",
+      "href": "/notas/el-magnifico-mundo-de-los-jardines-digitales"
+    },
+    "indexLabel": "Archivos",
+    "panels": [
+      {
+        "index": "01",
+        "title": "Yo",
+        "description": "Conoce un poco más sobre mí y mi forma de trabajar.",
+        "metadata": "Currículo · Experiencia",
+        "reveal": "Información personal",
+        "href": "/yo",
+        "kind": "yo",
+        "image": "../../assets/images/homepage/workspace-001.jpg",
+        "imageAlt": "Expediente retrofuturista con una fotografía de Rodolfo Miranda, engranajes y un disco óptico."
+      },
+      {
+        "index": "02",
+        "title": "Portafolio",
+        "description": "Mi portafolio de proyectos y trabajos.",
+        "metadata": "Trabajo seleccionado",
+        "href": "/portafolio",
+        "kind": "portafolio",
+        "image": "../../assets/images/homepage/floppy-002.webp",
+        "imageAlt": "Disquete negro transparente con engranajes, circuitos y un disco óptico."
+      },
+      {
+        "index": "03",
+        "title": "Notas",
+        "description": "Ideas y apuntes sobre lo que me genera curiosidad.",
+        "href": "/notas",
+        "kind": "notas",
+        "image": "../../assets/images/homepage/flower-002.jpg",
+        "imageAlt": "Ilustración botánica fantástica con flores rosadas, hojas translúcidas y raíces expuestas."
+      },
+      {
+        "index": "04",
+        "title": "Mediateca",
+        "description": "Libros, artículos, podcasts y videos que me sirven de referencia y aprendizaje.",
+        "metadata": "Inspiración · Referencias",
+        "href": "/mediateca",
+        "kind": "mediateca",
+        "image": "../../assets/images/homepage/mediateca-device-001.webp",
+        "imageAlt": "Ordenador retro con pantalla, magnetófonos y una consola de controles multimedia."
+      }
+    ]
+  }
+]

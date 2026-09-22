@@ -1,0 +1,95 @@
+---
+import brandSymbol from "../assets/images/brand-symbol.jpg"
+
+const navItems = [
+  { href: "/yo", label: "Yo" },
+  { href: "/portafolio", label: "Portafolio" },
+  { href: "/notas", label: "Notas" },
+  { href: "/mediateca", label: "Mediateca" },
+] as const
+
+const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/"
+const isCurrentSection = (href: (typeof navItems)[number]["href"]) =>
+  pathname === href || pathname.startsWith(`${href}/`)
+---
+
+<header class="site-header" data-site-header>
+  <a class="brand" href="/" aria-label="Rodolfo Miranda Company, inicio">
+    <img
+      class="brand-symbol"
+      src={brandSymbol.src}
+      width={brandSymbol.width}
+      height={brandSymbol.height}
+      alt=""
+      aria-hidden="true"
+    />
+  </a>
+
+  <nav class="desktop-nav" aria-label="Navegación principal">
+    {
+      navItems.map(({ href, label }) => (
+        <a href={href} aria-current={isCurrentSection(href) ? "page" : undefined}>
+          {label}
+        </a>
+      ))
+    }
+  </nav>
+
+  <button
+    class="mobile-menu-button"
+    type="button"
+    aria-expanded="false"
+    aria-controls="mobile-menu"
+    data-open-label="Cerrar"
+    data-closed-label="Menú"
+  >
+    Menú
+  </button>
+
+  <nav class="mobile-menu" id="mobile-menu" aria-label="Navegación móvil" hidden>
+    <button type="button" class="menu-close">Cerrar menú</button>
+    {
+      navItems.map(({ href, label }) => (
+        <a href={href} aria-current={isCurrentSection(href) ? "page" : undefined}>
+          {label}
+        </a>
+      ))
+    }
+  </nav>
+
+  <script>
+    document.querySelectorAll<HTMLElement>(".site-header").forEach((header) => {
+      if (header.dataset.menuReady === "true") return
+      header.dataset.menuReady = "true"
+
+      const trigger = header.querySelector<HTMLButtonElement>(".mobile-menu-button")
+      const menu = header.querySelector<HTMLElement>(".mobile-menu")
+      const closeButton = header.querySelector<HTMLButtonElement>(".menu-close")
+      if (!trigger || !menu || !closeButton) return
+
+      const setOpen = (open: boolean, restoreFocus = false) => {
+        menu.hidden = !open
+        trigger.setAttribute("aria-expanded", String(open))
+        trigger.textContent = open
+          ? (trigger.dataset.openLabel ?? "Cerrar")
+          : (trigger.dataset.closedLabel ?? "Menú")
+        header.classList.toggle("menu-open", open)
+        if (restoreFocus) window.requestAnimationFrame(() => trigger.focus())
+      }
+
+      trigger.addEventListener("click", () => {
+        setOpen(trigger.getAttribute("aria-expanded") !== "true")
+      })
+      closeButton.addEventListener("click", () => setOpen(false, true))
+      menu.addEventListener("click", (event) => {
+        if (event.target instanceof Element && event.target.closest("a")) setOpen(false)
+      })
+      header.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && trigger.getAttribute("aria-expanded") === "true") {
+          event.preventDefault()
+          setOpen(false, true)
+        }
+      })
+    })
+  </script>
+</header>

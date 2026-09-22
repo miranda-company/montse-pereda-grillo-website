@@ -1,0 +1,41 @@
+---
+import type { CollectionEntry } from "astro:content"
+import NoteArticle from "../../components/NoteArticle.astro"
+import { getEditorialConnectionGraph } from "../../lib/content-connections"
+import { createConnectionNodeKey, type ConnectionGroups } from "../../lib/connection-graph"
+import { getRoutableSpanishNotes } from "../../lib/notes"
+
+export async function getStaticPaths() {
+  const includeDrafts = import.meta.env.DEV
+  const [entries, connectionGraph] = await Promise.all([
+    getRoutableSpanishNotes(includeDrafts),
+    getEditorialConnectionGraph(includeDrafts),
+  ])
+
+  return entries.map((entry, index) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      connections: connectionGraph.get(createConnectionNodeKey("notas", entry.id)),
+      previousNote: entries[(index - 1 + entries.length) % entries.length]!,
+      nextNote: entries[(index + 1) % entries.length]!,
+    },
+  }))
+}
+
+interface Props {
+  entry: CollectionEntry<"notas">
+  connections: ConnectionGroups
+  previousNote?: CollectionEntry<"notas">
+  nextNote?: CollectionEntry<"notas">
+}
+
+const { entry, connections, previousNote, nextNote } = Astro.props
+---
+
+<NoteArticle
+  entry={entry}
+  connections={connections}
+  previousNote={previousNote}
+  nextNote={nextNote}
+/>

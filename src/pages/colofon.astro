@@ -1,0 +1,146 @@
+---
+import PageShell from "../components/PageShell.astro"
+import BaseLayout from "../layouts/BaseLayout.astro"
+import "../styles/colophon.css"
+---
+
+<BaseLayout
+  title="Colofón"
+  description="Cómo está diseñado, escrito, construido y publicado Rodolfo Miranda Company."
+  canonicalPath="/colofon"
+>
+  <PageShell pageClass="colophon-page" mainClass="colophon-main page-main--with-back">
+    <a class="page-back" href="/#indice">← Volver al índice</a>
+
+    <section class="page-intro colophon-intro" aria-labelledby="colophon-title">
+      <p class="kicker">El sitio / Cómo está hecho</p>
+      <h1 id="colophon-title">Colofón</h1>
+      <p class="intro-lead colophon-intro__description">
+        Una nota sobre las decisiones, herramientas y procesos que sostienen este sitio.
+      </p>
+    </section>
+
+    <div class="colophon-layout">
+      <aside class="colophon-facts" aria-label="Ficha técnica del sitio">
+        <dl>
+          <div>
+            <dt>Estado</dt>
+            <dd>En evolución</dd>
+          </div>
+          <div>
+            <dt>Idioma</dt>
+            <dd>Español</dd>
+          </div>
+          <div>
+            <dt>Salida</dt>
+            <dd>HTML estático</dd>
+          </div>
+          <div>
+            <dt>Actualizado</dt>
+            <dd>28/08/2026</dd>
+          </div>
+        </dl>
+      </aside>
+
+      <article class="colophon-content">
+        <section aria-labelledby="colophon-site">
+          <p class="colophon-section-label">01 / SITIO</p>
+          <h2 id="colophon-site">Un jardín digital hecho a medida</h2>
+          <p>
+            Diseñé y construí este sitio para reunir mi trayectoria, proyectos, notas y referencias
+            en un mismo lugar. Es una web personal y también un espacio de trabajo: algunas páginas
+            están terminadas y otras cambian a medida que aparecen nuevas ideas y conexiones.
+          </p>
+          <p>
+            La estructura se ha diseñado específicamente para el contenido, en lugar de adaptar las
+            piezas a una plantilla o a un gestor de contenidos generalista.
+          </p>
+        </section>
+
+        <section aria-labelledby="colophon-technology">
+          <p class="colophon-section-label">02 / TECNOLOGÍA</p>
+          <h2 id="colophon-technology">Una base estática y ligera</h2>
+          <p>
+            <a href="https://astro.build/">Astro</a> genera las páginas como HTML estático. La interfaz
+            está construida con HTML semántico, CSS propio y una pequeña cantidad de JavaScript sin framework
+            para los menús, filtros, búsquedas y carruseles.
+          </p>
+          <ul class="colophon-stack" aria-label="Tecnologías principales">
+            <li><strong>Astro 7</strong><span>Generación estática y rutas</span></li>
+            <li><strong>TypeScript</strong><span>Tipos y lógica de contenido</span></li>
+            <li><strong>Markdown y MDX</strong><span>Textos y componentes editoriales</span></li>
+            <li><strong>CSS</strong><span>Diseño, tokens y comportamiento responsivo</span></li>
+            <li><strong>Playwright</strong><span>Pruebas de interfaz y accesibilidad</span></li>
+            <li><strong>pnpm</strong><span>Dependencias y tareas del proyecto</span></li>
+          </ul>
+        </section>
+
+        <section aria-labelledby="colophon-content">
+          <p class="colophon-section-label">03 / CONTENIDO</p>
+          <h2 id="colophon-content">Archivos antes que un CMS</h2>
+          <p>
+            El contenido vive en archivos Markdown, MDX y JSON dentro del repositorio. Lo escribo y
+            edito directamente en el código; las colecciones de Astro validan sus metadatos durante
+            el build antes de generar una página.
+          </p>
+          <p>
+            Este sistema mantiene cerca el texto, la estructura y el diseño. También permite que una
+            nota sea un borrador, que un proyecto tenga un periodo de varios años o que una
+            referencia de Mediateca combine una portada, un vídeo y conexiones con otras entradas.
+          </p>
+        </section>
+
+        <section aria-labelledby="colophon-design">
+          <p class="colophon-section-label">04 / DISEÑO</p>
+          <h2 id="colophon-design">Tipografía, retícula y materiales locales</h2>
+          <p>
+            Los títulos usan Prata; el texto de lectura usa Instrument Sans y los metadatos usan IBM
+            Plex Mono. Las tres familias se sirven desde el propio build. Una retícula técnica, una
+            paleta contenida y un conjunto compartido de tokens ordenan los ritmos, tamaños, estados
+            de foco y cambios responsivos.
+          </p>
+          <p>
+            Las imágenes también son locales. Se preparan al tamaño útil antes de incorporarlas para
+            mantener la salida sencilla y evitar una capa adicional de servicios externos.
+          </p>
+        </section>
+
+        <section aria-labelledby="colophon-connections">
+          <p class="colophon-section-label">05 / CONEXIONES</p>
+          <h2 id="colophon-connections">Enlaces en ambas direcciones</h2>
+          <p>
+            Notas, Mediateca y Portafolio forman un pequeño grafo editorial. Cada entrada declara
+            sus relaciones una sola vez y el sitio calcula los enlaces de vuelta durante el build.
+            El resultado funciona sin una base de datos y sin enviar JavaScript adicional al
+            navegador.
+          </p>
+        </section>
+
+        <section aria-labelledby="colophon-publishing">
+          <p class="colophon-section-label">06 / PUBLICACIÓN</p>
+          <h2 id="colophon-publishing">Un conjunto de archivos listo para servir</h2>
+          <p>
+            El proyecto se versiona con Git y se mantiene en <a
+              href="https://github.com/miranda-company/rodolfo-miranda-company">GitHub</a
+            >. Antes de publicar, el proceso comprueba formato, tipos, rutas, accesibilidad,
+            comportamiento responsivo y presupuestos de peso. El build final se guarda en <code
+              >dist</code
+            > y puede servirse desde cualquier alojamiento estático, sin servidor de aplicación ni base
+            de datos.
+          </p>
+        </section>
+
+        <section aria-labelledby="colophon-inspiration">
+          <p class="colophon-section-label">07 / REFERENCIA</p>
+          <h2 id="colophon-inspiration">Inspiración para el colofón</h2>
+          <p>
+            Un colofón explica los materiales y decisiones que hay detrás de una publicación. La
+            organización de esta página toma como referencia el <a
+              href="https://maggieappleton.com/colophon">colofón de Maggie Appleton</a
+            >, adaptado a la arquitectura y al proceso de este sitio.
+          </p>
+        </section>
+      </article>
+    </div>
+  </PageShell>
+</BaseLayout>

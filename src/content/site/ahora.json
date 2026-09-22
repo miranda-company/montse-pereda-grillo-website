@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ahora",
+    "label": "Acceso rápido",
+    "period": "2026",
+    "title": "Lo último",
+    "notesHeading": "Notas",
+    "notesLinkLabel": "Ver todas las notas ↗",
+    "mediatecaHeading": "Anaquel",
+    "mediatecaLinkLabel": "Abrir mediateca ↗",
+    "portfolioHeading": "Proyectos",
+    "portfolioLinkLabel": "Ver portafolio ↗",
+    "portfolioEmptyTitle": "Portafolio en preparación",
+    "portfolioEmptyStatus": "Sin proyectos publicados"
+  }
+]

@@ -1,0 +1,126 @@
+.reference-meta,
+.reference-provisional {
+  font-family: var(--font-mono);
+  letter-spacing: 0.045em;
+}
+
+.reference-external:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: 3px;
+}
+
+.reference-tags span {
+  border: 1px solid var(--line);
+  padding: 2px 4px;
+  font-style: normal;
+}
+
+.reference-external:hover,
+.reference-external:focus-visible {
+  color: var(--blue);
+}
+
+.reference-meta .media-cover__image {
+  height: auto;
+}
+
+.reference-meta dl {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 18px 0 0;
+}
+
+.reference-meta dl > div {
+  border-top: 1px solid var(--line);
+  padding: 10px 0 13px;
+}
+
+.reference-meta dl > div:nth-child(odd) {
+  padding-right: 10px;
+}
+
+.reference-meta dt {
+  margin-bottom: 5px;
+  color: var(--graphite);
+  font-size: 7px;
+  text-transform: uppercase;
+}
+
+.reference-meta dd {
+  margin: 0;
+  font-size: 9px;
+}
+
+.reference-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+  font-size: 7px;
+}
+
+.reference-external {
+  display: inline-block;
+  margin-top: 17px;
+  color: var(--ink);
+  font-size: 9px;
+  text-underline-offset: 4px;
+}
+
+.reference-reading {
+  min-width: 0;
+}
+
+.reference-reading .rich-content > :first-child {
+  margin-top: 0;
+}
+
+.reference-provisional {
+  display: flex;
+  gap: 11px;
+  margin: 0 0 46px;
+  border-top: 1px solid var(--blue);
+  border-bottom: 1px solid var(--blue);
+  padding: 14px 0;
+  color: var(--blue);
+  font-size: 9px;
+  line-height: 1.45;
+}
+
+.reference-provisional span {
+  color: var(--ochre);
+}
+
+@media (max-width: 767px) {
+  .reference-meta {
+    display: grid;
+    grid-template-columns: 125px minmax(0, 1fr);
+    gap: 15px;
+  }
+
+  .reference-meta .media-engagement-placeholder,
+  .reference-meta .media-cover {
+    grid-row: 1 / span 3;
+  }
+
+  .reference-meta dl {
+    margin: 0;
+  }
+
+  .reference-meta dl > div {
+    padding: 8px 0;
+  }
+
+  .reference-tags {
+    align-content: start;
+  }
+
+  .reference-external {
+    margin-top: 0;
+  }
+
+  .reference-provisional {
+    margin-bottom: 38px;
+  }
+}

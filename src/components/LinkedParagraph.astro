@@ -1,0 +1,20 @@
+---
+interface Segment {
+  text: string
+  href?: string
+}
+
+interface Props {
+  segments: Segment[]
+}
+
+const { segments } = Astro.props
+---
+
+<p>
+  {
+    segments.map((segment) =>
+      segment.href ? <a href={segment.href}>{segment.text}</a> : segment.text,
+    )
+  }
+</p>

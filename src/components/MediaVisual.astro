@@ -1,0 +1,33 @@
+---
+import type { CollectionEntry } from "astro:content"
+import EngagementMode from "./EngagementMode.astro"
+
+interface Props {
+  entry: CollectionEntry<"mediateca">
+}
+
+const { entry } = Astro.props
+const coverImage = entry.data.coverImage
+const coverCaption = entry.data.coverCaption?.trim()
+---
+
+{
+  coverImage ? (
+    <figure class="media-cover">
+      <img
+        class="media-cover__image"
+        src={coverImage.src}
+        width={coverImage.width}
+        height={coverImage.height}
+        alt={entry.data.coverAlt ?? ""}
+        loading="lazy"
+        decoding="async"
+      />
+      {coverCaption && <figcaption>{coverCaption}</figcaption>}
+    </figure>
+  ) : (
+    <div class="media-engagement-placeholder">
+      <EngagementMode mode={entry.data.engagementMode} />
+    </div>
+  )
+}

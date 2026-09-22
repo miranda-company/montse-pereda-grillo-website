@@ -1,0 +1,43 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { formatNumericDate, toDateValue } from "../lib/dates"
+
+interface Props {
+  entry: CollectionEntry<"portafolio">
+}
+
+const { entry } = Astro.props
+const yearLabel = entry.data.endYear
+  ? `${entry.data.year}–${entry.data.endYear}`
+  : String(entry.data.year)
+const updatedLabel = formatNumericDate(entry.data.updatedAt)
+---
+
+<aside class="project-meta" aria-label="Metadatos del proyecto">
+  <dl>
+    <div><dt>{entry.data.endYear ? "Años" : "Año"}</dt><dd>{yearLabel}</dd></div>
+    <div><dt>Rol</dt><dd>{entry.data.role}</dd></div>
+    {
+      entry.data.client && (
+        <div>
+          <>
+            <dt>Organización</dt>
+            <dd>{entry.data.client}</dd>
+          </>
+        </div>
+      )
+    }
+    <div><dt>Estado</dt><dd>{entry.data.projectStatus}</dd></div>
+    <div>
+      <dt>Disciplinas</dt>
+      <dd class="project-meta__disciplines">
+        {entry.data.disciplines.map((discipline) => <span>{discipline}</span>)}
+      </dd>
+    </div>
+    <div><dt>Archivo</dt><dd>{entry.data.archiveNumber}</dd></div>
+    <div>
+      <dt>Actualizado</dt>
+      <dd><time datetime={toDateValue(entry.data.updatedAt)}>{updatedLabel}</time></dd>
+    </div>
+  </dl>
+</aside>

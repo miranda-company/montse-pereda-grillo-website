@@ -1,0 +1,174 @@
+---
+import CurrentShelf from "../../components/CurrentShelf.astro"
+import MediaCard from "../../components/MediaCard.astro"
+import PageShell from "../../components/PageShell.astro"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import { formatNumericDate } from "../../lib/dates"
+import { getVisibleSpanishMedia } from "../../lib/media"
+import "../../styles/media-shared.css"
+import "../../styles/media-index.css"
+
+const includeDrafts = import.meta.env.DEV
+const entries = await getVisibleSpanishMedia(includeDrafts)
+const currentShelf = entries.filter((entry) => entry.data.displayInShelf)
+const lastUpdated = entries[0]?.data.updatedAt ?? new Date("2026-07-31")
+const lastUpdatedLabel = formatNumericDate(lastUpdated)
+const formatFilters = [
+  ["all", "Todo"],
+  ["book", "Libros"],
+  ["article", "Artículos"],
+  ["website", "Sitios"],
+  ["tool", "Herramientas"],
+  ["video", "Videos"],
+  ["podcast", "Podcasts"],
+] as const
+const themes = ["Diseño", "Sistemas", "Cultura digital", "Herramientas", "Edición"]
+---
+
+<BaseLayout
+  title="Mediateca"
+  description="Libros, artículos, videos y audios que inspiran mi trabajo y mi día a día."
+  canonicalPath="/mediateca"
+  schemaType="CollectionPage"
+>
+  <PageShell pageClass="media-page" mainClass="media-main page-main--with-back">
+    <a class="page-back" href="/#indice">← Volver al índice</a>
+    <section class="page-intro mediateca-intro" aria-labelledby="media-title">
+      <div>
+        <p class="kicker media-kicker">Inspiración y cosicas buenas</p>
+        <h1 id="media-title">Mediateca</h1>
+        <p class="intro-lead mediateca-intro__description">
+          Libros, artículos, videos y audios que inspiran mi trabajo y mi día a día.
+        </p>
+        <p class="mediateca-intro__meta">
+          {String(entries.length).padStart(2, "0")} REFERENCIAS · ACTUALIZADO {lastUpdatedLabel}
+        </p>
+      </div>
+    </section>
+
+    <section class="current-shelf" aria-labelledby="shelf-title">
+      <div class="media-section-heading">
+        <div>
+          <p>Seleccionados ahora</p>
+          <h2 id="shelf-title">Anaquel</h2>
+        </div>
+        <p>
+          Referencias que acompañan el trabajo en este momento. Las anotaciones son provisionales.
+        </p>
+      </div>
+      <CurrentShelf entries={currentShelf} />
+    </section>
+
+    <section class="media-catalogue" aria-labelledby="catalogue-title">
+      <div class="media-section-heading media-section-heading--catalogue">
+        <div>
+          <h2 id="catalogue-title">Repositorio</h2>
+        </div>
+        <p data-result-count aria-live="polite">{entries.length} referencias visibles</p>
+      </div>
+
+      <details class="media-controls-disclosure" data-media-disclosure>
+        <summary>
+          <span>Filtrar y ordenar</span>
+          <span data-filter-summary>{entries.length} referencias · sin filtros</span>
+        </summary>
+
+        <form class="media-controls" data-media-controls>
+          <fieldset class="media-filter-group media-filter-group--format">
+            <legend>Formato</legend>
+            <div class="media-filter-options">
+              {
+                formatFilters.map(([value, label]) => (
+                  <button
+                    class="archive-control"
+                    type="button"
+                    aria-pressed={value === "all" ? "true" : "false"}
+                    data-format-filter={value}
+                  >
+                    <span aria-hidden="true">{value === "all" ? "×" : "+"}</span>
+                    {label}
+                  </button>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <fieldset class="media-filter-group media-filter-group--themes">
+            <legend>Tema</legend>
+            <div class="media-filter-options">
+              {
+                themes.map((theme) => (
+                  <button
+                    class="archive-control"
+                    type="button"
+                    aria-pressed="false"
+                    data-theme-filter={theme}
+                  >
+                    <span aria-hidden="true">+</span>
+                    {theme}
+                  </button>
+                ))
+              }
+            </div>
+          </fieldset>
+
+          <label class="media-sort">
+            <span>Orden</span>
+            <select class="archive-control" data-media-sort>
+              <option value="recent">Actualizadas recientemente</option>
+              <option value="title">Título</option>
+              <option value="creator">Creador</option>
+            </select>
+          </label>
+        </form>
+      </details>
+
+      <div class="media-catalogue__grid" data-media-grid>
+        {entries.map((entry) => <MediaCard entry={entry} />)}
+      </div>
+      <div class="media-empty" data-media-empty hidden>
+        <p>No hay referencias que coincidan con esta combinación. Prueba otro cruce.</p>
+        <button class="filter-reset" type="button" data-media-reset>Restablecer filtros</button>
+      </div>
+    </section>
+  </PageShell>
+
+  <script>
+    import { initArchiveControls } from "../../scripts/archive-controls"
+
+    initArchiveControls({
+      disclosureSelector: "[data-media-disclosure]",
+      controlsSelector: "[data-media-controls]",
+      containerSelector: "[data-media-grid]",
+      cardSelector: "[data-media-card]",
+      sortSelector: "[data-media-sort]",
+      countSelector: "[data-result-count]",
+      summarySelector: "[data-filter-summary]",
+      emptySelector: "[data-media-empty]",
+      resetSelector: "[data-media-reset]",
+      primary: {
+        buttonSelector: "[data-format-filter]",
+        buttonDataKey: "formatFilter",
+        cardDataKey: "format",
+        defaultValue: "all",
+      },
+      secondary: {
+        buttonSelector: "[data-theme-filter]",
+        buttonDataKey: "themeFilter",
+        cardDataKey: "tags",
+        defaultValue: "",
+      },
+      singular: "referencia",
+      plural: "referencias",
+      compareCards: (first, second, sortValue) => {
+        if (sortValue === "title") {
+          return (first.dataset.title ?? "").localeCompare(second.dataset.title ?? "", "es")
+        }
+        if (sortValue === "creator") {
+          return (first.dataset.creator ?? "").localeCompare(second.dataset.creator ?? "", "es")
+        }
+        return (second.dataset.updated ?? "").localeCompare(first.dataset.updated ?? "")
+      },
+    })
+  </script>
+</BaseLayout>

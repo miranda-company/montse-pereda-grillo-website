@@ -1,0 +1,58 @@
+---
+import type { CollectionEntry } from "astro:content"
+import PortfolioProject from "../../components/PortfolioProject.astro"
+import { getEditorialConnectionGraph } from "../../lib/content-connections"
+import { createConnectionNodeKey, type ConnectionGroups } from "../../lib/connection-graph"
+import {
+  getDevelopmentSpanishProjectFixtures,
+  getVisibleSpanishProjects,
+} from "../../lib/portfolio"
+
+export async function getStaticPaths() {
+  const includeDrafts = import.meta.env.DEV
+  const [entries, connectionGraph] = await Promise.all([
+    getVisibleSpanishProjects(includeDrafts),
+    getEditorialConnectionGraph(includeDrafts),
+  ])
+
+  const editorialPaths = entries.map((entry, index) => ({
+    params: { slug: entry.id },
+    props: {
+      entry,
+      connections: connectionGraph.get(createConnectionNodeKey("portafolio", entry.id)),
+      previousProject: entries[index - 1],
+      nextProject: entries[index + 1],
+    },
+  }))
+
+  if (!import.meta.env.DEV) return editorialPaths
+
+  const fixtures = await getDevelopmentSpanishProjectFixtures()
+  return [
+    ...editorialPaths,
+    ...fixtures.map((entry) => ({
+      params: { slug: entry.id },
+      props: {
+        entry,
+        connections: connectionGraph.get(createConnectionNodeKey("portafolio", entry.id)),
+      },
+    })),
+  ]
+}
+
+interface Props {
+  entry: CollectionEntry<"portafolio">
+  connections: ConnectionGroups
+  previousProject?: CollectionEntry<"portafolio">
+  nextProject?: CollectionEntry<"portafolio">
+}
+
+const { entry, connections, previousProject, nextProject } = Astro.props
+---
+
+<PortfolioProject
+  entry={entry}
+  connections={connections}
+  previousProject={previousProject}
+  nextProject={nextProject}
+/>

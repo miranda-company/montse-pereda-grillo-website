@@ -1,0 +1,98 @@
+---
+import {
+  countConnections,
+  type ConnectionGroups,
+  type EditorialCollection,
+  type SupplementalConnectionLink,
+} from "../lib/connection-graph"
+
+interface Props {
+  connections: ConnectionGroups
+  supplementalLinks?: SupplementalConnectionLink[]
+  presentation?: "rail" | "inline"
+  headingId?: string
+  emptyMessage?: string
+}
+
+const {
+  connections,
+  supplementalLinks = [],
+  presentation = "rail",
+  headingId = "editorial-connections-title",
+  emptyMessage = "Esta entrada todavía no tiene conexiones.",
+} = Astro.props
+const collectionLabels = {
+  notas: "Nota",
+  mediateca: "Mediateca",
+  portafolio: "Proyecto",
+} satisfies Record<EditorialCollection, string>
+const groups = [
+  { key: "mutual", label: "Relaciones mutuas", items: connections.mutual },
+  { key: "outgoing", label: "Enlaces directos", items: connections.outgoing },
+  { key: "incoming", label: "Menciones", items: connections.incoming },
+].filter((group) => group.items.length > 0)
+const total = countConnections(connections, supplementalLinks.length)
+---
+
+<aside
+  class:list={["editorial-connections", `editorial-connections--${presentation}`]}
+  aria-labelledby={headingId}
+  data-editorial-connections
+  data-connection-count={total}
+>
+  <h2 id={headingId}>Conexiones</h2>
+  {
+    total > 0 ? (
+      <>
+        {groups.map((group) => (
+          <section aria-labelledby={`${headingId}-${group.key}`}>
+            <h3 id={`${headingId}-${group.key}`}>{group.label}</h3>
+            <ol>
+              {group.items.map((connection) => (
+                <li data-connection-direction={connection.direction}>
+                  <a href={connection.href}>
+                    <span>
+                      {collectionLabels[connection.collection]} · {connection.archiveNumber}
+                    </span>
+                    {connection.title}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))}
+        {supplementalLinks.length > 0 && (
+          <section aria-labelledby={`${headingId}-additional`}>
+            <h3 id={`${headingId}-additional`}>Otros enlaces</h3>
+            <ol>
+              {supplementalLinks.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    target={link.target}
+                    rel={link.rel}
+                    aria-label={link.ariaLabel}
+                  >
+                    <span>{link.label}</span>
+                    {link.title}
+                    {link.external && (
+                      <span class="editorial-connections__external" aria-hidden="true">
+                        {" "}
+                        ↗
+                      </span>
+                    )}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+      </>
+    ) : (
+      <p class="editorial-connections__empty">{emptyMessage}</p>
+    )
+  }
+  <p class="editorial-connections__count">
+    CONEXIONES / {String(total).padStart(2, "0")}
+  </p>
+</aside>

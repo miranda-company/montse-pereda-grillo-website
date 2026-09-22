@@ -1,0 +1,113 @@
+---
+title: "Referencia técnica de Portafolio en MDX"
+summary: "Ruta aislada para comprobar imágenes, vídeos y código dentro del sistema compartido de casos de estudio."
+year: 2026
+role: "Demostración técnica"
+client: "Sin cliente"
+disciplines:
+  - "Documentación"
+tags:
+  - "MDX"
+  - "Referencia"
+projectStatus: "Fixture técnica"
+archiveNumber: "P.999"
+gallery: []
+projectLinks: []
+displayOrder: 999
+updatedAt: 2026-08-03
+placeholder: true
+relatedNotes: []
+relatedMedia: []
+draft: true
+fixture: true
+language: "es"
+---
+
+import VideoEmbed from "../../components/content/VideoEmbed.astro"
+import ImageCarousel from "../../components/content/ImageCarousel.astro"
+import ContentImage from "../../components/content/ContentImage.astro"
+import technicalImage from "../../assets/images/simbolo-lobo.png"
+import technicalPortrait from "../../assets/images/retrato-rodolfo-miranda.jpg"
+
+Esta ruta existe solo para revisar el sistema de contenido enriquecido. No describe un proyecto real, un encargo ni una relación profesional de Rodolfo.
+
+## Imagen editorial local
+
+<ContentImage
+  src={technicalImage}
+  alt="Silueta geométrica de un lobo caminando, símbolo gráfico de Rodolfo Miranda Company"
+  caption="Símbolo gráfico existente reutilizado únicamente como ejemplo técnico de imagen local."
+/>
+
+## Carrusel narrativo de imágenes locales
+
+Este ejemplo es contenido narrativo inline. No sustituye `coverImage` ni el campo estructurado `gallery` del proyecto.
+
+<ImageCarousel
+  label="Prueba técnica del carrusel en Portafolio"
+  images={[
+    {
+      src: technicalImage,
+      alt: "Silueta geométrica rojiza de un lobo caminando sobre fondo transparente",
+      caption: "Símbolo local usado para comprobar una imagen horizontal con transparencia.",
+    },
+    {
+      src: technicalPortrait,
+      alt: "Retrato de Rodolfo Miranda sonriendo, con camiseta negra y un paisaje urbano junto al agua al fondo",
+      caption: "Retrato local usado únicamente para comprobar una imagen vertical completa.",
+    },
+    {
+      src: technicalImage,
+      alt: "Silueta geométrica rojiza de un lobo caminando sobre fondo transparente",
+      caption:
+        "Repetición deliberada del activo horizontal para comprobar una tercera posición; no representa un caso de estudio real.",
+    },
+  ]}
+/>
+
+## Vídeos externos permitidos
+
+<VideoEmbed
+  provider="youtube"
+  videoId="M7lc1UVf-VE"
+  title="YouTube Developers Live: Embedded Web Player Customization, demostración técnica externa de Google for Developers"
+  caption="Demostración externa de Google for Developers; no implica autoría ni respaldo de Rodolfo."
+/>
+
+<VideoEmbed
+  provider="vimeo"
+  videoId="280815263"
+  title="Volumetric Filmmakers NYC, demostración técnica externa publicada por Vimeo"
+  caption="Demostración externa publicada por Vimeo; no implica autoría ni respaldo de Rodolfo."
+/>
+
+## Código estático
+
+```ts
+interface ProjectReference {
+  draft: true
+  fixture: true
+}
+```
+
+```html
+<article aria-labelledby="project-title"></article>
+```
+
+```css
+.project-reference {
+  max-width: 70ch;
+}
+```
+
+```json
+{ "archiveNumber": "P.999", "fixture": true }
+```
+
+```bash
+pnpm run check
+```
+
+```text
+Esta línea técnica deliberadamente larga demuestra que el bloque conserva la indentación y permite desplazamiento horizontal interno sin ensanchar la página completa ni alterar la columna editorial compartida.
+```

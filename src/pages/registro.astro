@@ -1,0 +1,48 @@
+---
+import PageShell from "../components/PageShell.astro"
+import BaseLayout from "../layouts/BaseLayout.astro"
+import { getPublishedSiteRoutes } from "../lib/site-routes"
+import "../styles/registry.css"
+
+const routes = (await getPublishedSiteRoutes()).sort((first, second) =>
+  first.path.localeCompare(second.path, "es"),
+)
+---
+
+<BaseLayout
+  title="Registro"
+  description="Índice alfabético de las rutas publicadas en Rodolfo Miranda Company."
+  canonicalPath="/registro"
+  schemaType="CollectionPage"
+>
+  <PageShell pageClass="registry-page" mainClass="registry-main page-main--with-back">
+    <a class="page-back" href="/#indice">← Volver al índice</a>
+
+    <section class="page-intro registry-intro" aria-labelledby="registry-title">
+      <p class="kicker">Archivo / Navegación</p>
+      <h1 id="registry-title">Registro</h1>
+      <p class="intro-lead registry-intro__description">
+        Todas las rutas publicadas del sitio, ordenadas alfabéticamente por URL.
+      </p>
+    </section>
+
+    <section class="registry-index" aria-labelledby="registry-index-title">
+      <div class="registry-index__heading">
+        <h2 id="registry-index-title">Rutas</h2>
+        <p>{routes.length.toString().padStart(2, "0")} entradas</p>
+      </div>
+      <ol>
+        {
+          routes.map((route) => (
+            <li>
+              <a href={route.path}>
+                <span>{route.title}</span>
+                <code>{route.path}</code>
+              </a>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+  </PageShell>
+</BaseLayout>

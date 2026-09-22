@@ -1,0 +1,58 @@
+---
+interface TimelineEntry {
+  role: string
+  organization: string
+  period: string
+  description: string
+  organizationUrl?: string
+  caseStudyLabel?: string
+  caseStudyUrl?: string
+  current: boolean
+  placeholder: boolean
+}
+
+interface Props {
+  entries: TimelineEntry[]
+}
+
+const { entries } = Astro.props
+---
+
+<ol class="career-timeline">
+  {
+    entries.map((entry, index) => (
+      <li class:list={[entry.current && "is-current", entry.placeholder && "is-placeholder"]}>
+        <p class="career-timeline__period">{entry.period}</p>
+        <span class="career-timeline__node" aria-hidden="true" />
+        <article class="career-timeline__entry">
+          <div class="career-timeline__annotations">
+            <span>{String(index + 1).padStart(2, "0")}</span>
+            {entry.current && <span>ACTUAL</span>}
+            {entry.placeholder && <span>PENDIENTE</span>}
+          </div>
+          <h3>{entry.role}</h3>
+          <p class="career-timeline__organization">
+            {entry.organizationUrl ? (
+              <a href={entry.organizationUrl} rel="external noreferrer">
+                {entry.organization}
+              </a>
+            ) : (
+              entry.organization
+            )}
+          </p>
+          <p class="career-timeline__description">{entry.description}</p>
+          {entry.caseStudyLabel &&
+            (entry.caseStudyUrl ? (
+              <a class="career-timeline__case" href={entry.caseStudyUrl}>
+                {entry.caseStudyLabel}
+              </a>
+            ) : (
+              <span class="career-timeline__case career-timeline__case--pending">
+                {entry.caseStudyLabel}
+              </span>
+            ))}
+        </article>
+      </li>
+    ))
+  }
+</ol>

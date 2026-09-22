@@ -1,0 +1,115 @@
+---
+title: "Métodos para descubrir el problema"
+summary: "Aquí los métodos que me permiten identificar un problema en cualquier proyecto."
+publishedAt: 2026-09-01
+updatedAt: 2026-09-01
+state: "semilla"
+archiveNumber: "N.008"
+cardFormat: "featured"
+tags:
+  - "Claridad estratégica"
+  - "Producción de proyectos"
+relatedNotes: []
+relatedLinks: []
+featured: false
+draft: false
+language: "es"
+---
+
+import ContentImage from "../../components/content/ContentImage.astro"
+import VideoEmbed from "../../components/content/VideoEmbed.astro"
+
+import img001 from "../../assets/images/notas/ishikawa-diagram.webp"
+
+Antes de empezar cualquier tipo de proyecto, es de sabios definir cuál es el problema que queremos resolver. Pero muchas veces el problema de raíz, está oculto por problemas superficiales. Así que tenemos que trabajar duro para descubrirlo.
+
+El diagnóstico es una de las fases más importantes en el desarrollo de proyectos. Tener claridad sobre el problema nos va permitir diseñar estrategias eficaces para resolverlo, y sobre todo, aportar valor real a las personas que se ven afectadas por él.
+
+En mi trabajo del día a día utilizo una mezcla de metodologías para descubrir problemas y definirlos. Aquí unas cuantas.
+
+## Los 5 por qué de Toyota
+
+[Taiichi Ohno](https://en.wikipedia.org/wiki/Taiichi_Ohno) innovó el [sistema de producción de Toyota](https://en.wikipedia.org/wiki/Toyota_Production_System) utilizando esta metodología.
+
+El objetivo de este método es identificar el problema o defecto de raíz haciendo la pregunta "¿Por qué?" [5 veces hasta llegar a la causa](https://en.wikipedia.org/wiki/Five_whys). El número de veces que se tiene que hacer la pregunta puede variar dependiendo de la complejidad del análisis del problema.
+
+Si solo nos quedasemos en la primera pregunta, a nivel superficial, no solucionaríamos el problema. Solo crearíamos una solución temporal. En cambio, si hacemos repetidamente la pregunta, nos forzamos a ver más allá y a identificar prolemas con mayor profundidad y relevancia. Por lo tanto, nuestras soluciones tendrán un mayor impacto o valor.
+
+### Un par de ejemplos de los 5 por qué de Toyota
+
+**Problema:** Los pacientes están dejando malas reseñas por tiempos de espera de más de 45 minutos, a pesar de llegar puntuales a su cita.
+
+**¿Por qué?** – Las citas de la tarde se van acumulando y empiezan sistemáticamente con retraso.
+
+**¿Por qué?** – Los dentistas están dedicando 10 minutos entre cada paciente a limpiar y desinfectar el instrumental de la sala.
+
+**¿Por qué?** – El personal auxiliar encargado de la esterilización no está disponible para preparar las salas rápidamente.
+
+**¿Por qué?** – Hay una falta de personal auxiliar entre las 13:00 y las 15:00 horas.
+
+**¿Por qué? (Causa Raíz)** – El sistema automatizado de turnos asigna los descansos para comer de todo el personal auxiliar en la misma franja horaria, sin tener en cuenta que la clínica sigue operando ininterrumpidamente.
+
+---
+
+**Problema:** Los usuarios están abandonando masivamente el carrito de compras en el último paso dentro de la aplicación móvil.
+
+**¿Por qué?** – El formulario de pago devuelve un error genérico cuando intentan procesar la tarjeta.
+
+**¿Por qué?** – El campo de la fecha de caducidad está rechazando las entradas de los usuarios, pero no les indica el formato correcto.
+
+**¿Por qué?** – Una reciente actualización de diseño eliminó accidentalmente el texto de ayuda visual dentro de ese campo.
+
+**¿Por qué?** – El equipo de diseño de interfaz (UI) optimizó el espacio para pantallas más pequeñas ocultando las etiquetas descriptivas.
+
+**¿Por qué? (Causa Raíz)** – La empresa carece de un protocolo de pruebas de usabilidad (QA) obligatorio que evalúe cómo los cambios de diseño afectan la tasa de conversión antes de lanzarlos a producción.
+
+---
+
+## Diagrama de Ishikawa
+
+También conocidos cómo [_diagramas de esqueleto de pez_](https://en.wikipedia.org/wiki/Ishikawa_diagram) por su forma, son una metodología para identificar problemas de una forma visual. Este método fue creado por [Kaoru Ishikawa](https://en.wikipedia.org/wiki/Kaoru_Ishikawa) un experto en [teoría organizacional](https://es.wikipedia.org/wiki/Teor%C3%ADa_organizacional).
+
+Los diagramas de Ishikawa son usados comunmente para el diseño de productos, para prevenir posibles fallos en sistemas o también durante el proceso de control de calidad.
+
+La intención de este tipo de análisis es descubrir relaciones clave entre distintas variables que pueden causar el problema. Cada posible causa añade información importante al comportamiento del sistema, ya sea funcional o disfuncional.
+
+<ContentImage
+  src={img001}
+  alt="Diagrama de Ishikawa mostrando las posibles causas de raíz de una foto borrosa."
+  caption="Diagrama de Ishikawa mostrando las posibles causas de raíz de una foto borrosa."
+/>
+
+Las causas del problema son agrupadas en categorías para poder clasificarlas y analizarlas de mejor forma.
+
+El problema es colocado en el extremo derecho (en la cabeza del esqueleto del pez) y las causas se ramifican hacia la izquierda.
+
+> At a practical level, a cause is whatever is responsible for, or explains, an effect - a factor whose presence makes a critical difference to the occurrence of an outcome - Kaoru Ishikawa
+
+---
+
+## Design Thinking: empatizar y definir
+
+El método de [_Design Thinking_](https://en.wikipedia.org/wiki/Design_thinking) es el que uso de base. Es una forma de pensar para resolver problemas que están poco definidos ([problemas retorcidos](https://es.wikipedia.org/wiki/Problema_retorcido)). Nos ayuda a buscar estategias para plantear soluciones y su enfoque son las necesidades de las personas.
+
+Sus fases 1 y 2 (empatizar y definir) son especialmente útiles para detectar problemas y definirlos.
+
+La primera fase consiste en investigar a las personas que se ven afectadas por el problema. Se busca entender sus necesidades, motivaciones y comportamientos. Esto se logra a través de entrevistas, encuestas, observación y análisis de datos.
+
+En la segunda fase, se organiza la información recopilada para identificar patrones, tendencias y los problemas principales. Al final de esta fase se habrá creado el documento de [_Problem Statement_](https://ixdf.org/literature/topics/problem-statements) que define el problema de una forma clara y concisa, del estado actual del problema y el estado ideal al que se quiere llegar.
+
+> The goal is to articulate the problem so everyone can see its dimensions and feel inspired to systematically hunt for suitable solutions.
+
+---
+
+## Jobs-to-be-Done
+
+<VideoEmbed
+  provider="youtube"
+  videoId="sfGtw2C95Ms"
+  title="Understanding the Job - Clay Christensen"
+  caption="Understanding the Job - Clay Christensen"
+/>
+
+El método [Jobs To Be Done](https://www.christenseninstitute.org/theory/jobs-to-be-done/) (JTBD) es un marco de trabajo para entender las necesidades de los clientes y cómo los productos o servicios pueden satisfacer esas necesidades. Fue popularizado por [Clayton Christensen](https://en.wikipedia.org/wiki/Clayton_Christensen), un profesor de la Harvard Business School.
+
+> People don’t simply buy or pick products or services; they pull them into their lives to make progress. - Clayton Christensen

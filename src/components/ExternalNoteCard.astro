@@ -1,0 +1,55 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { formatDottedDate, toDateValue } from "../lib/dates"
+import { getNoteDestination, isExternalNote } from "../lib/notes"
+
+interface Props {
+  entry: CollectionEntry<"notas">
+}
+
+const { entry } = Astro.props
+
+if (!isExternalNote(entry)) {
+  throw new Error("Una tarjeta externa de Notas requiere fuente y URL validadas.")
+}
+
+const { externalSource } = entry.data
+const destination = getNoteDestination(entry)
+---
+
+<article
+  class="note-card note-card--external fragment-target"
+  id={entry.id}
+  tabindex="-1"
+  data-note-card
+  data-note-kind="external"
+  data-state={entry.data.state}
+  data-tags={entry.data.tags.join("|")}
+  data-title={entry.data.title}
+  data-updated={entry.data.updatedAt.toISOString()}
+  data-archive={entry.data.archiveNumber}
+>
+  <a
+    class="note-card__link"
+    href={destination.href}
+    target={destination.target}
+    rel={destination.rel}
+    aria-label={destination.ariaLabel}
+  >
+    <div class="note-card__topline">
+      <span>{entry.data.archiveNumber}</span>
+      <span class="note-card__external-label">Artículo externo ↗</span>
+    </div>
+
+    <h3>{entry.data.title}</h3>
+    <p>{entry.data.summary}</p>
+
+    <div class="note-card__footer">
+      <span class="note-card__external-source">{externalSource}</span>
+      <time class="note-card__date" datetime={toDateValue(entry.data.publishedAt)}>
+        PUB. {formatDottedDate(entry.data.publishedAt)}
+      </time>
+      <span class="note-card__arrow" aria-hidden="true">↗</span>
+    </div>
+  </a>
+</article>

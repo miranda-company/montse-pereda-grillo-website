@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { formatNumericDate } from "../lib/dates"
+import { MEDIA_FORMAT_LABELS, MEDIA_STATUS_LABELS } from "../lib/media"
+import EngagementMode from "./EngagementMode.astro"
+
+interface Props {
+  entry: CollectionEntry<"mediateca">
+}
+
+const { entry } = Astro.props
+const updatedLabel = formatNumericDate(entry.data.updatedAt)
+---
+
+<article
+  class:list={["media-card", `media-card--${entry.data.format}`]}
+  data-media-card
+  data-format={entry.data.format}
+  data-tags={entry.data.tags.join("|")}
+  data-title={entry.data.title}
+  data-creator={entry.data.creator}
+  data-updated={entry.data.updatedAt.toISOString()}
+>
+  <a href={`/mediateca/${entry.id}`} aria-label={`Abrir referencia: ${entry.data.title}`}>
+    <div class="media-card__mode">
+      <span class="media-card__archive">{entry.data.archiveNumber}</span>
+      <EngagementMode mode={entry.data.engagementMode} />
+    </div>
+    <div class="media-card__body">
+      <h3>{entry.data.title}</h3>
+      <p class="media-card__creator">{entry.data.creator}</p>
+      <p class="media-card__summary">{entry.data.summary}</p>
+      <footer class="media-card__metadata">
+        <span>{MEDIA_FORMAT_LABELS[entry.data.format]}</span>
+        <span>{MEDIA_STATUS_LABELS[entry.data.status]}</span>
+        <span class="media-card__tags">
+          {entry.data.tags.map((tag) => <i>{tag}</i>)}
+        </span>
+        <time datetime={entry.data.updatedAt.toISOString()}>ACT. {updatedLabel}</time>
+        {entry.data.externalUrl && <span aria-label="Incluye enlace externo">EXTERNA ↗</span>}
+      </footer>
+    </div>
+  </a>
+</article>

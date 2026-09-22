@@ -1,0 +1,141 @@
+---
+import { render, type CollectionEntry } from "astro:content"
+import { formatDottedDate, toDateValue } from "../lib/dates"
+import type { ConnectionGroups, SupplementalConnectionLink } from "../lib/connection-graph"
+import { getExternalNoteConnectionLinks } from "../lib/content-connections"
+import { hasEditorialNoteBody, NOTE_MATURITY } from "../lib/notes"
+import "../styles/notes-detail.css"
+import "../styles/notes-shared.css"
+import EditorialDetailLayout from "./EditorialDetailLayout.astro"
+import EditorialConnections from "./EditorialConnections.astro"
+import MaturityMarker from "./MaturityMarker.astro"
+
+interface Props {
+  entry: CollectionEntry<"notas">
+  connections: ConnectionGroups
+  previousNote?: CollectionEntry<"notas">
+  nextNote?: CollectionEntry<"notas">
+}
+
+const { entry, connections, previousNote, nextNote } = Astro.props
+const { Content } = await render(entry)
+const includeDrafts = import.meta.env.DEV
+const externalNoteLinks = await getExternalNoteConnectionLinks(
+  entry.data.relatedNotes,
+  includeDrafts,
+)
+const relatedLinks = entry.data.relatedLinks
+const supplementalLinks: SupplementalConnectionLink[] = [
+  ...externalNoteLinks,
+  ...relatedLinks.map((link) => ({
+    title: link.label,
+    href: link.href,
+    label: "Enlace interno",
+  })),
+]
+const hasBody = hasEditorialNoteBody(entry)
+const maturity = NOTE_MATURITY[entry.data.state]
+const publishedDate = toDateValue(entry.data.publishedAt)
+const updatedDate = toDateValue(entry.data.updatedAt)
+---
+
+<EditorialDetailLayout
+  title={entry.data.title}
+  description={entry.data.summary}
+  pageClass="note-page"
+  introClass="notes-intro"
+  backlinkHref="/notas"
+  backlinkLabel="Volver a Notas"
+  canonicalPath={`/notas/${entry.id}`}
+  schemaType="Article"
+  publishedAt={entry.data.publishedAt}
+  updatedAt={entry.data.updatedAt}
+  keywords={entry.data.tags}
+  schemaData={{ articleSection: "Notas" }}
+>
+  <Fragment slot="header-meta">
+    <span>{entry.data.archiveNumber}</span>
+    <MaturityMarker state={entry.data.state} />
+  </Fragment>
+  <p slot="header-summary">{entry.data.summary}</p>
+
+  <aside slot="metadata" class="note-meta-rail" aria-label="Metadatos de la nota">
+    <dl>
+      <div>
+        <dt>Creada</dt>
+        <dd><time datetime={publishedDate}>{formatDottedDate(entry.data.publishedAt)}</time></dd>
+      </div>
+      <div>
+        <dt>Actualizada</dt>
+        <dd><time datetime={updatedDate}>{formatDottedDate(entry.data.updatedAt)}</time></dd>
+      </div>
+      <div>
+        <dt>Estado</dt>
+        <dd>{maturity.label}</dd>
+      </div>
+      <div>
+        <dt>Etiquetas</dt>
+        <dd class="note-meta-tags">
+          {entry.data.tags.map((tag) => <span>{tag}</span>)}
+        </dd>
+      </div>
+    </dl>
+  </aside>
+
+  <Fragment>
+    <p class:list={["note-growth-notice", `is-${entry.data.state}`]}>
+      <span aria-hidden="true">●—●</span>
+      {maturity.notice}
+    </p>
+
+    <div class="rich-content">
+      {
+        hasBody ? (
+          <Content />
+        ) : (
+          <p class="note-editorial-empty">Esta nota todavía no tiene desarrollo editorial.</p>
+        )
+      }
+    </div>
+
+    <footer class="note-article-footer">
+      <p>ÚLTIMA ACTUALIZACIÓN · {formatDottedDate(entry.data.updatedAt)}</p>
+      <MaturityMarker state={entry.data.state} />
+      <div class="note-footer-tags">{entry.data.tags.map((tag) => <span>{tag}</span>)}</div>
+    </footer>
+  </Fragment>
+
+  <EditorialConnections
+    slot="connections"
+    connections={connections}
+    supplementalLinks={supplementalLinks}
+    headingId="note-connections-title"
+    emptyMessage="Esta nota todavía no tiene conexiones."
+  />
+
+  {
+    previousNote && nextNote && (
+      <nav slot="sequence" class="note-sequence" aria-label="Navegación entre notas">
+        <a
+          class="note-sequence__previous"
+          href={`/notas/${previousNote.id}`}
+          aria-label={`Nota anterior: ${previousNote.data.title}`}
+        >
+          <span>← Nota anterior</span>
+          {previousNote.data.title}
+        </a>
+        <a
+          class="note-sequence__next"
+          href={`/notas/${nextNote.id}`}
+          aria-label={`Nota siguiente: ${nextNote.data.title}`}
+        >
+          <span>Nota siguiente →</span>
+          {nextNote.data.title}
+        </a>
+        <a class="note-sequence__all" href="/notas">
+          Volver a todas las notas
+        </a>
+      </nav>
+    )
+  }
+</EditorialDetailLayout>

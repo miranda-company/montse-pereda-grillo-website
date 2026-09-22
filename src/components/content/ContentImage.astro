@@ -1,0 +1,38 @@
+---
+import type { ImageMetadata } from "astro"
+import { isLocalImageMetadata } from "../../lib/images"
+
+interface Props {
+  src: ImageMetadata
+  alt: string
+  caption?: string
+}
+
+const { src, alt, caption } = Astro.props
+
+if (!isLocalImageMetadata(src)) {
+  throw new Error("ContentImage requiere una imagen local importada mediante Astro.")
+}
+
+if (typeof alt !== "string" || !alt.trim()) {
+  throw new Error("ContentImage requiere un texto alternativo significativo y no vacío.")
+}
+
+if (caption !== undefined && (typeof caption !== "string" || !caption.trim())) {
+  throw new Error("ContentImage: la leyenda debe contener texto o eliminarse.")
+}
+
+const editorialCaption = caption?.trim()
+---
+
+<figure class="content-image">
+  <img
+    src={src.src}
+    width={src.width}
+    height={src.height}
+    alt={alt.trim()}
+    loading="lazy"
+    decoding="async"
+  />
+  {editorialCaption && <figcaption>{editorialCaption}</figcaption>}
+</figure>

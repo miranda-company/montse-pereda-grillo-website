@@ -1,0 +1,215 @@
+---
+import "@fontsource-variable/instrument-sans"
+import "@fontsource/ibm-plex-mono/latin-400.css"
+import "@fontsource/ibm-plex-mono/latin-500.css"
+import { getImage } from "astro:assets"
+import favicon from "../assets/images/favicon.jpg"
+import defaultSocialImage from "../assets/images/homepage/hello-computer-002.webp"
+import { SITE_DESCRIPTION, SITE_LANGUAGE, SITE_LOCALE, SITE_NAME, SITE_ORIGIN } from "../lib/site"
+import "../styles/global.css"
+
+type SchemaType = "WebPage" | "ProfilePage" | "CollectionPage" | "Article" | "CreativeWork"
+type StructuredData = Record<string, unknown>
+
+interface Props {
+  title?: string
+  description?: string
+  canonicalPath?: string
+  socialImage?: ImageMetadata
+  socialImageAlt?: string
+  schemaType?: SchemaType
+  schemaData?: StructuredData
+  publishedAt?: Date
+  updatedAt?: Date
+  keywords?: string[]
+  forceNoIndex?: boolean
+}
+
+const {
+  title = SITE_NAME,
+  description = SITE_DESCRIPTION,
+  canonicalPath = Astro.url.pathname,
+  socialImage = defaultSocialImage,
+  socialImageAlt = "Ilustración de un ordenador cubierto de plantas con el mensaje «Hello World!»",
+  schemaType = "WebPage",
+  schemaData = {},
+  publishedAt,
+  updatedAt,
+  keywords = [],
+  forceNoIndex = false,
+} = Astro.props
+const documentTitle = title === SITE_NAME ? title : `${title} — ${SITE_NAME}`
+const siteUrl = Astro.site ?? new URL(SITE_ORIGIN)
+const canonicalUrl = new URL(canonicalPath, siteUrl)
+const indexingEnabled = import.meta.env.PUBLIC_INDEXING_ENABLED === "true"
+const robotsDirective = indexingEnabled && !forceNoIndex ? "index, follow" : "noindex, nofollow"
+const openGraphType =
+  schemaType === "Article" || schemaType === "CreativeWork"
+    ? "article"
+    : schemaType === "ProfilePage"
+      ? "profile"
+      : "website"
+const optimizedSocialImage = await getImage({
+  src: socialImage,
+  width: Math.min(1200, socialImage.width),
+  height: Math.min(630, Math.round((socialImage.width * 630) / 1200)),
+  fit: "cover",
+  format: "jpeg",
+  quality: 84,
+})
+const socialImageUrl = new URL(optimizedSocialImage.src, siteUrl)
+const websiteId = new URL("/#website", siteUrl).href
+const personId = new URL("/#rodolfo-miranda", siteUrl).href
+const toIsoDate = (date: Date) => date.toISOString()
+
+const websiteEntity = {
+  "@type": "WebSite",
+  "@id": websiteId,
+  url: new URL("/", siteUrl).href,
+  name: SITE_NAME,
+  description: SITE_DESCRIPTION,
+  inLanguage: SITE_LANGUAGE,
+}
+
+const personEntity = {
+  "@type": "Person",
+  "@id": personId,
+  name: "Rodolfo Miranda",
+  url: new URL("/yo", siteUrl).href,
+  jobTitle: "Estratega digital y diseñador",
+}
+
+const pageEntity = {
+  "@type": schemaType,
+  "@id": `${canonicalUrl.href}#page`,
+  url: canonicalUrl.href,
+  name: title,
+  headline: title,
+  description,
+  inLanguage: SITE_LANGUAGE,
+  isPartOf: { "@id": websiteId },
+  author: { "@id": personId },
+  image: socialImageUrl.href,
+  ...(publishedAt ? { datePublished: toIsoDate(publishedAt) } : {}),
+  ...(updatedAt ? { dateModified: toIsoDate(updatedAt) } : {}),
+  ...(keywords.length > 0 ? { keywords } : {}),
+  ...(schemaType === "ProfilePage" ? { mainEntity: { "@id": personId } } : {}),
+  ...(canonicalUrl.pathname === "/" ? { mainEntity: { "@id": websiteId } } : {}),
+  ...schemaData,
+}
+
+const structuredData = {
+  "@context": "https://schema.org",
+  "@graph": [websiteEntity, personEntity, pageEntity],
+}
+---
+
+<!doctype html>
+<html lang={SITE_LANGUAGE}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="robots" content={robotsDirective} />
+    <meta name="googlebot" content={robotsDirective} />
+    <meta name="theme-color" content="#f7f3ea" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" type="image/jpeg" href={favicon.src} />
+
+    <meta property="og:type" content={openGraphType} />
+    <meta property="og:site_name" content={SITE_NAME} />
+    <meta property="og:locale" content={SITE_LOCALE} />
+    <meta property="og:title" content={documentTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={socialImageUrl} />
+    <meta property="og:image:alt" content={socialImageAlt} />
+    <meta property="og:image:width" content={optimizedSocialImage.attributes.width} />
+    <meta property="og:image:height" content={optimizedSocialImage.attributes.height} />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={documentTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={socialImageUrl} />
+    <meta name="twitter:image:alt" content={socialImageAlt} />
+
+    {
+      (schemaType === "Article" || schemaType === "CreativeWork") && publishedAt && (
+        <meta property="article:published_time" content={toIsoDate(publishedAt)} />
+      )
+    }
+    {
+      (schemaType === "Article" || schemaType === "CreativeWork") && updatedAt && (
+        <meta property="article:modified_time" content={toIsoDate(updatedAt)} />
+      )
+    }
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData)} />
+    <title>{documentTitle}</title>
+  </head>
+  <body>
+    <slot />
+    <script>
+      const getHashTarget = () => {
+        if (!window.location.hash) return null
+
+        try {
+          return document.getElementById(decodeURIComponent(window.location.hash.slice(1)))
+        } catch {
+          return null
+        }
+      }
+
+      const scrollToCurrentHash = () => {
+        const target = getHashTarget()
+        if (!target) return
+
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        target.scrollIntoView({
+          behavior: reduceMotion ? "auto" : "smooth",
+          block: "start",
+        })
+
+        if (target.classList.contains("fragment-target") && target instanceof HTMLElement) {
+          target.focus({ preventScroll: true })
+        }
+      }
+
+      const queueHashScroll = () => window.requestAnimationFrame(scrollToCurrentHash)
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", queueHashScroll, { once: true })
+      } else {
+        queueHashScroll()
+      }
+
+      window.addEventListener("hashchange", queueHashScroll)
+
+      document.addEventListener("click", (event) => {
+        if (!(event.target instanceof Element)) return
+        const link = event.target.closest<HTMLAnchorElement>("a[href*='#']")
+        if (!link) return
+
+        const destination = new URL(link.href, window.location.href)
+        if (
+          destination.origin !== window.location.origin ||
+          destination.pathname !== window.location.pathname ||
+          !destination.hash
+        ) {
+          return
+        }
+
+        let targetId: string
+        try {
+          targetId = decodeURIComponent(destination.hash.slice(1))
+        } catch {
+          return
+        }
+
+        if (!document.getElementById(targetId)) return
+        event.preventDefault()
+        window.history.pushState(null, "", destination.hash)
+        queueHashScroll()
+      })
+    </script>
+  </body>
+</html>

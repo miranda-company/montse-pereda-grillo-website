@@ -1,0 +1,25 @@
+---
+import portrait from "../assets/images/retrato-rodolfo-miranda.jpg"
+
+interface Props {
+  alt: string
+  annotation: string
+}
+
+const { alt, annotation } = Astro.props
+---
+
+<figure class="yo-portrait">
+  <div class="yo-portrait__field">
+    <img
+      src={portrait.src}
+      width={portrait.width}
+      height={portrait.height}
+      alt={alt}
+      loading="lazy"
+      decoding="async"
+      class="yo-portrait__image"
+    />
+  </div>
+  <figcaption>{annotation}</figcaption>
+</figure>

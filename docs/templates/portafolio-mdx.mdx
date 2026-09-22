@@ -1,0 +1,72 @@
+---
+title: "Título del proyecto"
+summary: "Resumen breve y verificable del proyecto."
+year: 2026
+# endYear: 2028
+role: "Rol desempeñado"
+client: "Organización o cliente"
+disciplines:
+  - "Diseño"
+tags:
+  - "Producto"
+projectStatus: "En preparación"
+archiveNumber: "P.000"
+coverImage: "../../assets/images/portafolio/slug/portada.jpg"
+coverAlt: "Descripción concreta de lo que muestra la portada"
+coverCaption: "Leyenda editorial opcional de la portada."
+gallery: []
+projectLinks: []
+displayOrder: 0
+updatedAt: 2026-01-01
+placeholder: false
+relatedNotes: []
+relatedMedia: []
+relatedProjects: []
+draft: true
+language: "es"
+---
+
+import VideoEmbed from "../../components/content/VideoEmbed.astro"
+import ImageCarousel from "../../components/content/ImageCarousel.astro"
+import ContentImage from "../../components/content/ContentImage.astro"
+import inlineImage from "../../assets/images/portafolio/slug/imagen-editorial.jpg"
+import carouselImageOne from "../../assets/images/portafolio/slug/carrusel-01.jpg"
+import carouselImageTwo from "../../assets/images/portafolio/slug/carrusel-02.jpg"
+
+## Contexto
+
+Escribe aquí el caso de estudio aprobado.
+
+<ContentImage
+  src={inlineImage}
+  alt="Descripción concreta de la imagen editorial"
+  caption="Leyenda editorial opcional."
+/>
+
+<ImageCarousel
+  label="Iteraciones verificadas del proyecto"
+  images={[
+    {
+      src: carouselImageOne,
+      alt: "Descripción accesible de la primera imagen",
+      caption: "Leyenda editorial opcional.",
+    },
+    {
+      src: carouselImageTwo,
+      alt: "Descripción accesible de la segunda imagen",
+    },
+  ]}
+/>
+
+<VideoEmbed
+  provider="youtube"
+  videoId="VIDEO_ID"
+  title="Descripción accesible y específica del vídeo"
+  caption="Comentario editorial opcional."
+/>
+
+```ts
+interface ProjectEvidence {
+  verified: boolean
+}
+```

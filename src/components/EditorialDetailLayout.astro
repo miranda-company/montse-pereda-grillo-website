@@ -1,0 +1,84 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro"
+import "../styles/editorial-detail.css"
+import "../styles/rich-content.css"
+import PageShell from "./PageShell.astro"
+
+interface Props {
+  title: string
+  description: string
+  pageClass: string
+  introClass: string
+  backlinkHref: string
+  backlinkLabel: string
+  hasConnections?: boolean
+  canonicalPath: string
+  socialImage?: ImageMetadata
+  socialImageAlt?: string
+  schemaType: "Article" | "CreativeWork"
+  schemaData?: Record<string, unknown>
+  publishedAt?: Date
+  updatedAt?: Date
+  keywords?: string[]
+}
+
+const {
+  title,
+  description,
+  pageClass,
+  introClass,
+  backlinkHref,
+  backlinkLabel,
+  hasConnections = true,
+  canonicalPath,
+  socialImage,
+  socialImageAlt,
+  schemaType,
+  schemaData,
+  publishedAt,
+  updatedAt,
+  keywords,
+} = Astro.props
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+  socialImage={socialImage}
+  socialImageAlt={socialImageAlt}
+  schemaType={schemaType}
+  schemaData={schemaData}
+  publishedAt={publishedAt}
+  updatedAt={updatedAt}
+  keywords={keywords}
+>
+  <PageShell pageClass={pageClass} mainClass="entry-detail-main page-main--with-back">
+    <a class="page-back" href={backlinkHref}>← {backlinkLabel}</a>
+
+    <section class:list={["page-intro", "entry-detail-intro", introClass]}>
+      <div class="entry-detail-intro__meta"><slot name="header-meta" /></div>
+      <h1>{title}</h1>
+      <div class="intro-lead entry-detail-intro__summary"><slot name="header-summary" /></div>
+    </section>
+
+    <section
+      class:list={[
+        "entry-detail-layout",
+        { "entry-detail-layout--without-connections": !hasConnections },
+      ]}
+    >
+      <aside class="entry-detail-meta"><slot name="metadata" /></aside>
+      <article class="entry-detail-reading"><slot /></article>
+      {
+        hasConnections && (
+          <div class="entry-detail-connections">
+            <slot name="connections" />
+          </div>
+        )
+      }
+    </section>
+
+    <slot name="sequence" />
+  </PageShell>
+</BaseLayout>

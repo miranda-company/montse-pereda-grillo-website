@@ -1,0 +1,208 @@
+---
+import type { ImageMetadata } from "astro"
+import { isLocalImageMetadata } from "../../lib/images"
+
+export interface CarouselImage {
+  src: ImageMetadata
+  alt: string
+  caption?: string
+}
+
+interface Props {
+  label: string
+  images: CarouselImage[]
+}
+
+const { label, images } = Astro.props
+
+if (typeof label !== "string" || !label.trim()) {
+  throw new Error("ImageCarousel requiere una etiqueta accesible no vacía.")
+}
+
+if (!Array.isArray(images) || images.length < 2) {
+  throw new Error("ImageCarousel requiere al menos dos imágenes locales.")
+}
+
+images.forEach((image, index) => {
+  const position = index + 1
+
+  if (!image || typeof image !== "object" || !isLocalImageMetadata(image.src)) {
+    throw new Error(
+      `ImageCarousel: la imagen ${position} debe ser un archivo local importado mediante Astro.`,
+    )
+  }
+
+  if (typeof image.alt !== "string" || !image.alt.trim()) {
+    throw new Error(
+      `ImageCarousel: la imagen ${position} requiere un texto alternativo significativo y no vacío.`,
+    )
+  }
+
+  if (image.caption !== undefined && (typeof image.caption !== "string" || !image.caption.trim())) {
+    throw new Error(
+      `ImageCarousel: la leyenda de la imagen ${position} debe contener texto o eliminarse.`,
+    )
+  }
+})
+
+const accessibleLabel = label.trim()
+const total = images.length
+const formatNumber = (value: number) => String(value).padStart(2, "0")
+---
+
+<div
+  class="content-carousel"
+  role="region"
+  aria-roledescription="carrusel"
+  aria-label={accessibleLabel}
+  data-image-carousel
+>
+  <p class="content-carousel__label">{accessibleLabel}</p>
+
+  <div
+    class="content-carousel__viewport"
+    tabindex="0"
+    aria-label={`Galería desplazable: ${accessibleLabel}`}
+    data-carousel-viewport
+  >
+    <ol class="content-carousel__track">
+      {
+        images.map((image, index) => (
+          <li
+            class="content-carousel__slide"
+            aria-roledescription="diapositiva"
+            aria-label={`Imagen ${index + 1} de ${total}`}
+            data-carousel-slide
+          >
+            <figure>
+              <div class="content-carousel__stage">
+                <img
+                  src={image.src.src}
+                  width={image.src.width}
+                  height={image.src.height}
+                  alt={image.alt.trim()}
+                  loading={index === 0 ? "eager" : "lazy"}
+                  decoding="async"
+                />
+              </div>
+              <figcaption>
+                <span class="content-carousel__slide-number" aria-hidden="true">
+                  {formatNumber(index + 1)}
+                </span>
+                {image.caption && <span>{image.caption.trim()}</span>}
+              </figcaption>
+            </figure>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+
+  <div class="content-carousel__controls" data-carousel-controls hidden>
+    <button type="button" aria-label="Mostrar imagen anterior" data-carousel-previous disabled>
+      ← Anterior
+    </button>
+    <p class="content-carousel__status" aria-live="polite" aria-atomic="true">
+      <span aria-hidden="true" data-carousel-counter>{formatNumber(1)} / {formatNumber(total)}</span
+      >
+      <span class="content-carousel__sr" data-carousel-announcement>Imagen 1 de {total}</span>
+    </p>
+    <button type="button" aria-label="Mostrar imagen siguiente" data-carousel-next>
+      Siguiente →
+    </button>
+  </div>
+</div>
+
+<script>
+  const initializeImageCarousels = () => {
+    document
+      .querySelectorAll<HTMLElement>("[data-image-carousel]:not([data-carousel-ready])")
+      .forEach((carousel) => {
+        const viewport = carousel.querySelector<HTMLElement>("[data-carousel-viewport]")
+        const slides = Array.from(carousel.querySelectorAll<HTMLElement>("[data-carousel-slide]"))
+        const controls = carousel.querySelector<HTMLElement>("[data-carousel-controls]")
+        const previous = carousel.querySelector<HTMLButtonElement>("[data-carousel-previous]")
+        const next = carousel.querySelector<HTMLButtonElement>("[data-carousel-next]")
+        const counter = carousel.querySelector<HTMLElement>("[data-carousel-counter]")
+        const announcement = carousel.querySelector<HTMLElement>("[data-carousel-announcement]")
+
+        if (
+          !viewport ||
+          slides.length < 2 ||
+          !controls ||
+          !previous ||
+          !next ||
+          !counter ||
+          !announcement
+        ) {
+          return
+        }
+
+        carousel.dataset.carouselReady = "true"
+        controls.hidden = false
+
+        let currentIndex = 0
+        let scrollFrame = 0
+        let resizeFrame = 0
+
+        const formatNumber = (value: number) => String(value).padStart(2, "0")
+        const slidePosition = (slide: HTMLElement) => slide.offsetLeft - slides[0]!.offsetLeft
+        const nearestSlideIndex = () => {
+          const left = viewport.scrollLeft
+          return slides.reduce((nearest, slide, index) => {
+            const nearestDistance = Math.abs(slidePosition(slides[nearest]!) - left)
+            const distance = Math.abs(slidePosition(slide) - left)
+            return distance < nearestDistance ? index : nearest
+          }, 0)
+        }
+
+        const updateInterface = (index: number) => {
+          currentIndex = Math.max(0, Math.min(index, slides.length - 1))
+          const current = currentIndex + 1
+          previous.disabled = currentIndex === 0
+          next.disabled = currentIndex === slides.length - 1
+          counter.textContent = `${formatNumber(current)} / ${formatNumber(slides.length)}`
+          announcement.textContent = `Imagen ${current} de ${slides.length}`
+        }
+
+        const moveTo = (index: number, smooth = true) => {
+          const targetIndex = Math.max(0, Math.min(index, slides.length - 1))
+          updateInterface(targetIndex)
+          const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          viewport.scrollTo({
+            left: slidePosition(slides[targetIndex]!),
+            behavior: smooth && !reducedMotion ? "smooth" : "auto",
+          })
+        }
+
+        previous.addEventListener("click", () => moveTo(currentIndex - 1))
+        next.addEventListener("click", () => moveTo(currentIndex + 1))
+
+        viewport.addEventListener(
+          "scroll",
+          () => {
+            if (scrollFrame) return
+            scrollFrame = window.requestAnimationFrame(() => {
+              scrollFrame = 0
+              updateInterface(nearestSlideIndex())
+            })
+          },
+          { passive: true },
+        )
+
+        const resizeObserver = new ResizeObserver(() => {
+          if (resizeFrame) window.cancelAnimationFrame(resizeFrame)
+          resizeFrame = window.requestAnimationFrame(() => {
+            resizeFrame = 0
+            moveTo(currentIndex, false)
+          })
+        })
+        resizeObserver.observe(viewport)
+
+        updateInterface(0)
+      })
+  }
+
+  initializeImageCarousels()
+  document.addEventListener("astro:page-load", initializeImageCarousels)
+</script>

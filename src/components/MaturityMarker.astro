@@ -1,0 +1,18 @@
+---
+import { NOTE_MATURITY } from "../lib/notes"
+
+interface Props {
+  state: "semilla" | "en-crecimiento" | "perenne"
+}
+
+const { state } = Astro.props
+---
+
+<span class:list={["maturity-marker", `is-${state}`]}>
+  <span class="maturity-symbol" aria-hidden="true">
+    <i></i>
+    {state !== "semilla" && <i />}
+    {state === "perenne" && <i />}
+  </span>
+  <span>{NOTE_MATURITY[state].label}</span>
+</span>

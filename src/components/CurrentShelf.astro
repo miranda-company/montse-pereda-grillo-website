@@ -1,0 +1,44 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { MEDIA_STATUS_LABELS } from "../lib/media"
+
+interface Props {
+  entries: CollectionEntry<"mediateca">[]
+}
+
+const { entries } = Astro.props
+---
+
+<ol class="current-shelf__items">
+  {
+    entries.map((entry) => (
+      <li id={entry.id} class="current-shelf__item fragment-target" tabindex="-1">
+        <a href={`/mediateca/${entry.id}`}>
+          {entry.data.coverImage ? (
+            <span class="shelf-cover">
+              <img
+                src={entry.data.coverImage.src}
+                width={entry.data.coverImage.width}
+                height={entry.data.coverImage.height}
+                alt={entry.data.coverAlt ?? ""}
+                loading="lazy"
+                decoding="async"
+              />
+            </span>
+          ) : (
+            <span class="shelf-cover shelf-cover--placeholder" aria-hidden="true">
+              IMAGEN / {entry.data.archiveNumber}
+            </span>
+          )}
+          <span class="current-shelf__copy">
+            <span>{entry.data.archiveNumber} · LIBRO</span>
+            <h3>{entry.data.title}</h3>
+            <small>{entry.data.creator}</small>
+            <p>{entry.data.summary}</p>
+            <span>{MEDIA_STATUS_LABELS[entry.data.status]} · ABRIR ↗</span>
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ol>

@@ -1,0 +1,61 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+interface Props {
+  entry: CollectionEntry<"portafolio">
+}
+
+const { entry } = Astro.props
+const coverImage = entry.data.coverImage
+const yearLabel = entry.data.endYear
+  ? `${entry.data.year}–${entry.data.endYear}`
+  : String(entry.data.year)
+---
+
+<li
+  class="portfolio-card"
+  data-portfolio-card
+  data-search={`${entry.data.title} ${entry.data.summary} ${entry.data.client ?? ""} ${entry.data.disciplines.join(" ")} ${entry.data.tags.join(" ")}`}
+  data-tags={entry.data.tags.join("|")}
+>
+  <a href={`/portafolio/${entry.id}`} aria-label={`Abrir caso: ${entry.data.title}`}>
+    <div class="portfolio-card__image">
+      {
+        coverImage ? (
+          <img
+            src={coverImage.src}
+            width={coverImage.width}
+            height={coverImage.height}
+            alt={entry.data.coverAlt ?? ""}
+            loading="lazy"
+            decoding="async"
+          />
+        ) : (
+          <span aria-hidden="true">IMAGEN / {entry.data.archiveNumber}</span>
+        )
+      }
+    </div>
+    <div class="portfolio-card__information">
+      <p class="portfolio-card__archive">
+        <span>{entry.data.archiveNumber}</span>
+        <span>{yearLabel}</span>
+      </p>
+      <h3>{entry.data.title}</h3>
+      <p class="portfolio-card__summary">{entry.data.summary}</p>
+      <dl class="portfolio-card__meta">
+        {
+          entry.data.client && (
+            <div>
+              <>
+                <dt>Organización</dt>
+                <dd>{entry.data.client}</dd>
+              </>
+            </div>
+          )
+        }
+        <div><dt>Disciplinas</dt><dd>{entry.data.disciplines.join(" · ")}</dd></div>
+      </dl>
+      <span class="portfolio-card__action">Abrir caso ↗</span>
+    </div>
+  </a>
+</li>

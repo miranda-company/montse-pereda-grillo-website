@@ -1,0 +1,89 @@
+---
+import { render, type CollectionEntry } from "astro:content"
+import type { ConnectionGroups } from "../lib/connection-graph"
+import { getExternalNoteConnectionLinks } from "../lib/content-connections"
+import { MEDIA_FORMAT_LABELS, MEDIA_STATUS_LABELS } from "../lib/media"
+import "../styles/media-shared.css"
+import "../styles/media-detail.css"
+import EditorialDetailLayout from "./EditorialDetailLayout.astro"
+import EditorialConnections from "./EditorialConnections.astro"
+import MediaVisual from "./MediaVisual.astro"
+
+interface Props {
+  entry: CollectionEntry<"mediateca">
+  connections: ConnectionGroups
+}
+
+const { entry, connections } = Astro.props
+const { Content } = await render(entry)
+const isProvisional = entry.data.editorialState === "provisional"
+const supplementalLinks = await getExternalNoteConnectionLinks(
+  entry.data.relatedNotes,
+  import.meta.env.DEV,
+)
+---
+
+<EditorialDetailLayout
+  title={entry.data.title}
+  description={entry.data.summary}
+  pageClass="media-page"
+  introClass="mediateca-intro"
+  backlinkHref="/mediateca"
+  backlinkLabel="Volver a Mediateca"
+  canonicalPath={`/mediateca/${entry.id}`}
+  socialImage={entry.data.coverImage}
+  socialImageAlt={entry.data.coverAlt}
+  schemaType="CreativeWork"
+  updatedAt={entry.data.updatedAt}
+  keywords={entry.data.tags}
+  schemaData={{
+    creator: { "@type": "Person", name: entry.data.creator },
+    ...(entry.data.publicationYear ? { datePublished: String(entry.data.publicationYear) } : {}),
+    ...(entry.data.externalUrl ? { sameAs: entry.data.externalUrl } : {}),
+  }}
+>
+  <p slot="header-meta">
+    {entry.data.archiveNumber} / {MEDIA_FORMAT_LABELS[entry.data.format].toUpperCase()}
+  </p>
+  <p slot="header-summary">{entry.data.creator}</p>
+
+  <aside slot="metadata" class="reference-meta" aria-label="Ficha de la referencia">
+    <MediaVisual entry={entry} />
+    <dl>
+      <div><dt>Año</dt><dd>{entry.data.publicationYear ?? "—"}</dd></div>
+      <div><dt>Formato</dt><dd>{MEDIA_FORMAT_LABELS[entry.data.format]}</dd></div>
+      <div><dt>Estado</dt><dd>{MEDIA_STATUS_LABELS[entry.data.status]}</dd></div>
+      <div><dt>Archivo</dt><dd>{entry.data.archiveNumber}</dd></div>
+    </dl>
+    <div class="reference-tags">
+      {entry.data.tags.map((tag) => <span>{tag}</span>)}
+    </div>
+    {
+      entry.data.externalUrl && (
+        <a class="reference-external" href={entry.data.externalUrl} rel="external noreferrer">
+          Referencia externa ↗
+        </a>
+      )
+    }
+  </aside>
+
+  <div class="reference-reading">
+    {
+      isProvisional && (
+        <p class="reference-provisional">
+          <span aria-hidden="true">●</span>
+          COPIA EDITORIAL PROVISIONAL · REQUIERE APROBACIÓN
+        </p>
+      )
+    }
+    <div class="rich-content"><Content /></div>
+  </div>
+
+  <EditorialConnections
+    slot="connections"
+    connections={connections}
+    supplementalLinks={supplementalLinks}
+    headingId="reference-connections-title"
+    emptyMessage="Esta referencia todavía no tiene conexiones."
+  />
+</EditorialDetailLayout>

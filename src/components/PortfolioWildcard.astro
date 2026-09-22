@@ -1,0 +1,130 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { formatDottedDate } from "../lib/dates"
+
+interface Props {
+  entries: CollectionEntry<"portafolio">[]
+  emptyTitle: string
+  emptyStatus: string
+}
+
+interface WildcardProject {
+  id: string
+  href: string
+  title: string
+  archiveNumber: string
+  status: string
+  updatedAt: string
+  cover: {
+    src: string
+    width: number
+    height: number
+    alt: string
+  }
+}
+
+const { entries, emptyTitle, emptyStatus } = Astro.props
+const projects: WildcardProject[] = entries.flatMap((entry) => {
+  const coverImage = entry.data.coverImage
+  if (!coverImage) return []
+
+  return [
+    {
+      id: entry.id,
+      href: `/portafolio/${entry.id}`,
+      title: entry.data.title,
+      archiveNumber: entry.data.archiveNumber,
+      status: entry.data.projectStatus,
+      updatedAt: formatDottedDate(entry.data.updatedAt),
+      cover: {
+        src: coverImage.src,
+        width: coverImage.width,
+        height: coverImage.height,
+        alt: entry.data.coverAlt ?? "",
+      },
+    },
+  ]
+})
+const initialProject = projects[0]
+---
+
+{
+  initialProject ? (
+    <a
+      class="portfolio-latest"
+      href={initialProject.href}
+      aria-label={`Abrir proyecto: ${initialProject.title}`}
+      data-portfolio-wildcard
+      data-portfolio-projects={JSON.stringify(projects)}
+      data-selected-project={initialProject.id}
+    >
+      <img
+        class="portfolio-latest__image"
+        src={initialProject.cover.src}
+        width={initialProject.cover.width}
+        height={initialProject.cover.height}
+        alt={initialProject.cover.alt}
+        loading="lazy"
+        decoding="async"
+        data-portfolio-wildcard-image
+      />
+      <span class="portfolio-latest__copy">
+        <span data-portfolio-wildcard-archive>{initialProject.archiveNumber}</span>
+        <b data-portfolio-wildcard-title>{initialProject.title}</b>
+        <em data-portfolio-wildcard-status>
+          {initialProject.status} · ACT. {initialProject.updatedAt}
+        </em>
+      </span>
+    </a>
+  ) : (
+    <div class="portfolio-latest portfolio-latest--empty">
+      <span>P.—</span>
+      <b>{emptyTitle}</b>
+      <em>{emptyStatus}</em>
+    </div>
+  )
+}
+
+<script>
+  interface WildcardProject {
+    id: string
+    href: string
+    title: string
+    archiveNumber: string
+    status: string
+    updatedAt: string
+    cover: {
+      src: string
+      width: number
+      height: number
+      alt: string
+    }
+  }
+
+  for (const card of document.querySelectorAll<HTMLElement>("[data-portfolio-wildcard]")) {
+    const serializedProjects = card.dataset.portfolioProjects
+    if (!serializedProjects) continue
+
+    const projects = JSON.parse(serializedProjects) as WildcardProject[]
+    const project = projects[Math.floor(Math.random() * projects.length)]
+    const image = card.querySelector<HTMLImageElement>("[data-portfolio-wildcard-image]")
+    const archive = card.querySelector<HTMLElement>("[data-portfolio-wildcard-archive]")
+    const title = card.querySelector<HTMLElement>("[data-portfolio-wildcard-title]")
+    const status = card.querySelector<HTMLElement>("[data-portfolio-wildcard-status]")
+
+    if (!project || !image || !archive || !title || !status) continue
+
+    if (card instanceof HTMLAnchorElement) {
+      card.href = project.href
+      card.setAttribute("aria-label", `Abrir proyecto: ${project.title}`)
+    }
+    card.dataset.selectedProject = project.id
+    image.src = project.cover.src
+    image.width = project.cover.width
+    image.height = project.cover.height
+    image.alt = project.cover.alt
+    archive.textContent = project.archiveNumber
+    title.textContent = project.title
+    status.textContent = `${project.status} · ACT. ${project.updatedAt}`
+  }
+</script>

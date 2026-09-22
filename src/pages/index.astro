@@ -1,0 +1,140 @@
+---
+import { getEntry } from "astro:content"
+import type { CollectionEntry } from "astro:content"
+import ArchiveCard from "../components/ArchiveCard.astro"
+import LatestMedia from "../components/LatestMedia.astro"
+import LatestNotes from "../components/LatestNotes.astro"
+import PageShell from "../components/PageShell.astro"
+import PortfolioWildcard from "../components/PortfolioWildcard.astro"
+import BaseLayout from "../layouts/BaseLayout.astro"
+import { formatDottedDate } from "../lib/dates"
+import { getVisibleSpanishMedia } from "../lib/media"
+import { getVisibleSpanishNotes } from "../lib/notes"
+import { getVisibleSpanishProjects } from "../lib/portfolio"
+import "../styles/home.css"
+
+import helloComputer from "../assets/images/homepage/hello-computer-002.webp"
+
+const home = await getEntry("homepage", "homepage")
+const ahora = await getEntry("ahora", "ahora")
+
+if (!home || !ahora) {
+  throw new Error("Falta el contenido validado de la portada.")
+}
+
+const publishedNotes = await getVisibleSpanishNotes(false)
+const publishedMedia = await getVisibleSpanishMedia(false)
+const publishedProjects = await getVisibleSpanishProjects(false)
+const latestPublishedNote = [...publishedNotes].sort(
+  (a, b) => b.data.publishedAt.getTime() - a.data.publishedAt.getTime(),
+)[0]
+
+type HomepagePanel = CollectionEntry<"homepage">["data"]["panels"][number]
+type RenderedHomepagePanel = HomepagePanel & {
+  metadata: string
+  reveal: string
+}
+
+const panels: RenderedHomepagePanel[] = home.data.panels.map((panel) => {
+  if (panel.kind === "notas") {
+    return {
+      ...panel,
+      metadata: `Última nota · ${latestPublishedNote ? formatDottedDate(latestPublishedNote.data.publishedAt) : "—"}`,
+      reveal: `${publishedNotes.length} ${publishedNotes.length === 1 ? "nota publicada" : "notas publicadas"}`,
+    }
+  }
+
+  if (panel.kind === "mediateca") {
+    return {
+      ...panel,
+      reveal: `${publishedMedia.length} ${publishedMedia.length === 1 ? "medio guardado" : "medios guardados"}`,
+    }
+  }
+
+  if (panel.kind === "portafolio") {
+    return {
+      ...panel,
+      reveal: `${publishedProjects.length} ${publishedProjects.length === 1 ? "proyecto publicado" : "proyectos publicados"}`,
+    }
+  }
+
+  return panel
+})
+
+const notes = publishedNotes.slice(0, 3)
+
+const mediaShelf = publishedMedia.filter((entry) => entry.data.displayInShelf).slice(0, 3)
+const connectionLinkStart = home.data.connectionLabel.indexOf(home.data.connectionLink.label)
+const connectionLabelBefore = home.data.connectionLabel.slice(0, connectionLinkStart)
+const connectionLabelAfter = home.data.connectionLabel.slice(
+  connectionLinkStart + home.data.connectionLink.label.length,
+)
+---
+
+<BaseLayout canonicalPath="/">
+  <PageShell pageClass="home-page" mainClass="home-main">
+    <section class="hero" id="inicio" aria-labelledby="hero-title">
+      <div class="hero-grid">
+        <div class="text-container">
+          <p class="kicker home-kicker">{home.data.heroEyebrow}</p>
+          <h1 id="hero-title">{home.data.heroTitle}</h1>
+          <p class="intro-lead home-intro__description">
+            {connectionLabelBefore}<a href={home.data.connectionLink.href}
+              >{home.data.connectionLink.label}</a
+            >{connectionLabelAfter}
+          </p>
+        </div>
+
+        <div class="img-container">
+          <img
+            src={helloComputer.src}
+            width={helloComputer.width}
+            height={helloComputer.height}
+            class="hero-image"
+            alt="Ilustración de un ordenador cubierto de plantas con el mensaje «Hello World!»"
+            loading="eager"
+            fetchpriority="high"
+            decoding="async"
+          />
+        </div>
+      </div>
+    </section>
+
+    <section class="panel-section" id="indice" aria-label="Archivo principal">
+      <div class="section-label">
+        <span>{home.data.indexLabel}</span>
+      </div>
+      <div class="panels">
+        {panels.map((panel) => <ArchiveCard panel={panel} />)}
+      </div>
+    </section>
+
+    <section class="growing-section" id="ahora" aria-labelledby="growing-title">
+      <div class="section-label">
+        <span>{ahora.data.label}</span>
+        <span>{ahora.data.period}</span>
+      </div>
+      <div class="growing-grid">
+        <div class="preview-column">
+          <h3>{ahora.data.notesHeading}</h3>
+          <LatestNotes entries={notes} />
+          <a class="archive-link" href="/notas">{ahora.data.notesLinkLabel}</a>
+        </div>
+        <div class="preview-column">
+          <h3>{ahora.data.mediatecaHeading}</h3>
+          <LatestMedia entries={mediaShelf} />
+          <a class="archive-link" href="/mediateca">{ahora.data.mediatecaLinkLabel}</a>
+        </div>
+        <div class="preview-column portfolio-preview">
+          <h3>{ahora.data.portfolioHeading}</h3>
+          <PortfolioWildcard
+            entries={publishedProjects}
+            emptyTitle={ahora.data.portfolioEmptyTitle}
+            emptyStatus={ahora.data.portfolioEmptyStatus}
+          />
+          <a class="archive-link" href="/portafolio">{ahora.data.portfolioLinkLabel}</a>
+        </div>
+      </div>
+    </section>
+  </PageShell>
+</BaseLayout>

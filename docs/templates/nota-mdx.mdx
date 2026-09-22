@@ -1,0 +1,77 @@
+---
+title: "Título de la nota"
+summary: "Resumen breve."
+publishedAt: 2026-08-03
+updatedAt: 2026-08-03
+state: "semilla"
+archiveNumber: "N.000"
+kind: "note"
+cardFormat: "standard"
+# coverImage: "../../assets/images/notas/slug/portada.jpg"
+# coverAlt: "Descripción accesible de la imagen de tarjeta"
+tags:
+  - "Diseño"
+relatedNotes: []
+relatedMedia: []
+relatedProjects: []
+relatedLinks: []
+featured: false
+draft: true
+language: "es"
+---
+
+import VideoEmbed from "../../components/content/VideoEmbed.astro"
+import ImageCarousel from "../../components/content/ImageCarousel.astro"
+import ContentImage from "../../components/content/ContentImage.astro"
+import inlineImage from "../../assets/images/notas/slug/imagen-editorial.jpg"
+import imageOne from "../../assets/images/notas/slug/imagen-01.jpg"
+import imageTwo from "../../assets/images/notas/slug/imagen-02.jpg"
+import imageThree from "../../assets/images/notas/slug/imagen-03.jpg"
+
+Los componentes pueden aparecer entre dos fragmentos del texto.
+
+<ContentImage
+  src={inlineImage}
+  alt="Descripción accesible de la imagen editorial"
+  caption="Leyenda editorial opcional."
+/>
+
+<ImageCarousel
+  label="Exploraciones iniciales del sistema"
+  images={[
+    {
+      src: imageOne,
+      alt: "Descripción accesible de la primera imagen",
+      caption: "Leyenda opcional de la primera imagen.",
+    },
+    {
+      src: imageTwo,
+      alt: "Descripción accesible de la segunda imagen",
+      caption: "Leyenda opcional de la segunda imagen.",
+    },
+    {
+      src: imageThree,
+      alt: "Descripción accesible de la tercera imagen",
+    },
+  ]}
+/>
+
+La nota continúa después del carrusel.
+
+<VideoEmbed
+  provider="youtube"
+  videoId="VIDEO_ID"
+  title="Descripción accesible del vídeo"
+  caption="Comentario editorial opcional sobre el vídeo."
+/>
+
+## Lo que muestra el vídeo
+
+La nota continúa después del contenido audiovisual.
+
+```ts
+interface Note {
+  title: string
+  state: "semilla" | "en-crecimiento" | "perenne"
+}
+```

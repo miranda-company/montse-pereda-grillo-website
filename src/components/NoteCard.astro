@@ -1,0 +1,63 @@
+---
+import type { CollectionEntry } from "astro:content"
+import { formatDottedDate } from "../lib/dates"
+import MaturityMarker from "./MaturityMarker.astro"
+
+interface Props {
+  entry: CollectionEntry<"notas">
+}
+
+const { entry } = Astro.props
+const tags = entry.data.tags.slice(0, 2)
+const coverImage = entry.data.coverImage
+---
+
+<article
+  class:list={["note-card", `note-card--${entry.data.cardFormat}`, "fragment-target"]}
+  id={entry.id}
+  tabindex="-1"
+  data-note-card
+  data-note-kind="note"
+  data-state={entry.data.state}
+  data-tags={entry.data.tags.join("|")}
+  data-title={entry.data.title}
+  data-updated={entry.data.updatedAt.toISOString()}
+  data-archive={entry.data.archiveNumber}
+>
+  <a
+    class="note-card__link"
+    href={`/notas/${entry.id}`}
+    aria-label={`Abrir nota: ${entry.data.title}`}
+  >
+    {
+      coverImage && (
+        <div class="note-card__image">
+          <img
+            src={coverImage.src}
+            width={coverImage.width}
+            height={coverImage.height}
+            alt={entry.data.coverAlt ?? ""}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      )
+    }
+
+    <div class="note-card__topline">
+      {entry.data.cardFormat !== "compact" && <span>{entry.data.archiveNumber}</span>}
+      <MaturityMarker state={entry.data.state} />
+    </div>
+
+    <h2>{entry.data.title}</h2>
+    {entry.data.cardFormat !== "compact" && <p>{entry.data.summary}</p>}
+
+    <div class="note-card__footer">
+      <span class="note-card__tags">
+        {tags.map((tag) => <span>{tag}</span>)}
+      </span>
+      <span class="note-card__date">ACT. {formatDottedDate(entry.data.updatedAt)}</span>
+      <span class="note-card__arrow" aria-hidden="true">↗</span>
+    </div>
+  </a>
+</article>

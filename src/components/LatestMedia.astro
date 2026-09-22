@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from "astro:content"
+
+interface Props {
+  entries: CollectionEntry<"mediateca">[]
+  fragmentTargets?: boolean
+  detailLinks?: boolean
+}
+
+const { entries, fragmentTargets = false, detailLinks = false } = Astro.props
+---
+
+<ol class="latest-media" aria-label="Tres referencias destacadas">
+  {
+    entries.map((entry) => (
+      <li
+        id={fragmentTargets ? entry.id : undefined}
+        class={fragmentTargets ? "fragment-target" : undefined}
+        tabindex={fragmentTargets ? "-1" : undefined}
+      >
+        <a href={detailLinks ? "/mediateca/" + entry.id : "/mediateca#" + entry.id}>
+          <span class:list={["book-cover", "cover-" + entry.id]} aria-hidden="true">
+            {entry.data.coverImage ? (
+              <img
+                src={entry.data.coverImage.src}
+                width={entry.data.coverImage.width}
+                height={entry.data.coverImage.height}
+                alt=""
+                loading="lazy"
+                decoding="async"
+              />
+            ) : entry.id === "cosas" ? (
+              <i>
+                LAS
+                <br />
+                COSAS
+              </i>
+            ) : entry.id === "orden" ? (
+              <i>
+                EL
+                <br />
+                ORDEN
+                <br />
+                DEL
+                <br />
+                TIEMPO
+              </i>
+            ) : (
+              <i>{entry.data.title}</i>
+            )}
+          </span>
+          <span>{entry.data.title}</span>
+        </a>
+      </li>
+    ))
+  }
+</ol>

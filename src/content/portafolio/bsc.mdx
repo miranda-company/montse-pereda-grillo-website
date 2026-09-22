@@ -1,0 +1,124 @@
+---
+title: "Barcelona Supercomputing Center"
+summary: "Cómo transformar datos científicos complejos en productos digitales accesibles y escalables."
+archiveNumber: "P.002"
+updatedAt: 2026-08-18
+year: 2020
+endYear: 2022
+displayOrder: 2
+role: "Director de Producto Digital"
+client: "BSC"
+disciplines:
+  - "Arquitectura de la Información"
+  - "Estrategia de Producto y UX"
+  - "Transformación Digital"
+tags:
+  - "Producto"
+  - "Sistemas"
+projectStatus: "Finalizado"
+coverImage: "../../assets/images/portafolio/bsc/portada-bsc.jpg"
+coverAlt: "Barcelona Supercomputing Center"
+coverCaption: "© Centro Nacional de Supercomputación (BSC-CNS)"
+gallery: []
+projectLinks: []
+relatedNotes: []
+relatedMedia: []
+placeholder: false
+draft: false
+language: "es"
+---
+
+import ContentImage from "../../components/content/ContentImage.astro"
+
+import img001 from "../../assets/images/portafolio/bsc/img-bsc-001.jpg"
+import img003 from "../../assets/images/portafolio/bsc/img-bsc-003.jpg"
+import img004 from "../../assets/images/portafolio/bsc/img-bsc-004.jpg"
+import img006 from "../../assets/images/portafolio/bsc/img-bsc-006.jpg"
+
+## El proyecto
+
+El reto de este proyecto podría resumirse en una pregunta: ¿cómo hacer comprensible información científica compleja sin despojarla de su rigor?
+
+El [Barcelona Supercomputing Center](https://www.bsc.es/) trabaja con modelos predictivos sobre fenómenos climáticos que tienen consecuencias muy reales, desde la formación de huracanes hasta el desplazamiento de partículas de polvo procedentes del Sáhara.
+
+El conocimiento estaba ahí. El problema era cómo organizarlo, publicarlo y presentarlo para que resultara útil tanto para la comunidad científica como para instituciones internacionales y personas sin conocimientos especializados.
+
+Desde [Eloquent](https://www.eloquent.es/) trabajamos con el equipo del BSC en el diseño y desarrollo de dos plataformas: [WMO Barcelona Dust Regional Center](https://dust.aemet.es/) y [Seasonal Hurricane Predictions](https://seasonalhurricanepredictions.bsc.es/).
+
+## El problema
+
+El ecosistema reunía más de 40 tipos de visualización, modelos predictivos y archivos actualizados en tiempo real. Una interfaz más limpia podía ayudar, pero no resolvería por sí sola el problema.
+
+Primero había que entender cómo se relacionaban los datos, qué necesitaba consultar cada audiencia y cómo podían publicar información los distintos centros meteorológicos que participaban en los proyectos.
+
+Esto introducía tres retos conectados:
+
+- Facilitar la exploración de los datos sin eliminar información relevante.
+- Mantener criterios comunes entre proyectos y organizaciones diferentes.
+- Diseñar un sistema que el equipo del BSC pudiera actualizar y ampliar de manera autónoma.
+
+La verdadera tarea no era reducir la cantidad de información. Era darle una forma que permitiera orientarse dentro de ella.
+
+<ContentImage
+  src={img001}
+  alt="Datos sobre predicción de huracanes desde 2016 a 2025"
+  caption="Datos sobre predicción de huracanes desde 2016 a 2025"
+/>
+
+## Mi papel
+
+Mi rol en este proyecto fue de diseñar la estrategia de producto digital para las dos plataformas que se crearon.
+
+Mi posición estaba entre el conocimiento científico, las necesidades de los usuarios y las posibilidades técnicas de la plataforma. Una parte importante del trabajo consistió en traducir entre esos tres ámbitos: entender qué no podíamos perder, decidir qué debía tener prioridad y convertirlo en una experiencia digital viable.
+
+También coordiné el proceso con el equipo del BSC y participé directamente en la definición de la arquitectura, la navegación y las interfaces.
+
+<ContentImage
+  src={img003}
+  alt="Visualización de la plataforma Seasonal Hurricane Predictions"
+  caption="Visualización de la plataforma Seasonal Hurricane Predictions"
+/>
+
+<ContentImage
+  src={img004}
+  alt="Visualización de la plataforma Seasonal Hurricane Predictions"
+  caption="Visualización de la plataforma Seasonal Hurricane Predictions"
+/>
+
+## Auditar antes de construir
+
+Comenzamos auditando el contenido y la estructura de las plataformas. Necesitábamos saber qué información existía, cómo se actualizaba y qué relaciones había entre modelos, predicciones, visualizaciones y archivos.
+
+A partir de este diagnóstico definimos una nueva arquitectura de la información y una serie de principios de diseño: jerarquías más claras, menos ruido visual, patrones de interacción consistentes y pautas de accesibilidad aplicables a todo el sistema.
+
+El objetivo no era convertir las plataformas en simples repositorios de datos. Queríamos que funcionaran como herramientas de consulta y comparación, capaces de ayudar a distintos usuarios a comprender qué estaba ocurriendo y cómo evolucionaban las predicciones.
+
+También establecimos criterios comunes para que centros meteorológicos de diferentes países pudieran publicar y comparar sus estimaciones dentro de un mismo marco.
+
+<ContentImage
+  src={img006}
+  alt="Visualización de la plataforma Barcelona Dust Regional Center"
+  caption="Visualización de la plataforma Barcelona Dust Regional Center"
+/>
+
+## Sistematizar para dar autonomía
+
+Una plataforma científica no debería depender permanentemente del equipo que la diseñó. Por eso, la entrega no terminaba con las interfaces.
+
+Construimos el sistema para integrarlo en la infraestructura tecnológica del BSC, basada en [Plone](https://plone.org/), y para que su equipo pudiera gestionar contenidos, actualizar datos e incorporar nuevos módulos sin depender de nosotros para cada cambio.
+
+Puede parecer una parte poco visible del diseño, pero era una de las más importantes: si la plataforma no podía mantenerse desde dentro, la solución no sería sostenible.
+
+## Qué construimos
+
+El proyecto dio lugar a:
+
+- **Producto Digital**: Dos plataformas integradas en la infraestructura Plone del BSC.
+- **Gobernanza de Datos**: Criterios estandarizados para organizaciones internacionales.
+- **Escalabilidad**: Sistema modular preparado para nuevos indicadores predictivos.
+
+## Resultado y aprendizajes
+
+El resultado fueron dos plataformas más claras, consistentes y manejables, capaces de presentar información científica compleja sin convertirla en una colección de gráficos difíciles de interpretar. El BSC obtuvo, además, un marco común para coordinar la publicación de datos y mantener las herramientas con autonomía.
+
+Este proyecto me confirmó que hacer accesible el conocimiento científico no consiste en eliminar su complejidad. Consiste en darle un orden, explicar las relaciones importantes y construir una puerta de entrada para quienes todavía no conocen el camino.

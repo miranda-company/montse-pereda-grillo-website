@@ -1,0 +1,188 @@
+---
+import NoteCard from "../../components/NoteCard.astro"
+import ExternalNoteCard from "../../components/ExternalNoteCard.astro"
+import PageShell from "../../components/PageShell.astro"
+import BaseLayout from "../../layouts/BaseLayout.astro"
+import { formatDottedDate } from "../../lib/dates"
+import { getVisibleSpanishNotes } from "../../lib/notes"
+import "../../styles/notes-index.css"
+import "../../styles/notes-shared.css"
+
+const includeDrafts = import.meta.env.DEV
+const notes = await getVisibleSpanishNotes(includeDrafts)
+const latestUpdatedAt = notes[0]?.data.updatedAt
+const noteCountLabel = `${notes.length} ${notes.length === 1 ? "nota" : "notas"}`
+---
+
+<BaseLayout
+  title="Notas"
+  description="Ideas en proceso, conexiones y apuntes que cambian con el tiempo."
+  canonicalPath="/notas"
+  schemaType="CollectionPage"
+>
+  <PageShell pageClass="notes-page" mainClass="notes-main page-main--with-back">
+    <a class="page-back" href="/#indice">← Volver al índice</a>
+    <section class="page-intro notes-intro" aria-labelledby="notes-title">
+      <div class="notes-intro__copy">
+        <p class="kicker notes-kicker">Ideas y pensamientos</p>
+        <h1 id="notes-title">Notas</h1>
+        <p class="intro-lead notes-intro__description">
+          Ideas en proceso, conexiones y apuntes que cambian con el tiempo.
+        </p>
+        <p class="notes-intro__meta">
+          {noteCountLabel} · {
+            latestUpdatedAt
+              ? `Actualizado ${formatDottedDate(latestUpdatedAt)}`
+              : "Sin actualizaciones"
+          }
+        </p>
+      </div>
+    </section>
+
+    <details class="note-controls-disclosure" data-note-disclosure>
+      <summary>
+        <span>Filtrar y ordenar</span>
+        <span data-filter-summary>{notes.length} notas · sin filtros</span>
+      </summary>
+
+      <form class="note-controls" data-note-controls>
+        <fieldset class="note-filter-group">
+          <legend>Madurez</legend>
+          <div class="note-filter-options">
+            <button class="archive-control" type="button" aria-pressed="true" data-maturity="all">
+              <span aria-hidden="true">×</span>Todas
+            </button>
+            <button
+              class="archive-control"
+              type="button"
+              aria-pressed="false"
+              data-maturity="semilla"
+            >
+              <span class="control-symbol control-symbol--seed" aria-hidden="true"></span>Semilla
+            </button>
+            <button
+              class="archive-control"
+              type="button"
+              aria-pressed="false"
+              data-maturity="en-crecimiento"
+            >
+              <span class="control-symbol control-symbol--growth" aria-hidden="true"></span>En
+              crecimiento
+            </button>
+            <button
+              class="archive-control"
+              type="button"
+              aria-pressed="false"
+              data-maturity="perenne"
+            >
+              <span class="control-symbol control-symbol--perennial" aria-hidden="true"
+                ><i></i></span
+              >
+              Perenne
+            </button>
+          </div>
+        </fieldset>
+
+        <fieldset class="note-filter-group note-filter-group--themes">
+          <legend>Tema</legend>
+          <div class="note-filter-options">
+            {
+              ["Estrategia", "Diseño", "Sistemas", "Cultura digital", "Herramientas"].map(
+                (theme) => (
+                  <button
+                    class="archive-control"
+                    type="button"
+                    aria-pressed="false"
+                    data-theme={theme}
+                  >
+                    <span aria-hidden="true">+</span>
+                    {theme}
+                  </button>
+                ),
+              )
+            }
+          </div>
+        </fieldset>
+
+        <label class="note-sort">
+          <span>Orden</span>
+          <select class="archive-control" data-note-sort>
+            <option value="recent">Actualizadas recientemente</option>
+            <option value="oldest">Más antiguas</option>
+            <option value="alpha">Alfabético</option>
+          </select>
+        </label>
+      </form>
+    </details>
+
+    <div class="notes-results-line">
+      <span data-result-count aria-live="polite">{notes.length} notas visibles</span>
+    </div>
+
+    <section class="note-garden" aria-label="Jardín de notas" data-note-garden>
+      {
+        notes.map((entry) =>
+          entry.data.kind === "external" ? (
+            <ExternalNoteCard entry={entry} />
+          ) : (
+            <NoteCard entry={entry} />
+          ),
+        )
+      }
+    </section>
+
+    <div class="note-empty" data-note-empty hidden>
+      <p>No hay notas que coincidan con esta combinación. Prueba otro cruce.</p>
+      <button class="filter-reset" type="button" data-note-reset>Restablecer filtros</button>
+    </div>
+  </PageShell>
+
+  <script>
+    import { initArchiveControls } from "../../scripts/archive-controls"
+    import { initMasonryGrid } from "../../scripts/masonry-grid"
+
+    initArchiveControls({
+      disclosureSelector: "[data-note-disclosure]",
+      controlsSelector: "[data-note-controls]",
+      containerSelector: "[data-note-garden]",
+      cardSelector: "[data-note-card]",
+      sortSelector: "[data-note-sort]",
+      countSelector: "[data-result-count]",
+      summarySelector: "[data-filter-summary]",
+      emptySelector: "[data-note-empty]",
+      resetSelector: "[data-note-reset]",
+      primary: {
+        buttonSelector: "[data-maturity]",
+        buttonDataKey: "maturity",
+        cardDataKey: "state",
+        defaultValue: "all",
+      },
+      secondary: {
+        buttonSelector: "[data-theme]",
+        buttonDataKey: "theme",
+        cardDataKey: "tags",
+        defaultValue: "",
+      },
+      singular: "nota",
+      plural: "notas",
+      compareCards: (first, second, sortValue) => {
+        if (sortValue === "alpha") {
+          return (first.dataset.title ?? "").localeCompare(second.dataset.title ?? "", "es")
+        }
+
+        const direction = sortValue === "oldest" ? 1 : -1
+        const dateDifference =
+          direction * (first.dataset.updated ?? "").localeCompare(second.dataset.updated ?? "")
+        return (
+          dateDifference ||
+          (first.dataset.archive ?? "").localeCompare(second.dataset.archive ?? "", "es")
+        )
+      },
+    })
+
+    initMasonryGrid({
+      containerSelector: "[data-note-garden]",
+      itemSelector: "[data-note-card]",
+    })
+  </script>
+</BaseLayout>

@@ -1,0 +1,67 @@
+.maturity-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+
+.maturity-symbol {
+  position: relative;
+  display: inline-flex;
+  width: 24px;
+  height: 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.maturity-symbol::before {
+  position: absolute;
+  top: 5px;
+  left: 4px;
+  width: 16px;
+  height: 1px;
+  background: currentColor;
+  content: "";
+}
+
+.maturity-symbol i {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 6px;
+  height: 6px;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+.maturity-marker.is-semilla {
+  color: #8f6914;
+}
+
+.maturity-marker.is-semilla .maturity-symbol::before {
+  display: none;
+}
+
+.maturity-marker.is-semilla .maturity-symbol i {
+  border-color: var(--ochre);
+  background: var(--ochre);
+}
+
+.maturity-marker.is-en-crecimiento {
+  color: var(--blue);
+}
+
+.maturity-marker.is-perenne {
+  color: var(--plum);
+}
+
+.maturity-marker.is-perenne .maturity-symbol {
+  width: 30px;
+}
+
+.maturity-marker.is-perenne .maturity-symbol::before {
+  left: 5px;
+  width: 20px;
+}

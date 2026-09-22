@@ -1,0 +1,89 @@
+.registry-intro {
+  border-bottom: 1px solid var(--line);
+}
+
+.registry-intro h1 {
+  margin: 0;
+}
+
+.registry-intro__description {
+  max-width: 700px;
+  margin: 28px 0 0;
+}
+
+.registry-index {
+  margin-top: 52px;
+}
+
+.registry-index__heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 20px;
+}
+
+.registry-index__heading h2,
+.registry-index__heading p {
+  margin: 0;
+}
+
+.registry-index__heading p {
+  color: var(--graphite);
+  font: var(--type-metadata-size) / var(--type-metadata-line-height) var(--font-mono);
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.registry-index ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.registry-index li {
+  border-top: 1px solid var(--line);
+}
+
+.registry-index li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.registry-index a {
+  display: grid;
+  min-height: 64px;
+  grid-template-columns: minmax(0, 1fr) minmax(180px, 0.75fr);
+  gap: 28px;
+  align-items: center;
+  padding: 12px 0;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.registry-index a:hover,
+.registry-index a:focus-visible {
+  color: var(--blue);
+}
+
+.registry-index a > span {
+  font: 20px/1.2 var(--font-serif);
+}
+
+.registry-index code {
+  overflow-wrap: anywhere;
+  color: currentColor;
+  font: 10px/1.4 var(--font-mono);
+  letter-spacing: 0.045em;
+}
+
+@media (max-width: 767px) {
+  .registry-index {
+    margin-top: 36px;
+  }
+
+  .registry-index a {
+    grid-template-columns: 1fr;
+    gap: 7px;
+    padding: 15px 0;
+  }
+}
