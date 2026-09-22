@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets"
 import { getEntry } from "astro:content"
 import type { CollectionEntry } from "astro:content"
 import ArchiveCard from "../components/ArchiveCard.astro"
@@ -13,7 +14,7 @@ import { getVisibleSpanishNotes } from "../lib/notes"
 import { getVisibleSpanishProjects } from "../lib/portfolio"
 import "../styles/home.css"
 
-import helloComputer from "../assets/images/homepage/hello-computer-002.webp"
+import montsePortrait from "../assets/images/homepage/montse-pereda-portrait.png"
 
 const home = await getEntry("homepage", "homepage")
 const ahora = await getEntry("ahora", "ahora")
@@ -86,12 +87,14 @@ const connectionLabelAfter = home.data.connectionLabel.slice(
         </div>
 
         <div class="img-container">
-          <img
-            src={helloComputer.src}
-            width={helloComputer.width}
-            height={helloComputer.height}
+          <Image
+            src={montsePortrait}
+            width={760}
+            height={760}
+            format="webp"
+            quality={85}
             class="hero-image"
-            alt="Ilustración de un ordenador cubierto de plantas con el mensaje «Hello World!»"
+            alt="Retrato de Montse Pereda Grillo con americana gris y jersey blanco sobre fondo claro"
             loading="eager"
             fetchpriority="high"
             decoding="async"
