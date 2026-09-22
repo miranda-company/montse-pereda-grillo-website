@@ -1,11 +1,3 @@
-@font-face {
-  font-family: "Prata";
-  src: url("../assets/fonts/Prata-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   --paper: #f9f6ee;
   --paper-alt: #f1eee5;
@@ -30,9 +22,9 @@
   --motion-duration-standard: 200ms;
   --motion-duration-medium: 220ms;
   --motion-easing-standard: ease-out;
-  --font-serif: "Prata", serif;
-  --font-sans: "Instrument Sans Variable", sans-serif;
-  --font-mono: "IBM Plex Mono", monospace;
+  --font-sans: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-mono: "Helvetica Neue", Helvetica, Arial, sans-serif;
   --heading-h1-size: clamp(64px, 5vw, 72px);
   --heading-h2-size: clamp(35px, 3.5vw, 39px);
   --heading-h3-size: clamp(27px, 2.35vw, 30px);
@@ -84,7 +76,13 @@ h3,
 h4,
 h5,
 h6 {
+  font-family: var(--font-sans);
+  font-weight: 400;
+}
+
+:is(h1, h2, h3, h4, h5, h6) em {
   font-family: var(--font-serif);
+  font-style: italic;
   font-weight: 400;
 }
 
@@ -384,7 +382,7 @@ a {
   align-items: center;
   gap: 10px;
   color: var(--ink);
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 17px;
   text-decoration: none;
 }
@@ -586,7 +584,7 @@ a {
     border-top: 1px solid var(--line);
     padding: 13px 0;
     color: var(--ink);
-    font: 400 25px/1 var(--font-serif);
+    font: 400 25px/1 var(--font-sans);
     text-decoration: none;
   }
 

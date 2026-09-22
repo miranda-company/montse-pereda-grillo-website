@@ -421,7 +421,7 @@
 
 .portfolio-latest b {
   margin: auto 0;
-  font: 400 30px/0.9 var(--font-serif);
+  font: 400 30px/0.9 var(--font-sans);
   letter-spacing: -0.045em;
   overflow-wrap: anywhere;
 }

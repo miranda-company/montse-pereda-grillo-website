@@ -106,7 +106,7 @@ summary and metadata arrangement while retaining their collection class.
 Introductory copy uses the global `.intro-lead` typography utility together
 with its route-specific layout hook. This keeps the homepage hero, collection
 introductions, standalone introductions and editorial summaries on the same
-Instrument Sans size, weight, line-height and tracking while allowing each
+Helvetica Neue size, weight, line-height and tracking while allowing each
 layout to retain its own width and margins.
 
 Pages with a return link use `.page-main--with-back` on the main landmark and

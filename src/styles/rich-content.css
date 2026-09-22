@@ -41,7 +41,7 @@
   border-left: 3px solid var(--ochre);
   padding: 3px 0 3px 25px;
   color: var(--ink);
-  font: 400 27px/1.26 var(--font-serif);
+  font: 400 27px/1.26 var(--font-sans);
   letter-spacing: -0.025em;
 }
 

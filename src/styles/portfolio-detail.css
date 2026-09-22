@@ -139,7 +139,7 @@
   justify-content: space-between;
   padding: 16px;
   color: var(--ink);
-  font: 400 23px/1.05 var(--font-serif);
+  font: 400 23px/1.05 var(--font-sans);
   text-decoration: none;
 }
 
