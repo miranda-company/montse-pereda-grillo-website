@@ -510,6 +510,14 @@ a {
   transform: translate3d(0, 0, 0) scale(1);
 }
 
+@media (max-width: 1100px) {
+  .page-shell[data-reveal-ready] .entry-detail-reading > .rich-content > [data-scroll-reveal] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 /*
  * Adaptive layout contract:
  * compact: up to 767px

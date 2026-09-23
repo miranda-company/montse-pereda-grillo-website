@@ -77,7 +77,8 @@ normalizarse antes de cambiar `draft` a `false`; la siguiente ejecución de
 - entrada CSS del hero y revelado único mediante Intersection Observer para
   las tarjetas, sin ocultar el footer;
 - cuerpo completo de los casos visible sin depender de Intersection Observer
-  en mobile y tablet;
+  en mobile y tablet, incluido el viewport iPhone SE de 375 × 667 y el cambio
+  de viewport de desktop a mobile sin recargar la página;
 - menú móvil con teclado, cierre con Escape y restauración del foco;
 - navegación pública limitada a Inicio y Portafolio, y enlaces actuales del
   footer;

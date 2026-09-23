@@ -13,7 +13,10 @@ const revealGroups: RevealGroup[] = [
   { selector: ".page-back" },
   { selector: ".page-intro > *", stagger: 65 },
   { selector: "[data-portfolio-card]", variant: "media", stagger: 70 },
-  { selector: ".entry-detail-layout > *", stagger: 70 },
+  {
+    selector: ".entry-detail-layout > :not(.entry-detail-reading)",
+    stagger: 70,
+  },
   {
     selector: ".entry-detail-reading > .rich-content > *",
     expandedOnly: true,

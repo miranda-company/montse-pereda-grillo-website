@@ -34,7 +34,9 @@ browsers cache the shared CSS across routes.
   visible when JavaScript or Intersection Observer is unavailable. Individual
   long-form article blocks use observer-driven reveals only in the expanded
   range; compact and medium layouts keep the full reading body visible to avoid
-  scroll-dependent content on touch-sized viewports.
+  scroll-dependent content on touch-sized viewports. The long article wrapper
+  itself is never a reveal target because its height can exceed the viewport by
+  enough to make a percentage-based observer threshold unreachable.
 - `src/styles/global.css` contains design tokens and the semantic typography
   system.
 - `src/styles/home.css` contains the dark homepage hero, its responsive

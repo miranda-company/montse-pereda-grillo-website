@@ -68,17 +68,18 @@ con JavaScript ligero y sin framework cliente.
 
 - `pnpm run build`: correcto; Astro check informa 69 archivos, 0 errores, 0
   avisos y 0 sugerencias.
-- `pnpm run test`: correcto; pasan las 44 pruebas de navegador y accesibilidad,
+- `pnpm run test`: correcto; pasan las 45 pruebas de navegador y accesibilidad,
   además de integridad editorial, rutas de producción, enlaces internos y
   presupuestos de salida.
-- El CSS compartido se emite como archivos externos: el HTML total pesa 261,7
+- El CSS compartido se emite como archivos externos: el HTML total pesa 263,5
   KiB frente a un presupuesto de 270 KiB y el JavaScript emitido pesa 4,6 KiB.
 - El contrato de producción verifica 10 rutas públicas indexables y 3 rutas
   ocultas con `noindex, nofollow`; Registro y sitemap contienen únicamente las
   rutas públicas.
 - `git diff --check`: correcto en los últimos cambios de implementación.
-- Revisión visual manual completada a 1440 px, 1024 px y 390 px sobre portada,
-  índice de Portafolio, un caso de estudio y el footer.
+- Revisión visual manual completada a 1440 px, 1024 px, 390 px y el viewport
+  iPhone SE de 375 × 667 sobre portada, índice de Portafolio, un caso de estudio
+  y el footer.
 - Sin errores de consola, overlays, imágenes rotas ni overflow horizontal.
 - La rejilla responde 3 → 2 → 1 columnas como se esperaba.
 

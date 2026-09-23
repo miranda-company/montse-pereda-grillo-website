@@ -236,7 +236,7 @@ test("hero and portfolio motion use independent, one-way reveal systems", async 
 })
 
 for (const viewport of [
-  { name: "mobile", width: 390, height: 844 },
+  { name: "mobile", width: 375, height: 667 },
   { name: "tablet", width: 768, height: 1024 },
 ] as const) {
   test(`${viewport.name}: portfolio detail body remains visible without observer-dependent reveals`, async ({
@@ -246,6 +246,8 @@ for (const viewport of [
     await page.goto("/portafolio/cn-sant-andreu")
 
     const articleBlocks = page.locator(".entry-detail-reading > .rich-content > *")
+    await expect(page.locator(".entry-detail-reading")).toHaveCSS("opacity", "1")
+    await expect(page.locator(".entry-detail-reading")).not.toHaveAttribute("data-scroll-reveal")
     expect(await articleBlocks.count()).toBeGreaterThan(0)
     await expect(articleBlocks.first()).not.toHaveAttribute("data-scroll-reveal")
     expect(
@@ -255,6 +257,22 @@ for (const viewport of [
     ).toBe(true)
   })
 }
+
+test("case-study body remains visible when resizing from desktop to mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/portafolio/cn-sant-andreu")
+
+  const articleBlocks = page.locator(".entry-detail-reading > .rich-content > *")
+  await expect(articleBlocks.first()).toHaveAttribute("data-scroll-reveal", "default")
+
+  await page.setViewportSize({ width: 375, height: 667 })
+  await expect(page.locator(".entry-detail-reading")).toHaveCSS("opacity", "1")
+  expect(
+    await articleBlocks.evaluateAll((elements) =>
+      elements.every((element) => getComputedStyle(element).opacity === "1"),
+    ),
+  ).toBe(true)
+})
 
 test("desktop header exposes only the launch navigation", async ({ page }) => {
   await page.goto("/")

@@ -115,7 +115,8 @@ pnpm run verify
 ```
 
 The latest manual visual pass covered the homepage, Portfolio index, a project
-detail and the footer at 1440 px, 1024 px and 390 px. See
+detail and the footer at 1440 px, 1024 px, 390 px and the 375 × 667 iPhone SE
+viewport. See
 [Project status](docs/PROJECT_STATUS.md) for current findings and launch work.
 
 ## Deployment
