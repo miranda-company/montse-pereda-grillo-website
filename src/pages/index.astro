@@ -1,33 +1,29 @@
 ---
 import { Image } from "astro:assets"
 import { getEntry } from "astro:content"
-import LatestMedia from "../components/LatestMedia.astro"
-import LatestNotes from "../components/LatestNotes.astro"
 import PageShell from "../components/PageShell.astro"
 import PortfolioSection from "../components/PortfolioSection.astro"
-import PortfolioWildcard from "../components/PortfolioWildcard.astro"
 import BaseLayout from "../layouts/BaseLayout.astro"
-import { getVisibleSpanishMedia } from "../lib/media"
-import { getVisibleSpanishNotes } from "../lib/notes"
 import { getVisibleSpanishProjects } from "../lib/portfolio"
 import "../styles/home.css"
 
 import montsePortrait from "../assets/images/homepage/montse-pereda-portrait.png"
 
 const home = await getEntry("homepage", "homepage")
-const ahora = await getEntry("ahora", "ahora")
 
-if (!home || !ahora) {
+if (!home) {
   throw new Error("Falta el contenido validado de la portada.")
 }
 
-const publishedNotes = await getVisibleSpanishNotes(false)
-const publishedMedia = await getVisibleSpanishMedia(false)
 const publishedProjects = await getVisibleSpanishProjects(false)
-
-const notes = publishedNotes.slice(0, 3)
-
-const mediaShelf = publishedMedia.filter((entry) => entry.data.displayInShelf).slice(0, 3)
+const heroAccentPhrase = "estrategia digital"
+const heroAccentStart = home.data.heroTitle.toLocaleLowerCase("es").lastIndexOf(heroAccentPhrase)
+const heroTitleLead =
+  heroAccentStart >= 0
+    ? home.data.heroTitle.slice(0, heroAccentStart).trimEnd()
+    : home.data.heroTitle
+const heroTitleAccent =
+  heroAccentStart >= 0 ? home.data.heroTitle.slice(heroAccentStart) : undefined
 const connectionLinkStart = home.data.connectionLabel.indexOf(home.data.connectionLink.label)
 const connectionLabelBefore = home.data.connectionLabel.slice(0, connectionLinkStart)
 const connectionLabelAfter = home.data.connectionLabel.slice(
@@ -41,12 +37,18 @@ const connectionLabelAfter = home.data.connectionLabel.slice(
       <div class="hero-grid">
         <div class="text-container">
           <p class="kicker home-kicker">{home.data.heroEyebrow}</p>
-          <h1 id="hero-title">{home.data.heroTitle}</h1>
+          <h1 id="hero-title">
+            <span>{heroTitleLead}</span>
+            {heroTitleAccent && <em>{heroTitleAccent}</em>}
+          </h1>
           <p class="intro-lead home-intro__description">
             {connectionLabelBefore}<a href={home.data.connectionLink.href}
               >{home.data.connectionLink.label}</a
             >{connectionLabelAfter}
           </p>
+          <a class="hero-cta" href="/montse-pereda-cv.pdf" download>
+            Descarga mi CV <span aria-hidden="true">↓</span>
+          </a>
         </div>
 
         <div class="img-container">
@@ -72,34 +74,6 @@ const connectionLabelAfter = home.data.connectionLabel.slice(
         headingLevel="h2"
         titleId="home-portfolio-title"
       />
-    </section>
-
-    <section class="growing-section" id="ahora" aria-labelledby="growing-title">
-      <div class="section-label">
-        <span>{ahora.data.label}</span>
-        <span>{ahora.data.period}</span>
-      </div>
-      <div class="growing-grid">
-        <div class="preview-column">
-          <h3>{ahora.data.notesHeading}</h3>
-          <LatestNotes entries={notes} />
-          <a class="archive-link" href="/notas">{ahora.data.notesLinkLabel}</a>
-        </div>
-        <div class="preview-column">
-          <h3>{ahora.data.mediatecaHeading}</h3>
-          <LatestMedia entries={mediaShelf} />
-          <a class="archive-link" href="/mediateca">{ahora.data.mediatecaLinkLabel}</a>
-        </div>
-        <div class="preview-column portfolio-preview">
-          <h3>{ahora.data.portfolioHeading}</h3>
-          <PortfolioWildcard
-            entries={publishedProjects}
-            emptyTitle={ahora.data.portfolioEmptyTitle}
-            emptyStatus={ahora.data.portfolioEmptyStatus}
-          />
-          <a class="archive-link" href="/portafolio">{ahora.data.portfolioLinkLabel}</a>
-        </div>
-      </div>
     </section>
   </PageShell>
 </BaseLayout>

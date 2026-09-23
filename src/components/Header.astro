@@ -2,10 +2,8 @@
 import brandSymbol from "../assets/images/brand-symbol.jpg"
 
 const navItems = [
-  { href: "/yo", label: "Yo" },
+  { href: "/", label: "Inicio" },
   { href: "/portafolio", label: "Portafolio" },
-  { href: "/notas", label: "Notas" },
-  { href: "/mediateca", label: "Mediateca" },
 ] as const
 
 const pathname = Astro.url.pathname.replace(/\/+$/, "") || "/"

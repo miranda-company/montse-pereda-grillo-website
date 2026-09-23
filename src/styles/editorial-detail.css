@@ -149,7 +149,7 @@
 }
 
 .editorial-connections--inline > h2 {
-  font-size: var(--heading-h2-size);
+  font-size: var(--text-h2);
   line-height: 1;
 }
 
