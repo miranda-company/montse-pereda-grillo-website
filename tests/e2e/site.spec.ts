@@ -235,6 +235,27 @@ test("hero and portfolio motion use independent, one-way reveal systems", async 
   await expect(firstCard).toHaveAttribute("data-revealed", "true")
 })
 
+for (const viewport of [
+  { name: "mobile", width: 390, height: 844 },
+  { name: "tablet", width: 768, height: 1024 },
+] as const) {
+  test(`${viewport.name}: portfolio detail body remains visible without observer-dependent reveals`, async ({
+    page,
+  }) => {
+    await page.setViewportSize(viewport)
+    await page.goto("/portafolio/cn-sant-andreu")
+
+    const articleBlocks = page.locator(".entry-detail-reading > .rich-content > *")
+    expect(await articleBlocks.count()).toBeGreaterThan(0)
+    await expect(articleBlocks.first()).not.toHaveAttribute("data-scroll-reveal")
+    expect(
+      await articleBlocks.evaluateAll((elements) =>
+        elements.every((element) => getComputedStyle(element).opacity === "1"),
+      ),
+    ).toBe(true)
+  })
+}
+
 test("desktop header exposes only the launch navigation", async ({ page }) => {
   await page.goto("/")
 

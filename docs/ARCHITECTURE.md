@@ -31,7 +31,10 @@ browsers cache the shared CSS across routes.
   card groups with one-time Intersection Observer reveals. Elements already
   visible on first paint and the footer are never hidden by this system. Motion
   is disabled when `prefers-reduced-motion` is active, and content remains
-  visible when JavaScript or Intersection Observer is unavailable.
+  visible when JavaScript or Intersection Observer is unavailable. Individual
+  long-form article blocks use observer-driven reveals only in the expanded
+  range; compact and medium layouts keep the full reading body visible to avoid
+  scroll-dependent content on touch-sized viewports.
 - `src/styles/global.css` contains design tokens and the semantic typography
   system.
 - `src/styles/home.css` contains the dark homepage hero, its responsive

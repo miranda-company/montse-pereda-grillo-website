@@ -28,8 +28,10 @@ Fuente de verdad sobre el estado actual del sitio de Montse Pereda Grillo.
   `connectionLink` del contenido, schema, plantilla y CSS.
 - El hero usa una entrada CSS escalonada basada en opacidad y desplazamiento
   vertical; el resto de textos, medios y tarjetas se revela una sola vez al
-  entrar en el viewport. El footer queda siempre visible y todo el movimiento
-  se desactiva con `prefers-reduced-motion`.
+  entrar en el viewport. Los bloques del cuerpo de los casos se revelan de
+  forma individual solo en expanded; en compact y medium permanecen visibles
+  para que el contenido no dependa del observer. El footer queda siempre
+  visible y todo el movimiento se desactiva con `prefers-reduced-motion`.
 - Retrato de Montse en
   `src/assets/images/homepage/montse-pereda-portrait.png`.
 - El antiguo índice de cuatro tarjetas y la sección final de acceso rápido no
@@ -66,7 +68,7 @@ con JavaScript ligero y sin framework cliente.
 
 - `pnpm run build`: correcto; Astro check informa 69 archivos, 0 errores, 0
   avisos y 0 sugerencias.
-- `pnpm run test`: correcto; pasan las 42 pruebas de navegador y accesibilidad,
+- `pnpm run test`: correcto; pasan las 44 pruebas de navegador y accesibilidad,
   además de integridad editorial, rutas de producción, enlaces internos y
   presupuestos de salida.
 - El CSS compartido se emite como archivos externos: el HTML total pesa 261,7

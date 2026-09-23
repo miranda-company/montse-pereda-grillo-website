@@ -1,18 +1,24 @@
 type RevealGroup = {
   selector: string
+  expandedOnly?: boolean
   variant?: "media"
   stagger?: number
 }
 
 const REVEALED = "true"
 const MAX_STAGGER_INDEX = 2
+const EXPANDED_VIEWPORT_QUERY = "(min-width: 1101px)"
 
 const revealGroups: RevealGroup[] = [
   { selector: ".page-back" },
   { selector: ".page-intro > *", stagger: 65 },
   { selector: "[data-portfolio-card]", variant: "media", stagger: 70 },
   { selector: ".entry-detail-layout > *", stagger: 70 },
-  { selector: ".entry-detail-reading > .rich-content > *", stagger: 45 },
+  {
+    selector: ".entry-detail-reading > .rich-content > *",
+    expandedOnly: true,
+    stagger: 45,
+  },
   { selector: ".yo-section > *", stagger: 60 },
   { selector: ".colophon-layout > *", stagger: 70 },
   { selector: ".colophon-content > section", stagger: 45 },
@@ -31,13 +37,17 @@ const isInInitialViewport = (element: HTMLElement) => {
 }
 
 export const initScrollReveal = () => {
+  const isExpandedViewport = window.matchMedia(EXPANDED_VIEWPORT_QUERY).matches
+
   document.querySelectorAll<HTMLElement>("[data-scroll-shell]").forEach((shell) => {
     if (shell.dataset.revealInitialized === "true") return
     shell.dataset.revealInitialized = "true"
 
     const elements = new Set<HTMLElement>()
 
-    revealGroups.forEach(({ selector, variant, stagger = 0 }) => {
+    revealGroups.forEach(({ selector, expandedOnly, variant, stagger = 0 }) => {
+      if (expandedOnly && !isExpandedViewport) return
+
       shell.querySelectorAll<HTMLElement>(selector).forEach((element, index) => {
         if (elements.has(element)) return
 
