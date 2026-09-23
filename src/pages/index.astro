@@ -16,19 +16,6 @@ if (!home) {
 }
 
 const publishedProjects = await getVisibleSpanishProjects(false)
-const heroAccentPhrase = "estrategia digital"
-const heroAccentStart = home.data.heroTitle.toLocaleLowerCase("es").lastIndexOf(heroAccentPhrase)
-const heroTitleLead =
-  heroAccentStart >= 0
-    ? home.data.heroTitle.slice(0, heroAccentStart).trimEnd()
-    : home.data.heroTitle
-const heroTitleAccent =
-  heroAccentStart >= 0 ? home.data.heroTitle.slice(heroAccentStart) : undefined
-const connectionLinkStart = home.data.connectionLabel.indexOf(home.data.connectionLink.label)
-const connectionLabelBefore = home.data.connectionLabel.slice(0, connectionLinkStart)
-const connectionLabelAfter = home.data.connectionLabel.slice(
-  connectionLinkStart + home.data.connectionLink.label.length,
-)
 ---
 
 <BaseLayout canonicalPath="/">
@@ -38,16 +25,12 @@ const connectionLabelAfter = home.data.connectionLabel.slice(
         <div class="text-container">
           <p class="kicker home-kicker">{home.data.heroEyebrow}</p>
           <h1 id="hero-title">
-            <span>{heroTitleLead}</span>
-            {heroTitleAccent && <em>{heroTitleAccent}</em>}
+            <span>{home.data.heroTitle}</span>
+            <em>{home.data.heroTitleAccent}</em>
           </h1>
-          <p class="intro-lead home-intro__description">
-            {connectionLabelBefore}<a href={home.data.connectionLink.href}
-              >{home.data.connectionLink.label}</a
-            >{connectionLabelAfter}
-          </p>
+          <p class="intro-lead home-intro__description">{home.data.connectionLabel}</p>
           <a class="hero-cta" href="/montse-pereda-cv.pdf" download>
-            Descarga mi CV <span aria-hidden="true">↓</span>
+            Descarga mi CV <span aria-hidden="true">↗</span>
           </a>
         </div>
 

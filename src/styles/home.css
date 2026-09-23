@@ -68,21 +68,6 @@
   color: #d4d9d4;
 }
 
-.home-intro__description a {
-  color: inherit;
-  text-decoration-color: var(--hero-accent);
-  text-underline-offset: 4px;
-  transition:
-    color var(--motion-duration-short) var(--motion-easing-standard),
-    text-decoration-color var(--motion-duration-short) var(--motion-easing-standard);
-}
-
-.home-intro__description a:hover,
-.home-intro__description a:focus-visible {
-  color: var(--hero-accent);
-  text-decoration-color: var(--hero-accent);
-}
-
 .home-kicker {
   color: #c4cbc5;
   font-weight: 600;
@@ -128,14 +113,14 @@
 
 .img-container {
   display: flex;
-  width: min(100%, 380px);
+  width: min(100%, 420px);
   aspect-ratio: 1;
   margin-inline: auto;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   border: 1px solid rgba(223, 240, 154, 0.45);
-  border-radius: 50%;
+  border-radius: 8px;
 }
 
 .hero-image {

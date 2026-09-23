@@ -32,10 +32,9 @@ const tags = Array.from(new Set(projects.flatMap((project) => project.data.tags)
 ---
 
 <section class="page-intro portfolio-intro" aria-labelledby={titleId}>
-  <p class="kicker portfolio-kicker">Trabajo seleccionado de Montse Pereda</p>
   {headingLevel === "h1" ? <h1 id={titleId}>Portafolio</h1> : <h2 id={titleId}>Portafolio</h2>}
   <p class="portfolio-intro__meta">
-    {projectCount}
+    {projectCount + " "}
     {includeDrafts ? "PROYECTOS DE DESARROLLO" : "PROYECTOS PUBLICADOS"}
     {lastUpdatedLabel && <> · ACTUALIZADO {lastUpdatedLabel}</>}
   </p>

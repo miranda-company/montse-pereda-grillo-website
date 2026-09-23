@@ -2,12 +2,9 @@
   {
     "id": "homepage",
     "heroEyebrow": "Montse Pereda Grillo",
-    "heroTitle": "Consultora de comunicación y estrategia digital",
-    "connectionLabel": "Ayudo a organizaciones a comunicar su mensaje de forma efectiva en el entorno digital. Este es mi jardín digital.",
-    "connectionLink": {
-      "label": "jardín digital",
-      "href": "/notas/el-magnifico-mundo-de-los-jardines-digitales"
-    },
+    "heroTitle": "Montse Pereda, ",
+    "heroTitleAccent": "consultoría de comunicación",
+    "connectionLabel": "Ayudo a organizaciones a comunicar su mensaje de forma efectiva en el entorno digital.",
     "indexLabel": "Archivos",
     "panels": [
       {
