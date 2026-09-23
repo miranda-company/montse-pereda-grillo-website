@@ -1,5 +1,3 @@
-import { getVisibleSpanishMedia } from "./media"
-import { getRoutableSpanishNotes, getVisibleSpanishNotes } from "./notes"
 import { getVisibleSpanishProjects } from "./portfolio"
 
 export interface SiteRoute {
@@ -15,45 +13,15 @@ const latestDate = (dates: Date[]) =>
   )
 
 export async function getPublishedSiteRoutes(): Promise<SiteRoute[]> {
-  const [notes, localNotes, media, projects] = await Promise.all([
-    getVisibleSpanishNotes(false),
-    getRoutableSpanishNotes(false),
-    getVisibleSpanishMedia(false),
-    getVisibleSpanishProjects(false),
-  ])
+  const projects = await getVisibleSpanishProjects(false)
 
   return [
     {
       path: "/",
       title: "Inicio",
-      updatedAt: latestDate([
-        ...notes.map((entry) => entry.data.updatedAt),
-        ...media.map((entry) => entry.data.updatedAt),
-        ...projects.map((entry) => entry.data.updatedAt),
-      ]),
+      updatedAt: latestDate(projects.map((entry) => entry.data.updatedAt)),
     },
     { path: "/colofon", title: "Colofón" },
-    { path: "/yo", title: "Yo" },
-    {
-      path: "/notas",
-      title: "Notas",
-      updatedAt: latestDate(notes.map((entry) => entry.data.updatedAt)),
-    },
-    ...localNotes.map((entry) => ({
-      path: `/notas/${entry.id}`,
-      title: entry.data.title,
-      updatedAt: entry.data.updatedAt,
-    })),
-    {
-      path: "/mediateca",
-      title: "Mediateca",
-      updatedAt: latestDate(media.map((entry) => entry.data.updatedAt)),
-    },
-    ...media.map((entry) => ({
-      path: `/mediateca/${entry.id}`,
-      title: entry.data.title,
-      updatedAt: entry.data.updatedAt,
-    })),
     {
       path: "/portafolio",
       title: "Portafolio",

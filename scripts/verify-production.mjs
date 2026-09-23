@@ -4,65 +4,28 @@ import { relative, resolve, sep } from "node:path"
 
 const root = process.cwd()
 const dist = resolve(root, "dist")
-const siteOrigin = process.env.SITE_URL ?? "https://www.rodolfomiranda.company"
+const siteOrigin = process.env.SITE_URL ?? "https://www.montsepereda.com"
 const indexingEnabled = process.env.PUBLIC_INDEXING_ENABLED === "true"
 const robotsDirective = indexingEnabled ? "index, follow" : "noindex, nofollow"
 
-const canonicalRoutes = [
+const indexableRoutes = [
   "/",
   "/colofon",
-  "/yo",
-  "/notas",
-  "/notas/scrum",
-  "/notas/metodos-para-descubrir-el-problema",
-  "/notas/el-magnifico-mundo-de-los-jardines-digitales",
-  "/notas/mis-lugares-favoritos-de-internet",
-  "/notas/zettelkasten-un-metodo-para-organizar-nuestro-conocimiento",
-  "/mediateca",
-  "/mediateca/tools-for-thought",
-  "/mediateca/string-seed-of-thought",
-  "/mediateca/turn-your-ai-into-a-world-class-designer",
-  "/mediateca/the-hero-with-a-thousand-faces",
-  "/mediateca/the-adolescence-of-technology",
-  "/mediateca/magnifica-humanitas",
-  "/mediateca/pulitzer-prize-winner-explains-his-writing-process",
-  "/mediateca/the-turbulent-ai-era-is-here",
-  "/mediateca/the-machine-dream-was-never-real",
-  "/mediateca/the-age-of-the-image",
-  "/mediateca/thinking-in-systems",
-  "/mediateca/bird-by-bird",
-  "/mediateca/co-intelligence",
-  "/mediateca/wild-rose-poem",
-  "/mediateca/rick-rubin-en-design-matters",
   "/portafolio",
-  "/portafolio/syra-coffee",
-  "/portafolio/bsc",
-  "/portafolio/minka-icm",
   "/portafolio/cn-sant-andreu",
-  "/portafolio/modulab-barcelona",
+  "/portafolio/cats",
+  "/portafolio/museu-lh",
+  "/portafolio/syra-coffee",
   "/portafolio/eloquent",
-  "/portafolio/elespacio",
+  "/portafolio/modulab-barcelona",
   "/registro",
 ]
 
-const redirectRoutes = [
-  "/biblioteca",
-  "/biblioteca/bird-by-bird",
-  "/biblioteca/co-intelligence",
-  "/biblioteca/magnifica-humanitas",
-  "/biblioteca/pulitzer-prize-winner-explains-his-writing-process",
-  "/biblioteca/rick-rubin-en-design-matters",
-  "/biblioteca/string-seed-of-thought",
-  "/biblioteca/the-adolescence-of-technology",
-  "/biblioteca/the-age-of-the-image",
-  "/biblioteca/the-hero-with-a-thousand-faces",
-  "/biblioteca/the-machine-dream-was-never-real",
-  "/biblioteca/the-turbulent-ai-era-is-here",
-  "/biblioteca/thinking-in-systems",
-  "/biblioteca/turn-your-ai-into-a-world-class-designer",
-  "/biblioteca/wild-rose-poem",
-  "/biblioteca/tools-for-thought",
-]
+const hiddenRoutes = ["/yo", "/notas", "/mediateca"]
+
+const generatedRoutes = [...indexableRoutes, ...hiddenRoutes]
+
+const redirectRoutes = ["/biblioteca"]
 
 const walk = async (directory) => {
   const entries = await readdir(directory, { withFileTypes: true })
@@ -86,7 +49,7 @@ const actualRoutes = files
   .filter((file) => file.endsWith("index.html"))
   .map(toRoute)
   .sort()
-const expectedRoutes = [...canonicalRoutes, ...redirectRoutes].sort()
+const expectedRoutes = [...generatedRoutes, ...redirectRoutes].sort()
 
 assert.deepEqual(
   actualRoutes,
@@ -98,50 +61,12 @@ const readRoute = (route) =>
   readFile(resolve(dist, route === "/" ? "index.html" : `.${route}/index.html`), "utf8")
 const countCards = (html, marker) =>
   html.match(new RegExp(`<[a-z][^>]*\\b${marker}\\b`, "g"))?.length ?? 0
-const countAttributeValue = (html, attribute, value) =>
-  html.match(new RegExp(`<[a-z][^>]*\\b${attribute}="${value}"`, "g"))?.length ?? 0
 
-const notesHtml = await readRoute("/notas")
-const mediaHtml = await readRoute("/mediateca")
 const portfolioHtml = await readRoute("/portafolio")
-const turbulentAiHtml = await readRoute("/mediateca/the-turbulent-ai-era-is-here")
-const birdByBirdHtml = await readRoute("/mediateca/bird-by-bird")
-
-assert.equal(
-  countAttributeValue(notesHtml, "data-note-kind", "note"),
-  5,
-  "Producción debe conservar las cinco Notas locales.",
-)
-
-assert.ok(
-  turbulentAiHtml.includes('data-connection-direction="incoming"') &&
-    turbulentAiHtml.includes('href="/mediateca/magnifica-humanitas"'),
-  "Mediateca debe incluir backlinks derivados de otras referencias.",
-)
-assert.equal(
-  turbulentAiHtml.includes('href="/portafolio/grupo-hem"'),
-  false,
-  "Los proyectos draft no pueden generar backlinks en producción.",
-)
-assert.ok(
-  birdByBirdHtml.includes('data-connection-direction="incoming"') &&
-    birdByBirdHtml.includes('href="/mediateca/wild-rose-poem"'),
-  "Los backlinks publicados de Mediateca deben renderizarse una sola vez.",
-)
-assert.equal(
-  countAttributeValue(notesHtml, "data-note-kind", "external"),
-  4,
-  "Producción debe contener los cuatro artículos externos de Notas.",
-)
-assert.equal(
-  countCards(mediaHtml, "data-media-card"),
-  15,
-  "Producción debe contener quince referencias de Mediateca.",
-)
 assert.equal(
   countCards(portfolioHtml, "data-portfolio-card"),
-  7,
-  "Producción debe contener siete proyectos de Portafolio.",
+  6,
+  "Producción debe contener seis proyectos de Portafolio.",
 )
 
 const renderedHtml = await Promise.all(
@@ -158,7 +83,7 @@ for (const marker of forbiddenFixtureMarkers) {
   )
 }
 
-for (const route of canonicalRoutes) {
+for (const route of indexableRoutes) {
   const html = await readRoute(route)
   const canonicalUrl = new URL(route, siteOrigin).href
 
@@ -189,6 +114,20 @@ for (const route of canonicalRoutes) {
   assert.ok(Array.isArray(parsed["@graph"]), `${route} debe publicar un grafo JSON-LD.`)
 }
 
+for (const route of hiddenRoutes) {
+  const html = await readRoute(route)
+  assert.match(
+    html,
+    /<meta name="robots" content="noindex, nofollow">/,
+    `${route} debe permanecer oculta para los buscadores.`,
+  )
+  assert.match(
+    html,
+    /<meta name="googlebot" content="noindex, nofollow">/,
+    `${route} debe bloquear también Googlebot.`,
+  )
+}
+
 const notFoundHtml = await readFile(resolve(dist, "404.html"), "utf8")
 assert.match(
   notFoundHtml,
@@ -215,10 +154,10 @@ const sitemap = await readFile(resolve(dist, "sitemap.xml"), "utf8")
 const sitemapLocations = Array.from(sitemap.matchAll(/<loc>([^<]+)<\/loc>/g), (match) => match[1])
 assert.deepEqual(
   sitemapLocations,
-  canonicalRoutes.map((route) => new URL(route, siteOrigin).href),
-  "El sitemap debe contener exactamente las rutas canónicas de producción.",
+  indexableRoutes.map((route) => new URL(route, siteOrigin).href),
+  "El sitemap debe contener exactamente las rutas públicas e indexables.",
 )
 
 console.log(
-  `Producción verificada: ${canonicalRoutes.length} rutas canónicas con metadatos, una página 404 no indexable, sitemap verificado, indexación ${indexingEnabled ? "activa" : "bloqueada"}, ${redirectRoutes.length} redirects, 5 Notas locales, 4 artículos externos, 15 referencias y 7 proyectos.`,
+  `Producción verificada: ${indexableRoutes.length} rutas indexables, ${hiddenRoutes.length} rutas ocultas con noindex, una página 404 no indexable, sitemap verificado, indexación ${indexingEnabled ? "activa" : "bloqueada"}, ${redirectRoutes.length} redirect y 6 proyectos.`,
 )

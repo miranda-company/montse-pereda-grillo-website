@@ -6,14 +6,21 @@ esté conectado ni que el sitio esté desplegado.
 
 ## Estado de indexación
 
-La indexación pública fue autorizada el 30 de agosto de 2026. El archivo
+La indexación pública fue autorizada el 30 de agosto de 2026 para las rutas del
+alcance de lanzamiento. El archivo
 versionado `.env.production` contiene únicamente la configuración pública
 `PUBLIC_INDEXING_ENABLED=true`. Por tanto, un build normal de producción:
 
-- declara `index, follow` en todas las rutas canónicas;
+- declara `index, follow` en las rutas públicas aprobadas;
 - responde con `Allow: /` en `/robots.txt`;
 - publica un sitemap con las rutas aprobadas para producción;
-- usa `https://www.rodolfomiranda.company` como origen canónico.
+- usa `https://www.montsepereda.com` como origen canónico.
+
+Las rutas `/yo`, `/notas` y `/mediateca` se conservan como shells de acceso
+directo, pero fuerzan `noindex, nofollow` incluso en producción. También quedan
+fuera de la navegación, Registro y el sitemap. Los layouts de detalle de Notas
+y Mediateca aplican la misma protección a cualquier contenido que se restaure
+antes de reabrir esas secciones.
 
 El servidor de desarrollo no carga `.env.production` y continúa declarando
 `noindex, nofollow` con `Disallow: /`. La página 404 también permanece bloqueada
@@ -25,7 +32,7 @@ privado de revisión, anula explícitamente la variable con
 `SITE_URL` permite construir una variante con otro origen canónico:
 
 ```sh
-SITE_URL=https://www.rodolfomiranda.company pnpm run build
+SITE_URL=https://www.montsepereda.com pnpm run build
 ```
 
 Si no se define, Astro usa el dominio previsto. Cambiar `SITE_URL` no despliega
@@ -48,10 +55,11 @@ Los índices usan `CollectionPage`, `/yo` usa `ProfilePage`, las Notas usan
 portadas disponibles se reutilizan como imágenes sociales; las páginas sin
 cubierta usan la imagen social general.
 
-`src/pages/sitemap.xml.ts` incluye exactamente las 34 rutas canónicas del build
-de producción. Comparte `src/lib/site-routes.ts` con `/registro`, usa las mismas
-funciones que excluyen drafts y fixtures, añade fechas de modificación cuando
-existen y no publica aliases de `/biblioteca`.
+`src/pages/sitemap.xml.ts` incluye exactamente las 10 rutas públicas e
+indexables del build de producción. Comparte `src/lib/site-routes.ts` con
+`/registro`, usa las mismas funciones que excluyen drafts y fixtures, añade
+fechas de modificación cuando existen y no publica Yo, Notas, Mediateca ni los
+aliases de `/biblioteca`.
 `src/pages/robots.txt.ts` enlaza ese sitemap y permite su rastreo en producción.
 
 `src/pages/404.astro` genera `404.html` con el mismo shell, jerarquía tipográfica
@@ -76,7 +84,7 @@ dominio:
 | `/biblioteca/:slug` | `/mediateca/:slug` |    301 |
 
 Además, el hosting debe elegir un único origen canónico. Si se conecta el
-dominio raíz, redirígelo permanentemente a `www.rodolfomiranda.company` para que
+dominio raíz, redirígelo permanentemente a `www.montsepereda.com` para que
 coincida con las URLs generadas. Comprueba los redirects con peticiones HTTP,
 no solo mediante navegación en el navegador.
 

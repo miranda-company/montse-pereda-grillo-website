@@ -4,12 +4,20 @@ Esta carpeta reúne la documentación editorial y técnica activa del proyecto.
 Las capturas históricas de diseño ya no se conservan aquí; los checkpoints
 anteriores siguen disponibles en el historial y las etiquetas de Git.
 
+El alcance inmediato de lanzamiento es la portada de Montse y Portafolio. Yo,
+Notas y Mediateca se conservan como shells de acceso directo para fases
+posteriores, pero no aparecen en navegación, Registro ni sitemap y fuerzan
+`noindex, nofollow`. Consulta primero `PROJECT_STATUS.md` para no confundir una
+ruta generada con una sección aprobada para el lanzamiento actual.
+
 ## Por dónde empezar
 
 - [Estado del proyecto](PROJECT_STATUS.md) — qué existe, qué se publica y qué
   falta antes del lanzamiento.
 - [Modelo de contenido](CONTENT_MODEL.md) — colecciones, campos compartidos y
   límites entre desarrollo y producción.
+- [Sistema tipográfico](TYPOGRAPHY_SYSTEM.md) — Helvetica Neue, énfasis Georgia
+  y escala fluida `--text-h1` a `--text-h6`.
 - [Lista de lanzamiento](LAUNCH_CHECKLIST.md) — revisión editorial, técnica y de
   hosting que sigue pendiente tras habilitar la indexación.
 - [Preparación técnica para lanzamiento](LAUNCH_READINESS.md) — metadatos,

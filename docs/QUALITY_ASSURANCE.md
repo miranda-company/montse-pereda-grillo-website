@@ -13,7 +13,8 @@ pnpm exec playwright install chromium
 ```
 
 Playwright sirve el build estático mediante Astro en `127.0.0.1:4173`, aislado
-del servidor de desarrollo habitual en el puerto 8443. `pnpm run test:e2e`
+del servidor de desarrollo interactivo, normalmente abierto en el puerto 8444
+para este proyecto. `pnpm run test:e2e`
 genera primero un build actualizado; dentro de `pnpm run verify` se reutiliza el
 `dist/` que acaba de construirse. La variable `PLAYWRIGHT_PORT` permite usar
 otro puerto si es necesario.
@@ -97,24 +98,18 @@ manual.
 ## Límite editorial de producción
 
 `scripts/verify-production.mjs` trata la lista de rutas publicadas como un
-contrato explícito. Verifica 34 rutas canónicas, dieciséis redirects de
-`/biblioteca` y el archivo `404.html`, además de estos conteos:
-
-- 5 Notas locales y 4 artículos externos;
-- 15 referencias de Mediateca;
-- 7 proyectos de Portafolio.
+contrato explícito. Verifica 10 rutas públicas e indexables, los tres shells
+ocultos (`/yo`, `/notas` y `/mediateca`), el redirect de `/biblioteca` y el
+archivo `404.html`, además de los 6 proyectos publicados de Portafolio.
 
 También impide que `ejemplo-mdx` o los números reservados `N.999`, `M.999` y
 `P.999` aparezcan en `dist`. Cuando se apruebe una entrada nueva para
 producción, hay que actualizar el contenido y este contrato en el mismo cambio.
-El contrato también comprueba que las relaciones publicadas generen backlinks,
-que una relación mutua aparezca una sola vez y que un proyecto draft no pueda
-filtrarse dentro del grafo de producción.
-El mismo script comprueba que cada ruta canónica tenga `index, follow`,
+El mismo script comprueba que cada ruta pública tenga `index, follow`,
 canonical, Open Graph, tarjeta social y JSON-LD, y que `robots.txt` permita el
-rastreo y el sitemap contenga exactamente el contrato previsto. La página 404
-debe conservar `noindex, nofollow` aunque el resto del build permita la
-indexación.
+rastreo y el sitemap contenga exactamente el contrato previsto. Los tres
+shells ocultos y la página 404 deben conservar `noindex, nofollow` aunque el
+resto del build permita la indexación.
 
 ## Lighthouse
 

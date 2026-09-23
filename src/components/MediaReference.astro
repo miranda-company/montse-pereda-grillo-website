@@ -41,6 +41,7 @@ const supplementalLinks = await getExternalNoteConnectionLinks(
     ...(entry.data.publicationYear ? { datePublished: String(entry.data.publicationYear) } : {}),
     ...(entry.data.externalUrl ? { sameAs: entry.data.externalUrl } : {}),
   }}
+  forceNoIndex
 >
   <p slot="header-meta">
     {entry.data.archiveNumber} / {MEDIA_FORMAT_LABELS[entry.data.format].toUpperCase()}

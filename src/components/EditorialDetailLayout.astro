@@ -20,6 +20,7 @@ interface Props {
   publishedAt?: Date
   updatedAt?: Date
   keywords?: string[]
+  forceNoIndex?: boolean
 }
 
 const {
@@ -38,6 +39,7 @@ const {
   publishedAt,
   updatedAt,
   keywords,
+  forceNoIndex = false,
 } = Astro.props
 ---
 
@@ -52,6 +54,7 @@ const {
   publishedAt={publishedAt}
   updatedAt={updatedAt}
   keywords={keywords}
+  forceNoIndex={forceNoIndex}
 >
   <PageShell pageClass={pageClass} mainClass="entry-detail-main page-main--with-back">
     <a class="page-back" href={backlinkHref}>← {backlinkLabel}</a>

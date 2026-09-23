@@ -382,9 +382,16 @@ a {
   align-items: center;
   gap: 10px;
   color: var(--ink);
-  font-family: var(--font-sans);
-  font-size: 17px;
   text-decoration: none;
+}
+
+.brand-name {
+  font-family: var(--font-serif);
+  font-size: 14px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .brand-symbol {
@@ -539,9 +546,12 @@ a {
     grid-column: 1 / -1;
   }
 
-  .brand span:last-child,
   .site-header .desktop-nav {
     display: none;
+  }
+
+  .brand-name {
+    font-size: 13px;
   }
 
   .mobile-menu-button {

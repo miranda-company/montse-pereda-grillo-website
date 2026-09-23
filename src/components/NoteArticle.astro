@@ -52,6 +52,7 @@ const updatedDate = toDateValue(entry.data.updatedAt)
   updatedAt={entry.data.updatedAt}
   keywords={entry.data.tags}
   schemaData={{ articleSection: "Notas" }}
+  forceNoIndex
 >
   <Fragment slot="header-meta">
     <span>{entry.data.archiveNumber}</span>

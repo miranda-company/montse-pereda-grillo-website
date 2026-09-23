@@ -13,8 +13,6 @@ const primaryRoutes = [
   "/mediateca",
   "/portafolio",
   "/registro",
-  "/notas/el-magnifico-mundo-de-los-jardines-digitales",
-  "/mediateca/the-age-of-the-image",
   "/portafolio/syra-coffee",
 ] as const
 
@@ -238,14 +236,14 @@ test("header becomes compact after the shared scroll threshold without shifting 
   await expect(scrollToTop).toBeHidden()
 })
 
-test("desktop header links to the four primary sections", async ({ page }) => {
+test("desktop header exposes only the launch navigation", async ({ page }) => {
   await page.goto("/")
 
   const links = page.locator(".desktop-nav a")
-  await expect(links).toHaveText(["Yo", "Portafolio", "Notas", "Mediateca"])
+  await expect(links).toHaveText(["Inicio", "Portafolio"])
   expect(
     await links.evaluateAll((items) => items.map((item) => item.getAttribute("href"))),
-  ).toEqual(["/yo", "/portafolio", "/notas", "/mediateca"])
+  ).toEqual(["/", "/portafolio"])
 
   await page.locator(".desktop-nav").getByRole("link", { name: "Portafolio" }).click()
   await expect(page).toHaveURL(/\/portafolio$/)
@@ -294,13 +292,18 @@ test("Registro mirrors the sitemap and orders routes alphabetically", async ({ p
   await expect(page.locator('.site-footer a[aria-current="page"]')).toHaveText("Registro")
 })
 
-test("header identifies the current section on indexes and detail pages", async ({ page }) => {
-  await page.goto("/notas")
-  await expect(page.locator('.desktop-nav a[aria-current="page"]')).toHaveText("Notas")
-
-  await page.goto("/mediateca/the-age-of-the-image")
-  await expect(page.locator('.desktop-nav a[aria-current="page"]')).toHaveText("Mediateca")
-  await expect(page.locator('#mobile-menu a[aria-current="page"]')).toHaveText("Mediateca")
+test("hidden sections are explicitly non-indexable", async ({ page }) => {
+  for (const route of ["/yo", "/notas", "/mediateca"]) {
+    await page.goto(route)
+    await expect(page.locator('meta[name="robots"]')).toHaveAttribute(
+      "content",
+      "noindex, nofollow",
+    )
+    await expect(page.locator('meta[name="googlebot"]')).toHaveAttribute(
+      "content",
+      "noindex, nofollow",
+    )
+  }
 })
 
 test("mobile detail titles use the compact H1 scale and safe word wrapping", async ({ page }) => {
@@ -462,12 +465,7 @@ test("mobile menu opens from the keyboard and Escape restores focus", async ({ p
   await expect(trigger).toHaveAttribute("aria-expanded", "true")
   await expect(trigger).toHaveAccessibleName("Cerrar")
   await expect(page.locator("#mobile-menu")).toBeVisible()
-  await expect(page.locator("#mobile-menu a")).toHaveText([
-    "Yo",
-    "Portafolio",
-    "Notas",
-    "Mediateca",
-  ])
+  await expect(page.locator("#mobile-menu a")).toHaveText(["Inicio", "Portafolio"])
 
   await page.keyboard.press("Escape")
   await expect(trigger).toHaveAttribute("aria-expanded", "false")

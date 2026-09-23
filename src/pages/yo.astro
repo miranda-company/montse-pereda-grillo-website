@@ -19,6 +19,7 @@ if (!profile) throw new Error("Falta src/content/site/yo.json")
   socialImage={portrait}
   socialImageAlt={profile.data.portrait.alt}
   schemaType="ProfilePage"
+  forceNoIndex
 >
   <PageShell pageClass="yo-page" mainClass="yo-main page-main--with-back">
     <a class="page-back" href="/#indice">← Volver al índice</a>

@@ -251,9 +251,11 @@ personal note is not a provisional-content state. Eloquent and Modulab publish
 verified case-study links; timeline entries without a case study omit the
 optional label and URL fields.
 
-The approved portrait lives at
-`src/assets/images/retrato-rodolfo-miranda.jpg`. `YoPortrait.astro` imports this
-local source and renders that single file at its intrinsic dimensions.
+The retained `/yo` prototype still uses its baseline portrait asset and will be
+revisited when that route enters Montse's launch scope. The active homepage
+portrait lives at
+`src/assets/images/homepage/montse-pereda-portrait.png` and is imported directly
+by `src/pages/index.astro`.
 
 For a future approved replacement, overwrite that repository asset with a
 sanitized local image, preserve the outer `figure`, field dimensions, border
@@ -450,44 +452,29 @@ workflow. Templates omit the internal `fixture` field.
 
 ## Site copy
 
-Homepage and Ahora copy use validated JSON collections. Yo uses its own
-validated JSON profile collection. These files are intentionally editable
-without changing Astro components.
+Homepage copy uses a validated JSON collection. Yo and the retained Ahora data
+use their own validated JSON collections. These files are intentionally
+editable without changing Astro components.
 
-`homepage.json` requires exactly one archive panel for each validated kind:
-`yo`, `notas`, `mediateca`, and `portafolio`. Static titles, descriptions,
-routes, images and accessible image descriptions remain in JSON. Static
-metadata stays with Yo, Mediateca and Portafolio; Yo also keeps its static
-reveal label. Collection-driven values are intentionally absent from JSON and
-`src/pages/index.astro` derives them from published Spanish entries at build
-time.
+`homepage.json` retains one archive panel for each validated legacy kind:
+`yo`, `notas`, `mediateca`, and `portafolio`. Those panel records are not
+rendered by the current homepage but remain valid baseline data for later
+phases. The active homepage derives its Portfolio cards from published Spanish
+project entries at build time.
 
-The hero eyebrow and H1 are editable through `heroEyebrow` and `heroTitle`.
-The introduction remains a single editable `connectionLabel` string.
-`connectionLink.label` identifies the phrase rendered as an inline link and
-must occur inside that string; `connectionLink.href` stores its validated
-internal destination. This keeps the complete sentence readable in the content
-file while allowing the linked phrase and destination to change without
-editing the Astro template.
+The hero eyebrow is editable through `heroEyebrow`. The H1 has two required
+parts: `heroTitle` renders with the Helvetica stack and `heroTitleAccent`
+renders as italic Georgia in the accent color. The introduction is the plain
+text `connectionLabel` field. It no longer supports or validates an inline
+`connectionLink` object.
 
 - Notas: latest `publishedAt` date and total published-note count;
 - Mediateca: total published-reference count;
 - Portafolio: total published-project count.
 
-The homepage Ahora preview takes the first three entries from
-`getVisibleSpanishNotes(false)`. That helper already orders published Spanish
-notes by `updatedAt` descending, with `archiveNumber` as the deterministic
-tie-breaker. The preview shows each entry's `updatedAt`; `featured` does not
-control membership in this list.
-
-The Ahora section passes `getVisibleSpanishProjects(false)` to
-`PortfolioWildcard.astro`. This produces the same candidate boundary in
-development and production: Spanish entries with `draft: false`, excluding
-fixtures. The first entry in `displayOrder` is rendered as the static fallback;
-a small browser script may replace it with any candidate on page load. It
-updates the cover, `coverAlt`, archive number, title, `projectStatus`,
-`updatedAt`, destination and accessible label together. With no candidates, it
-uses the validated empty copy from `ahora.json`.
+The homepage passes `getVisibleSpanishProjects(false)` to the shared
+`PortfolioSection.astro` component. It produces the same project order, search,
+tag filters, count and responsive cards as `/portafolio`.
 
 The derived statistics use `getVisibleSpanishNotes(false)`,
 `getVisibleSpanishMedia(false)`, and `getVisibleSpanishProjects(false)`. Drafts

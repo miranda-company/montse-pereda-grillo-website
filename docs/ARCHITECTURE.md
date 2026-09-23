@@ -13,7 +13,7 @@ carousels.
 ## Presentation
 
 - `src/layouts/BaseLayout.astro` owns Spanish metadata, canonical and social
-  URLs, JSON-LD, build-aware indexing directives, locally bundled fonts, and
+  URLs, JSON-LD, build-aware indexing directives, system font stacks, and
   global page behavior.
 - `src/components/PageShell.astro` owns the canonical visible page structure.
 - `src/components/Header.astro` owns the single route-aware navigation header
@@ -25,15 +25,19 @@ carousels.
   reduced-motion-aware scroll-to-top behavior from one scroll state.
 - `src/styles/global.css` contains design tokens and the semantic typography
   system.
-- `src/styles/home.css` contains the homepage hero, panels, and Ahora previews;
-  it is imported only by `src/pages/index.astro`.
-- `src/pages/index.astro` renders the four-panel homepage index for Yo, Notas,
-  Mediateca, and Portafolio.
-- `/notas` and `NoteArticle.astro` implement the reviewed Notas index and
-  reading layout.
-- `/mediateca` and `/mediateca/[slug]` implement the reviewed catalogue and
-  reference layout.
-- `/yo` is a coded editorial prototype driven by validated profile content.
+- `src/styles/home.css` contains the dark homepage hero and its responsive
+  composition; it is imported only by `src/pages/index.astro`.
+- `src/components/PortfolioSection.astro` owns the shared search, filters,
+  counts and card grid used by both the homepage and `/portafolio`.
+- `src/pages/index.astro` renders Montse's hero and the complete shared
+  Portfolio section. The old four-panel index and quick-access section are not
+  part of the current homepage.
+- `/notas`, `/mediateca` and `/yo` remain direct-access shells for future
+  phases. They are absent from global navigation, Registro and the sitemap and
+  force `noindex, nofollow` independently of the build-wide indexing flag.
+- `NoteArticle.astro` and `MediaReference.astro` also force
+  `noindex, nofollow`, so any detail entries restored during the hidden phase
+  cannot become indexable accidentally.
 - `/portafolio` is a curated case-file index with framework-free search and tag
   filtering; each case uses the shared detail geometry.
 - `/404` uses the same page shell and introduction hierarchy, stays outside the
@@ -78,19 +82,20 @@ start without changing the URL and respects reduced-motion preferences. Without
 JavaScript the header remains in its normal document position and the button
 remains hidden.
 
-The shared header links directly to `/yo`, `/portafolio`, `/notas`, and
-`/mediateca` in that order. Expanded and medium layouts expose the links in
-`.desktop-nav`; compact layouts use the “Menú” trigger and the same destinations
-inside `.mobile-menu`. “Índice” and “Ahora” remain homepage section concepts,
-not global navigation items. Index and detail routes mark their parent section
-with `aria-current="page"`; the shared link underline exposes that state visually
-in both navigation variants.
+The shared header currently links to `/` as “Inicio” and `/portafolio` as
+“Portafolio”. Expanded and medium layouts expose the links in `.desktop-nav`;
+compact layouts use the “Menú” trigger and the same destinations inside
+`.mobile-menu`. Portfolio index and detail routes mark their section with
+`aria-current="page"`; the shared underline exposes that state visually in both
+navigation variants.
 
-The shared footer exposes LinkedIn, GitHub, email, `/colofon` and `/registro`.
+The shared footer exposes LinkedIn, Eloquent, email, `/colofon` and `/registro`.
 The two social links open in a new tab; Colofón and Registro mark their own
 footer link with `aria-current="page"`.
-`src/lib/site-routes.ts` derives the published local route set once for both
+`src/lib/site-routes.ts` derives the public, indexable route set once for both
 `/registro` and `sitemap.xml`, preventing the two indexes from drifting apart.
+It deliberately excludes Yo, Notas and Mediateca while those sections are
+hidden.
 
 Page introductions use a shared semantic and styling contract. Each is a
 labelled `<section>` with the shared `.page-intro` class plus a route-specific
@@ -313,21 +318,16 @@ Editable site copy remains separate from templates:
 - `src/content/site/ahora.json`
 - `src/content/site/yo.json`
 
-The homepage eyebrow, H1, panel titles, descriptions, routes, kinds, local images
-and image alternatives are validated in `homepage.json`. Only genuinely static
-metadata and reveal labels live there. `src/pages/index.astro` supplies
-collection-driven values at build time: the Notas panel receives the latest
-published-note date and published-note count, while Mediateca and Portafolio
-receive their published entry counts. The homepage Notas preview uses the first
-three published entries ordered by `updatedAt`. These values use the same
-centralized helpers and production boundary as route generation, so drafts and
-technical fixtures are excluded.
-`PortfolioWildcard.astro` owns the Portafolio preview in the Ahora section.
-Astro serializes only the published Spanish candidates; a framework-free
-browser script selects one on page load and updates the cover, alternative text,
-archive number, title, status, date, destination and accessible label together.
-The first candidate remains in the static HTML as progressive enhancement, and
-the component keeps an explicit state for builds with no published projects.
+The active hero fields validated in `homepage.json` are `heroEyebrow`,
+`heroTitle`, `heroTitleAccent` and the plain-text `connectionLabel`. The file
+also retains the four legacy panel records as baseline data, although the
+current homepage does not render them. `src/pages/index.astro` supplies
+Portfolio projects at build time through the centralized visibility helper, so
+drafts and technical fixtures are excluded.
+The homepage passes `getVisibleSpanishProjects(false)` to
+`PortfolioSection.astro`. This uses the same validated project boundary,
+search controls, tag filters and card grid as the standalone Portfolio index.
+Drafts and fixtures remain excluded.
 
 Spanish remains at root URLs. Schemas include language and optional translation
 keys so English can be added later without activating `/en/` routes now.
@@ -340,15 +340,14 @@ Mediateca and Portafolio append explicitly typed fixture routes in development
 without inserting fixtures into editorial navigation; production never appends
 them.
 
-Excluding redirect aliases, development exposes 49 canonical routes: seven
-indexes or standalone pages, nine local Notas, sixteen Mediateca references plus
-one media fixture, and 15 ordinary Portfolio entries plus one project fixture.
-A normal production build exposes 34 canonical routes: the seven standalone
-routes, five local Notas, fifteen Mediateca references, and seven Portfolio cases.
+Canonical route counts are derived from the visible-entry helpers and verified
+by the production-boundary scripts. The current Portfolio surface contains six
+published cases; drafts and fixtures do not appear in its index, homepage grid,
+filters or sequence navigation.
 
-Astro also writes sixteen legacy `/biblioteca` redirect artifacts: the index alias
-and one redirect for each published Mediateca detail. No overlapping explicit
-redirects are required.
+Astro currently writes only the legacy `/biblioteca` index redirect. Detail
+redirects are generated only when published Mediateca entries exist. No
+overlapping explicit redirects are required.
 
 ## Metadata, sitemap and indexing
 
@@ -361,12 +360,13 @@ through `EditorialDetailLayout.astro`; index routes use `CollectionPage` and
 `/yo` uses `ProfilePage`.
 
 `src/pages/sitemap.xml.ts` and `/registro` derive their production URLs from
-`src/lib/site-routes.ts`, which uses the same visible-collection helpers as route
-generation. `src/pages/robots.txt.ts` and the HTML metadata share the build-time
+`src/lib/site-routes.ts`, which deliberately exposes only the current launch
+scope. `src/pages/robots.txt.ts` and the HTML metadata share the build-time
 `PUBLIC_INDEXING_ENABLED` switch. The tracked, non-secret `.env.production`
 sets it to `true`, so normal production builds emit `index, follow` and
 `Allow: /`; the development server does not load that file and remains blocked.
-The 404 route overrides the shared switch and is always non-indexable.
+The 404 route and the hidden Yo, Notas and Mediateca surfaces override the
+shared switch and are always non-indexable.
 Deployment behavior and the permanent redirect contract are documented in
 `docs/LAUNCH_READINESS.md`.
 

@@ -90,7 +90,7 @@ de forma explícita.
 
 ## Rutas, hosting y dominio
 
-- [ ] Elegir y configurar un proveedor de hosting.
+- [ ] Configurar el hosting contratado en Nominalia y documentar el acceso FTP.
 - [ ] Configurar redirects permanentes de `/biblioteca` a `/mediateca` y de
       `/biblioteca/*` a `/mediateca/*` en el hosting.
 - [x] Mantener un único redirect dinámico para `/biblioteca/[slug]`, sin
@@ -98,7 +98,7 @@ de forma explícita.
 - [x] Generar una página `404.html` propia, accesible y siempre no indexable.
 - [ ] Verificar rutas directas, fragments y páginas de error en el entorno
       desplegado.
-- [ ] Conectar `www.rodolfomiranda.company` y verificar DNS, HTTPS y redirección
+- [ ] Conectar `www.montsepereda.com` y verificar DNS, HTTPS y redirección
       del dominio raíz si se utiliza.
 - [ ] Ejecutar la comprobación, la compilación y la revisión responsive final.
 - [ ] Ejecutar `pnpm run verify:launch` y conservar los resultados finales en la

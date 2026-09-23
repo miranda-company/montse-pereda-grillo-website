@@ -8,8 +8,6 @@ const routes = [
   "/notas",
   "/mediateca",
   "/portafolio",
-  "/notas/el-magnifico-mundo-de-los-jardines-digitales",
-  "/mediateca/the-age-of-the-image",
   "/portafolio/syra-coffee",
   "/ruta-que-no-existe",
 ] as const
@@ -40,7 +38,7 @@ test("open mobile controls pass the automated accessibility scan", async ({ page
 
 test("sticky mobile navigation passes the automated accessibility scan", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto("/notas/el-magnifico-mundo-de-los-jardines-digitales")
+  await page.goto("/portafolio/syra-coffee")
   await page.evaluate(() => window.scrollTo(0, 700))
   await expect(page.locator("[data-site-header]")).toHaveAttribute("data-sticky", "")
   await page.locator(".mobile-menu-button").click()

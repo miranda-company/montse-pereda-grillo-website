@@ -77,7 +77,7 @@ publicación real tiene requisitos adicionales indicados más abajo.
 | `summary`         | Texto obligatorio                                                 | Introducción del caso, resumen de la tarjeta y contenido buscable.                                                                                                                                                                 |
 | `year`            | Entero obligatorio, mínimo 1900                                   | Año inicial o único año del proyecto. Aparece en la ficha lateral y en la tarjeta del índice.                                                                                                                                      |
 | `endYear`         | Entero opcional                                                   | Año final de un proyecto plurianual. Debe ser posterior a `year`. La ficha y la tarjeta muestran, por ejemplo, `2021–2023`; omítelo para un solo año.                                                                              |
-| `role`            | Texto obligatorio                                                 | Responsabilidad principal de Rodolfo. Aparece como `Rol` en la ficha lateral.                                                                                                                                                      |
+| `role`            | Texto obligatorio                                                 | Responsabilidad principal de Montse. Aparece como `Rol` en la ficha lateral.                                                                                                                                                       |
 | `client`          | Texto opcional                                                    | Cliente u organización. Aparece en la ficha lateral y en la tarjeta; también participa en la búsqueda.                                                                                                                             |
 | `disciplines`     | Lista obligatoria con al menos un texto                           | Trabajo concreto realizado. Aparece en la ficha y la tarjeta, y participa en la búsqueda. Puede ser más específico que una etiqueta.                                                                                               |
 | `tags`            | Lista opcional; por defecto `[]`                                  | Vocabulario breve y consistente usado por los filtros y la búsqueda del índice. No se muestra en la ficha lateral.                                                                                                                 |
@@ -235,46 +235,36 @@ conexiones.
 
 ### Homepage
 
-El panel de Portafolio recibe el número de proyectos publicados. La sección
-Ahora contiene una tarjeta comodín de Portafolio:
-
-- usa únicamente proyectos españoles publicados mediante
-  `getVisibleSpanishProjects(false)`;
-- elige un candidato al azar en cada carga de la homepage; una repetición
-  consecutiva es posible;
-- actualiza como una unidad el enlace, la portada, el texto alternativo, el
-  archivo, el título, el estado y la fecha;
-- conserva el primer proyecto según `displayOrder` como fallback estático si
-  JavaScript no está disponible;
-- muestra el estado vacío definido en `src/content/site/ahora.json` si no hay
-  proyectos publicados.
-
-Los borradores, placeholders y fixtures nunca forman parte de los candidatos.
+La portada carga los proyectos españoles publicados mediante
+`getVisibleSpanishProjects(false)` y los pasa a `PortfolioSection.astro`. El
+componente comparte con `/portafolio` el encabezado, búsqueda, filtros,
+conteo y rejilla responsive de tarjetas. Los borradores, placeholders y
+fixtures no aparecen en ninguno de los dos índices.
 
 ## Mapa técnico
 
-| Necesidad                                  | Archivo principal                                       | Responsabilidad                                                                                 |
-| ------------------------------------------ | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
-| Definir o validar metadatos                | `src/content.config.ts`                                 | Schema de la colección y reglas cruzadas. Es la fuente de verdad.                               |
-| Añadir o editar un proyecto                | `src/content/portafolio/<slug>.md` o `.mdx`             | Frontmatter y cuerpo editorial.                                                                 |
-| Plantillas de autoría                      | `docs/templates/portafolio.md` y `portafolio-mdx.mdx`   | Puntos de partida seguros.                                                                      |
-| Selección de borradores, idioma y fixtures | `src/lib/portfolio.ts`                                  | Límites editoriales compartidos por rutas, conteos y portada.                                   |
-| Índice, búsqueda y filtros                 | `src/pages/portafolio/index.astro`                      | Carga proyectos, crea tags y controla la interfaz del índice.                                   |
-| Tarjeta del índice                         | `src/components/PortfolioCard.astro`                    | DOM y campos visibles de cada tarjeta.                                                          |
-| Ruta de cada caso                          | `src/pages/portafolio/[slug].astro`                     | Genera rutas y navegación anterior/siguiente.                                                   |
-| Composición del caso                       | `src/components/PortfolioProject.astro`                 | Une encabezado, metadatos, portada, cuerpo, galería, pie y secuencia.                           |
-| Ficha lateral                              | `src/components/ProjectMeta.astro`                      | Decide qué metadatos se muestran y cómo se formatean.                                           |
-| Portada o fallback visual                  | `src/components/PortfolioArtwork.astro`                 | Renderiza la imagen local importada o la geometría provisional.                                 |
-| Scaffold compartido del detalle            | `src/components/EditorialDetailLayout.astro`            | Estructura común con Notas y Mediateca. Modificarlo puede afectar las tres colecciones.         |
-| CSS del índice de Portafolio               | `src/styles/portfolio-index.css`                        | Índice, controles y tarjetas.                                                                   |
-| CSS del detalle de Portafolio              | `src/styles/portfolio-detail.css`                       | Metadatos, portada, galería, pie y navegación.                                                  |
-| Visual compartido del proyecto             | `src/styles/portfolio-shared.css`                       | Fallback gráfico usado tanto por el índice como por el detalle.                                 |
-| Geometría compartida del detalle           | `src/styles/editorial-detail.css`                       | Columnas, cabecera y responsive compartidos. Cambios aquí pueden afectar Notas y Mediateca.     |
-| Tipografía del cuerpo enriquecido          | `src/styles/rich-content.css`                           | Párrafos, headings, imágenes, vídeo, código y carrusel compartidos.                             |
-| Tokens y tipografía global                 | `src/styles/global.css`                                 | Colores, líneas, fuentes, escalas y reglas globales.                                            |
-| Carrusel y vídeo MDX                       | `src/components/content/`                               | Componentes compartidos de contenido enriquecido.                                               |
-| Tarjeta aleatoria de la homepage           | `src/components/PortfolioWildcard.astro`                | Fallback estático, candidatos publicados y actualización coordinada de portada, datos y enlace. |
-| Integración con homepage                   | `src/pages/index.astro` y `src/content/site/ahora.json` | Carga la colección publicada y aporta los textos de sección y del estado vacío.                 |
+| Necesidad                                  | Archivo principal                                     | Responsabilidad                                                                             |
+| ------------------------------------------ | ----------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| Definir o validar metadatos                | `src/content.config.ts`                               | Schema de la colección y reglas cruzadas. Es la fuente de verdad.                           |
+| Añadir o editar un proyecto                | `src/content/portafolio/<slug>.md` o `.mdx`           | Frontmatter y cuerpo editorial.                                                             |
+| Plantillas de autoría                      | `docs/templates/portafolio.md` y `portafolio-mdx.mdx` | Puntos de partida seguros.                                                                  |
+| Selección de borradores, idioma y fixtures | `src/lib/portfolio.ts`                                | Límites editoriales compartidos por rutas, conteos y portada.                               |
+| Índice, búsqueda y filtros                 | `src/pages/portafolio/index.astro`                    | Carga proyectos, crea tags y controla la interfaz del índice.                               |
+| Tarjeta del índice                         | `src/components/PortfolioCard.astro`                  | DOM y campos visibles de cada tarjeta.                                                      |
+| Ruta de cada caso                          | `src/pages/portafolio/[slug].astro`                   | Genera rutas y navegación anterior/siguiente.                                               |
+| Composición del caso                       | `src/components/PortfolioProject.astro`               | Une encabezado, metadatos, portada, cuerpo, galería, pie y secuencia.                       |
+| Ficha lateral                              | `src/components/ProjectMeta.astro`                    | Decide qué metadatos se muestran y cómo se formatean.                                       |
+| Portada o fallback visual                  | `src/components/PortfolioArtwork.astro`               | Renderiza la imagen local importada o la geometría provisional.                             |
+| Scaffold compartido del detalle            | `src/components/EditorialDetailLayout.astro`          | Estructura común con Notas y Mediateca. Modificarlo puede afectar las tres colecciones.     |
+| CSS del índice de Portafolio               | `src/styles/portfolio-index.css`                      | Índice, controles y tarjetas.                                                               |
+| CSS del detalle de Portafolio              | `src/styles/portfolio-detail.css`                     | Metadatos, portada, galería, pie y navegación.                                              |
+| Visual compartido del proyecto             | `src/styles/portfolio-shared.css`                     | Fallback gráfico usado tanto por el índice como por el detalle.                             |
+| Geometría compartida del detalle           | `src/styles/editorial-detail.css`                     | Columnas, cabecera y responsive compartidos. Cambios aquí pueden afectar Notas y Mediateca. |
+| Tipografía del cuerpo enriquecido          | `src/styles/rich-content.css`                         | Párrafos, headings, imágenes, vídeo, código y carrusel compartidos.                         |
+| Tokens y tipografía global                 | `src/styles/global.css`                               | Colores, líneas, fuentes, escalas y reglas globales.                                        |
+| Carrusel y vídeo MDX                       | `src/components/content/`                             | Componentes compartidos de contenido enriquecido.                                           |
+| Sección compartida de Portafolio           | `src/components/PortfolioSection.astro`               | Encabezado, búsqueda, filtros, conteo y rejilla usados en ambos índices.                    |
+| Integración con homepage                   | `src/pages/index.astro`                               | Carga la colección publicada y monta la sección compartida.                                 |
 
 ## Cómo hacer cambios técnicos sin afectar otras páginas
 

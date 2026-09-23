@@ -1,8 +1,10 @@
 # montse-pereda-grillo-website
 
-Static Astro website and Spanish-language digital garden for Rodolfo Miranda
-Company. Production indexing is enabled after explicit authorization; local
-development remains non-indexable and some content is intentionally provisional.
+Static Astro website for Montse Pereda Grillo. The active launch scope is the
+homepage and Portfolio. Yo, Notas and Mediateca remain as direct-access shells
+for later phases, but are excluded from navigation, Registro and the sitemap
+and force `noindex, nofollow`. Production indexing is enabled after explicit
+authorization; local development remains non-indexable.
 
 ## Start here
 
@@ -22,27 +24,29 @@ available through Git history and tags.
 
 ## Development server
 
-Use:
+The configured default is port `8443`. This project is commonly reviewed on
+port `8444` with:
 
 ```sh
-pnpm run dev
+pnpm run dev --host 127.0.0.1 --port 8444
 ```
 
-Astro listens on `$PORT`, defaulting to `8443`. To choose another port, set the
-environment variable rather than appending CLI arguments:
+Server diagnostics:
 
 ```sh
-PORT=8444 pnpm run dev
+pnpm exec astro dev status
+pnpm exec astro dev logs
+pnpm exec astro dev stop
 ```
 
-The preview URL is available in the app's preview panel and source changes hot
-reload. If Astro reports an existing server, use the URL it prints or stop that
-process with `pnpm exec astro dev stop` before starting another one.
+Source changes hot reload while the watcher is running. A browser can keep an
+old document after the server stops, and a content-schema change may require a
+restart before JSON edits appear.
 
 ## Project structure
 
 - `src/pages/` — Astro routes.
-- `src/layouts/BaseLayout.astro` — document metadata, local fonts, crawler
+- `src/layouts/BaseLayout.astro` — document metadata, system fonts, crawler
   directives, and global browser behavior.
 - `src/components/PageShell.astro` — canonical visible page structure.
 - `src/components/Header.astro` and `src/components/Footer.astro` — shared
@@ -59,7 +63,9 @@ process with `pnpm exec astro dev stop` before starting another one.
 - `src/lib/site-routes.ts` — published canonical routes shared by Registro and
   the sitemap.
 - `src/styles/global.css` — design tokens, shared typography, and global rules.
-- `src/styles/home.css` — homepage-only hero, panel, and preview presentation.
+- `src/styles/home.css` — homepage hero and responsive composition.
+- `src/components/PortfolioSection.astro` — shared Portfolio index rendered on
+  both the homepage and `/portafolio`.
 - `src/styles/editorial-detail.css` — shared editorial detail layout.
 - `src/styles/rich-content.css` — shared rendered Markdown/MDX presentation.
 - `src/styles/*-index.css`, `*-detail.css`, `*-shared.css` — route-scoped
@@ -91,6 +97,8 @@ process with `pnpm exec astro dev stop` before starting another one.
   duplicate those rules in collection stylesheets.
 - Keep tokens and site-wide semantic typography in `global.css`. Use
   collection styles only for genuinely section-specific layouts and controls.
+- Keep the visible global navigation limited to `Inicio` and `Portafolio`
+  until the later-phase sections are approved for launch.
 - Treat `relatedNotes`, `relatedMedia`, and `relatedProjects` as the authored
   source of truth for editorial connections. Incoming backlinks are derived at
   build time; do not duplicate a reverse edge unless the relationship is meant
