@@ -201,6 +201,26 @@ test("scroll-to-top control uses immediate scrolling when reduced motion is requ
   await expect(scrollToTop).toBeHidden()
 })
 
+test("portfolio cards reveal on scroll and reduced motion removes the transition", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 700 })
+  await page.goto("/")
+
+  const firstCard = page.locator("[data-portfolio-card]").first()
+  await expect(firstCard).toHaveAttribute("data-scroll-reveal", "media")
+  await firstCard.scrollIntoViewIfNeeded()
+  await expect(firstCard).toHaveAttribute("data-revealed", "true")
+
+  await page.emulateMedia({ reducedMotion: "reduce" })
+  await page.reload()
+  await expect(page.locator("[data-scroll-shell]")).not.toHaveAttribute("data-reveal-ready", "true")
+  await expect(page.locator("[data-portfolio-card]").first()).toHaveAttribute(
+    "data-revealed",
+    "true",
+  )
+})
+
 test("header becomes compact after the shared scroll threshold without shifting content", async ({
   page,
 }) => {

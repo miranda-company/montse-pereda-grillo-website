@@ -131,6 +131,82 @@
   object-fit: cover;
 }
 
+.home-kicker {
+  animation: hero-copy-enter 620ms var(--motion-easing-standard) 80ms both;
+}
+
+.hero h1 > span {
+  animation: hero-title-enter 720ms var(--motion-easing-standard) 150ms both;
+}
+
+.hero h1 > em {
+  animation: hero-title-enter 760ms var(--motion-easing-standard) 250ms both;
+}
+
+.home-intro__description {
+  animation: hero-copy-enter 680ms var(--motion-easing-standard) 370ms both;
+}
+
+.hero-cta {
+  animation: hero-copy-enter 680ms var(--motion-easing-standard) 460ms both;
+}
+
+.hero .img-container {
+  animation: hero-portrait-enter 900ms var(--motion-easing-standard) 220ms both;
+}
+
+.hero .hero-image {
+  animation: hero-portrait-scale 1100ms var(--motion-easing-standard) 220ms both;
+}
+
+@keyframes hero-copy-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hero-title-enter {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hero-portrait-enter {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+    transform: translate3d(0, 18px, 0) scale(0.975);
+  }
+
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+}
+
+@keyframes hero-portrait-scale {
+  from {
+    transform: scale(1.045);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
 .section-label,
 .panel-top,
 .panel-copy small {
@@ -581,5 +657,20 @@ a.portfolio-latest:focus-visible {
     border-left: 0;
     padding-top: 24px;
     padding-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-kicker,
+  .hero h1 > span,
+  .hero h1 > em,
+  .home-intro__description,
+  .hero-cta,
+  .hero .img-container,
+  .hero .hero-image {
+    opacity: 1;
+    filter: none;
+    animation: none;
+    transform: none;
   }
 }

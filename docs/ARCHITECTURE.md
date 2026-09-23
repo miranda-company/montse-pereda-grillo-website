@@ -23,10 +23,18 @@ carousels.
 - `src/components/Footer.astro` owns the shared contact and archive links.
 - `src/scripts/scroll-controls.ts` coordinates the sticky header and
   reduced-motion-aware scroll-to-top behavior from one scroll state.
+- `src/scripts/scroll-reveal.ts` progressively enhances key text, media and
+  card groups with one-time Intersection Observer reveals. Elements already
+  visible on first paint and the footer are never hidden by this system. Motion
+  is disabled when `prefers-reduced-motion` is active, and content remains
+  visible when JavaScript or Intersection Observer is unavailable.
 - `src/styles/global.css` contains design tokens and the semantic typography
   system.
-- `src/styles/home.css` contains the dark homepage hero and its responsive
-  composition; it is imported only by `src/pages/index.astro`.
+- `src/styles/home.css` contains the dark homepage hero, its responsive
+  composition and its CSS-first entrance sequence; it is imported only by
+  `src/pages/index.astro`. The hero starts from opacity zero and a positive Y
+  offset, never an X offset, so it cannot flash at its final position before
+  moving. The portrait adds a small scale and blur transition.
 - `src/components/PortfolioSection.astro` owns the shared search, filters,
   counts and card grid used by both the homepage and `/portafolio`.
 - `src/pages/index.astro` renders Montse's hero and the complete shared

@@ -26,6 +26,10 @@ Fuente de verdad sobre el estado actual del sitio de Montse Pereda Grillo.
   parte Georgia cursiva sin tocar la plantilla.
 - Descripción del hero como texto plano en `connectionLabel`; se eliminó
   `connectionLink` del contenido, schema, plantilla y CSS.
+- El hero usa una entrada CSS escalonada basada en opacidad y desplazamiento
+  vertical; el resto de textos, medios y tarjetas se revela una sola vez al
+  entrar en el viewport. El footer queda siempre visible y todo el movimiento
+  se desactiva con `prefers-reduced-motion`.
 - Retrato de Montse en
   `src/assets/images/homepage/montse-pereda-portrait.png`.
 - El antiguo índice de cuatro tarjetas y la sección final de acceso rápido no
