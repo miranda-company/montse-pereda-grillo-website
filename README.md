@@ -92,7 +92,8 @@ Global tokens live in `src/styles/global.css`. The responsive heading scale is
 --text-h1: clamp(2.75rem, 5.2vw, 5.75rem);
 ```
 
-The hero uses `#171b18` as its background and `#dff09a` as its accent color.
+The hero uses `#171b18` as its background. The shared `--accent-color` token is
+`#dff09a` and is used by the hero, sticky header and back-to-top control.
 Homepage-specific composition lives in `src/styles/home.css`; shared portfolio
 cards and controls live in `src/styles/portfolio-index.css`.
 

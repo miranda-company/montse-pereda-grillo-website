@@ -113,8 +113,9 @@ pnpm run verify:launch
 ```
 
 `verify:launch` ejecuta la suite normal y después Lighthouse sobre la portada,
-una Nota, una referencia y un caso de Portafolio. Los informes JSON temporales
-se guardan en `.lighthouse/`, que Git ignora. Los mínimos automáticos son:
+el índice de Portafolio y los casos Modulab Barcelona y Syra Coffee. Los
+informes JSON temporales se guardan en `.lighthouse/`, que Git ignora. Los
+mínimos automáticos son:
 
 | Categoría        | Mínimo |
 | ---------------- | -----: |

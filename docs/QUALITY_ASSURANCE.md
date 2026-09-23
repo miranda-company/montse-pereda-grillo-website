@@ -38,9 +38,13 @@ pnpm run verify:launch   # suite normal y Lighthouse, con un único build
 `verify` siempre ejecuta el build antes de ellos y es la opción recomendada
 antes de entregar o integrar cambios.
 
-`audit:lighthouse` sirve el build en `127.0.0.1:4321` y audita la portada,
-`/notas/el-magnifico-mundo-de-los-jardines-digitales`,
-`/mediateca/the-age-of-the-image` y `/portafolio/syra-coffee`. Guarda
+`test:links` permite temporalmente el único destino provisional
+`/montse-pereda-cv.pdf`. Elimina esa excepción de
+`scripts/check-internal-links.mjs` al añadir el PDF definitivo a `public/`.
+
+`audit:lighthouse` sirve el build en `127.0.0.1:4321` y audita la portada, el
+índice de Portafolio, `/portafolio/modulab-barcelona` y
+`/portafolio/syra-coffee`. Guarda
 informes JSON ignorados por Git en `.lighthouse/`. Usa `verify:launch` para una
 revisión previa a publicación: reutiliza el `dist/` generado por `verify` para
 no construir dos veces. `audit:lighthouse:dist` debe ejecutarse solo después de
@@ -66,26 +70,21 @@ normalizarse antes de cambiar `draft` a `false`; la siguiente ejecución de
 - ausencia de imágenes visibles rotas, errores propios de consola y overflow
   horizontal; el ruido interno de iframes externos se excluye porque no pertenece
   al código del sitio;
-- navegación por fragmentos desde otra ruta y mediante URL directa;
+- navegación por fragmento desde una ruta secundaria;
 - estado de scroll compartido para la cabecera fija y el control para volver
-  arriba, incluido el umbral exacto, la altura compacta, la ausencia de saltos
-  de contenido, el padding lateral responsive, el objetivo táctil y el
+  arriba, incluida la ausencia de saltos, el color de acento compartido y el
   movimiento reducido;
-- tarjeta comodín de Portafolio con un candidato publicado, enlace e imagen de
-  portada coherentes;
-- menú móvil normal y fijo con teclado, cierre con Escape y restauración del
-  foco;
-- ritmo vertical compacto entre el texto y la imagen de portada, los avisos y
-  el cuerpo editorial, y la portada y el texto de un caso de estudio;
-- separación superior coherente entre los intros de Yo, Portafolio, Notas y
-  Mediateca en escritorio;
-- navegación anterior/siguiente de Notas alineada con ambos bordes del
-  contenedor de detalle en escritorio y móvil;
-- disclosure y filtros de Notas;
-- filtros de formato de Mediateca;
+- entrada CSS del hero y revelado único mediante Intersection Observer para
+  las tarjetas, sin ocultar el footer;
+- menú móvil con teclado, cierre con Escape y restauración del foco;
+- navegación pública limitada a Inicio y Portafolio, y enlaces actuales del
+  footer;
+- exclusión explícita de Yo, Notas y Mediateca del índice;
+- tipografía compacta y wrapping seguro en detalles móviles;
 - búsqueda, estado vacío y recuperación de Portafolio;
-- deduplicación del grafo editorial, relaciones mutuas, backlinks derivados y
-  exclusión de conexiones procedentes de drafts en producción;
+- correspondencia entre Registro y sitemap;
+- deduplicación del grafo editorial y relaciones mutuas;
+- enlaces entre casos desde URLs con slash final;
 - estados inicial y final del carrusel, controles móviles y movimiento reducido.
 
 `tests/e2e/accessibility.spec.ts` usa axe-core con reglas WCAG 2 A/AA y WCAG
@@ -132,7 +131,7 @@ conservadores sobre el build actual:
 | Medida               |                           Límite |
 | -------------------- | -------------------------------: |
 | `dist` completo      |                           16 MiB |
-| HTML total           | 14 KiB × número de archivos HTML |
+| HTML total           | 18 KiB × número de archivos HTML |
 | Un archivo HTML      |                           43 KiB |
 | CSS total            |                           90 KiB |
 | JavaScript emitido   |                           25 KiB |
@@ -144,12 +143,12 @@ equivalen al peso transferido de una página concreta. Si una decisión editoria
 legítima necesita superarlos, primero hay que optimizar el recurso y después
 ajustar el límite con una explicación en el cambio.
 
-El límite agregado de HTML crece con el número de archivos generados: las 34
-rutas canónicas actuales, dieciséis redirecciones estáticas y la página 404
-permiten 714 KiB en total. El promedio por archivo evita que publicar una ruta
-legítima rompa el presupuesto por sí solo; el límite de 43 KiB por archivo
-admite los controles globales de scroll en el caso editorial más extenso y
-sigue evitando que una página concreta crezca sin control.
+El límite agregado de HTML crece con el número de archivos generados: los 15
+archivos HTML actuales permiten 270 KiB en total. El promedio de 18 KiB refleja
+la concentración actual en seis casos de estudio largos. Los estilos se emiten
+como archivos compartidos en lugar de repetirse dentro de cada documento; el
+límite de 43 KiB por archivo sigue evitando que una página concreta crezca sin
+control.
 
 Astro agrupa el controlador compartido de filtros de Notas y Mediateca en un
 módulo JavaScript pequeño; el resto de la interacción mínima puede permanecer

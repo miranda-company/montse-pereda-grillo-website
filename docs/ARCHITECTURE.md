@@ -10,6 +10,10 @@ and scroll-to-top state, the Notas and Mediateca filters and sorting, Portafolio
 search and tag filtering, and synchronization of author-inserted image
 carousels.
 
+`astro.config.ts` keeps shared stylesheets external instead of duplicating them
+inside every generated HTML document. This reduces aggregate HTML size and lets
+browsers cache the shared CSS across routes.
+
 ## Presentation
 
 - `src/layouts/BaseLayout.astro` owns Spanish metadata, canonical and social
@@ -166,6 +170,8 @@ The root token layer keeps the original palette names for authored artwork and
 decorative compositions, then maps interface meaning onto semantic roles:
 `--surface`, `--surface-container`, `--on-surface`,
 `--on-surface-variant`, `--primary`, `--on-primary` and `--outline-strong`.
+`--accent-color` owns the shared light-green emphasis used by the hero, sticky
+header and back-to-top control.
 Interactive focus uses the shared
 `--focus-ring-*` contract. Short, standard and medium interaction timings use
 `--motion-duration-*` with `--motion-easing-standard`; the global reduced-motion

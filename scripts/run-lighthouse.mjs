@@ -8,12 +8,7 @@ const reportsDirectory = resolve(root, ".lighthouse")
 const host = "127.0.0.1"
 const port = 4321
 const origin = `http://${host}:${port}`
-const routes = [
-  "/",
-  "/notas/el-magnifico-mundo-de-los-jardines-digitales",
-  "/mediateca/the-age-of-the-image",
-  "/portafolio/syra-coffee",
-]
+const routes = ["/", "/portafolio", "/portafolio/modulab-barcelona", "/portafolio/syra-coffee"]
 const thresholds = {
   performance: 0.75,
   accessibility: 0.95,

@@ -3,7 +3,8 @@ import { readdir, readFile } from "node:fs/promises"
 import { relative, resolve, sep } from "node:path"
 
 const dist = resolve(process.cwd(), "dist")
-const siteOrigin = new URL(process.env.SITE_URL ?? "https://www.rodolfomiranda.company").origin
+const siteOrigin = new URL(process.env.SITE_URL ?? "https://www.montsepereda.com").origin
+const allowedMissingPaths = new Set(["/montse-pereda-cv.pdf"])
 
 const walk = async (directory) => {
   const entries = await readdir(directory, { withFileTypes: true })
@@ -67,6 +68,8 @@ for (const source of pages) {
 
     checkedLinks += 1
     const destinationPath = decodeURI(destination.pathname)
+    if (allowedMissingPaths.has(destinationPath)) continue
+
     const targetPage = pagesByPath.get(normalizePath(destinationPath))
     const targetFileExists = filePaths.has(destinationPath)
 

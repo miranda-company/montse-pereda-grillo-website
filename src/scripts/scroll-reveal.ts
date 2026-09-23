@@ -4,10 +4,12 @@ type RevealGroup = {
   stagger?: number
 }
 
+const REVEALED = "true"
+const MAX_STAGGER_INDEX = 2
+
 const revealGroups: RevealGroup[] = [
   { selector: ".page-back" },
   { selector: ".page-intro > *", stagger: 65 },
-  { selector: ".portfolio-controls" },
   { selector: "[data-portfolio-card]", variant: "media", stagger: 70 },
   { selector: ".entry-detail-layout > *", stagger: 70 },
   { selector: ".entry-detail-reading > .rich-content > *", stagger: 45 },
@@ -19,8 +21,13 @@ const revealGroups: RevealGroup[] = [
 
 const revealImmediately = (elements: HTMLElement[]) => {
   elements.forEach((element) => {
-    element.dataset.revealed = "true"
+    element.dataset.revealed = REVEALED
   })
+}
+
+const isInInitialViewport = (element: HTMLElement) => {
+  const bounds = element.getBoundingClientRect()
+  return bounds.top < window.innerHeight && bounds.bottom > 0
 }
 
 export const initScrollReveal = () => {
@@ -35,12 +42,17 @@ export const initScrollReveal = () => {
         if (elements.has(element)) return
 
         element.dataset.scrollReveal = variant ?? "default"
-        element.style.setProperty("--reveal-delay", `${Math.min(index, 2) * stagger}ms`)
+        element.style.setProperty(
+          "--reveal-delay",
+          `${Math.min(index, MAX_STAGGER_INDEX) * stagger}ms`,
+        )
         elements.add(element)
       })
     })
 
     const revealElements = Array.from(elements)
+    if (revealElements.length === 0) return
+
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
 
     if (prefersReducedMotion || !("IntersectionObserver" in window)) {
@@ -49,14 +61,13 @@ export const initScrollReveal = () => {
     }
 
     const pendingElements = revealElements.filter((element) => {
-      const bounds = element.getBoundingClientRect()
-      const isInitiallyVisible = bounds.top < window.innerHeight && bounds.bottom > 0
-
-      if (isInitiallyVisible) element.dataset.revealed = "true"
-      return !isInitiallyVisible
+      if (!isInInitialViewport(element)) return true
+      element.dataset.revealed = REVEALED
+      return false
     })
 
     shell.dataset.revealReady = "true"
+    if (pendingElements.length === 0) return
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -64,7 +75,7 @@ export const initScrollReveal = () => {
           if (!entry.isIntersecting) return
 
           const element = entry.target as HTMLElement
-          element.dataset.revealed = "true"
+          element.dataset.revealed = REVEALED
           observer.unobserve(element)
         })
       },

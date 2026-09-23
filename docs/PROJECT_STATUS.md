@@ -57,14 +57,20 @@ con JavaScript ligero y sin framework cliente.
 - Énfasis editorial: Georgia → Times New Roman → serif, en cursiva.
 - Escala fluida compartida `--text-h1` a `--text-h6`; H1 usa
   `clamp(2.75rem, 5.2vw, 5.75rem)`.
-- Hero: fondo `#171b18` y acento `#dff09a`.
+- Hero: fondo `#171b18`. El token compartido `--accent-color: #dff09a` se usa
+  en el hero, la cabecera fija y el control para volver arriba.
 - Imágenes y tarjetas sin desbordamiento horizontal en los breakpoints
   revisados.
 
 ## Verificación reciente
 
-- `pnpm run build`: correcto; Astro check informa 68 archivos, 0 errores, 0
+- `pnpm run build`: correcto; Astro check informa 69 archivos, 0 errores, 0
   avisos y 0 sugerencias.
+- `pnpm run test`: correcto; pasan las 42 pruebas de navegador y accesibilidad,
+  además de integridad editorial, rutas de producción, enlaces internos y
+  presupuestos de salida.
+- El CSS compartido se emite como archivos externos: el HTML total pesa 261,7
+  KiB frente a un presupuesto de 270 KiB y el JavaScript emitido pesa 4,6 KiB.
 - El contrato de producción verifica 10 rutas públicas indexables y 3 rutas
   ocultas con `noindex, nofollow`; Registro y sitemap contienen únicamente las
   rutas públicas.
@@ -78,8 +84,6 @@ con JavaScript ligero y sin framework cliente.
 
 - Recuperar el retrato circular solicitado: actualmente el contenedor usa
   `border-radius: 8px` y se ve como un cuadrado redondeado.
-- Cambiar el `aria-label` heredado “Rodolfo Miranda Company, inicio” del enlace
-  de marca en `Header.astro`.
 - Añadir el PDF final a `public/montse-pereda-cv.pdf` y comprobar su descarga.
 - Revisar los metadatos, textos, enlaces y datos estructurados que todavía
   procedan de la implementación de referencia.

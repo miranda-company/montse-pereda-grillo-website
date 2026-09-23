@@ -7,6 +7,9 @@ const port = Number.parseInt(process.env.PORT ?? "8443", 10)
 export default defineConfig({
   site: process.env.SITE_URL ?? SITE_ORIGIN,
   output: "static",
+  build: {
+    inlineStylesheets: "never",
+  },
   integrations: [mdx()],
   markdown: {
     syntaxHighlight: "shiki",
