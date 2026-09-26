@@ -306,7 +306,8 @@
   min-height: 42px;
   border: 1px solid var(--outline-strong);
   border-radius: 0;
-  background: transparent;
+  background: var(--accent-color);
+  box-shadow: 0 5px 16px rgba(29, 30, 25, 0.09);
   padding: 9px 12px;
   color: var(--on-surface);
   cursor: pointer;
