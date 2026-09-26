@@ -4,7 +4,7 @@ Fuente de verdad sobre el estado actual del sitio de Montse Pereda Grillo.
 
 ## Resumen
 
-- **Fecha de revisión:** 23 de septiembre de 2026.
+- **Fecha de revisión:** 26 de septiembre de 2026.
 - **Rama:** `main`.
 - **Framework:** Astro 7, TypeScript estricto y salida HTML estática.
 - **Idioma activo:** español.
@@ -19,9 +19,8 @@ Fuente de verdad sobre el estado actual del sitio de Montse Pereda Grillo.
 
 - Portada de una sola página con hero oscuro y el Portafolio completo debajo.
 - Navegación visible limitada a `Inicio` y `Portafolio`.
-- CTA provisional `Descarga mi CV` dirigido a
-  `/montse-pereda-cv.pdf`; el archivo definitivo todavía no existe en
-  `public/`.
+- CTA `Descarga mi CV` dirigido al documento definitivo en
+  `/montse-pereda-cv.pdf`.
 - Título del hero separado en `heroTitle` y `heroTitleAccent`, para editar la
   parte Georgia cursiva sin tocar la plantilla.
 - Descripción del hero como texto plano en `connectionLabel`; se eliminó
@@ -39,9 +38,9 @@ Fuente de verdad sobre el estado actual del sitio de Montse Pereda Grillo.
 - Portada y `/portafolio` comparten `PortfolioSection.astro` y la misma rejilla
   de tarjetas: 3 columnas en expanded, 2 en medium y 1 en compact.
 
-## Portafolio publicado
+## Portafolio
 
-Se muestran seis casos:
+Producción muestra seis casos publicados:
 
 - `cn-sant-andreu`
 - `cats`
@@ -49,6 +48,15 @@ Se muestran seis casos:
 - `syra-coffee`
 - `eloquent`
 - `modulab-barcelona`
+
+Desarrollo añade dos casos provisionales, visibles únicamente para revisión:
+
+- `uned-girona`
+- `bcn-mes-artist-based-in-barna`
+
+Ambos usan `draft: true` y `placeholder: true`, imágenes dummy locales y los
+identificadores provisionales `P.009` y `P.010`. Antes de publicarlos hay que
+confirmar fechas, estado, métricas y material gráfico definitivo.
 
 La búsqueda, los filtros por etiqueta, el conteo y el estado vacío funcionan
 con JavaScript ligero y sin framework cliente.
@@ -59,7 +67,7 @@ con JavaScript ligero y sin framework cliente.
 - Énfasis editorial: Georgia → Times New Roman → serif, en cursiva.
 - Escala fluida compartida `--text-h1` a `--text-h6`; H1 usa
   `clamp(2.75rem, 5.2vw, 5.75rem)`.
-- Hero: fondo `#171b18`. El token compartido `--accent-color: #dff09a` se usa
+- Hero: fondo oscuro `#171b18`. El token compartido `--accent-color: #dff09a` se usa
   en el hero, la cabecera fija y el control para volver arriba.
 - Imágenes y tarjetas sin desbordamiento horizontal en los breakpoints
   revisados.
@@ -71,7 +79,7 @@ con JavaScript ligero y sin framework cliente.
 - `pnpm run test`: correcto; pasan las 45 pruebas de navegador y accesibilidad,
   además de integridad editorial, rutas de producción, enlaces internos y
   presupuestos de salida.
-- El CSS compartido se emite como archivos externos: el HTML total pesa 263,5
+- El CSS compartido se emite como archivos externos: el HTML total pesa 264,0
   KiB frente a un presupuesto de 270 KiB y el JavaScript emitido pesa 4,6 KiB.
 - El contrato de producción verifica 10 rutas públicas indexables y 3 rutas
   ocultas con `noindex, nofollow`; Registro y sitemap contienen únicamente las

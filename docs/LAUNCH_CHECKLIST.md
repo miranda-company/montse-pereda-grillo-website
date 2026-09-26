@@ -29,6 +29,10 @@ de forma explícita.
       `modulab-barcelona`, `eloquent` y `elespacio`.
 - [ ] Confirmar en cada caso publicado el periodo, rol, organización, resultados,
       derechos, créditos, enlaces, alternativas y leyendas.
+- [ ] Confirmar periodo, estado y métricas de `uned-girona`; sustituir sus tres
+      imágenes dummy antes de retirar `draft` y `placeholder`.
+- [ ] Confirmar periodo y estado de `bcn-mes-artist-based-in-barna`; sustituir sus
+      tres imágenes dummy antes de retirar `draft` y `placeholder`.
 - [ ] Mantener los ocho placeholders restantes de Portafolio como drafts hasta
       sustituir todo el contenido pendiente.
 - [ ] Normalizar `archiveNumber` y `displayOrder` antes de publicar cualquiera

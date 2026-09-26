@@ -64,7 +64,7 @@ Homepage copy is in `src/content/site/homepage.json`:
 {
   "heroEyebrow": "Montse Pereda Grillo",
   "heroTitle": "Montse Pereda, ",
-  "heroTitleAccent": "consultoría de comunicación",
+  "heroTitleAccent": "Comunicación Corporativa",
   "connectionLabel": "Ayudo a organizaciones a comunicar su mensaje de forma efectiva en el entorno digital."
 }
 ```
@@ -77,8 +77,8 @@ Homepage copy is in `src/content/site/homepage.json`:
   link behavior.
 - The portrait is imported by `src/pages/index.astro` from
   `src/assets/images/homepage/montse-pereda-portrait.png`.
-- The CV CTA currently targets `/montse-pereda-cv.pdf`. Add the final PDF to
-  `public/montse-pereda-cv.pdf` before launch.
+- The CV CTA downloads the final document stored at
+  `public/montse-pereda-cv.pdf`.
 
 The legacy `panels` data remains in `homepage.json` for the retained baseline
 routes, but the current homepage does not render the old four-card index.
@@ -92,7 +92,7 @@ Global tokens live in `src/styles/global.css`. The responsive heading scale is
 --text-h1: clamp(2.75rem, 5.2vw, 5.75rem);
 ```
 
-The hero uses `#171b18` as its background. The shared `--accent-color` token is
+The hero uses `#171b18` as its dark background. The shared `--accent-color` token is
 `#dff09a` and is used by the hero, sticky header and back-to-top control.
 Homepage-specific composition lives in `src/styles/home.css`; shared portfolio
 cards and controls live in `src/styles/portfolio-index.css`.
